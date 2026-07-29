@@ -529,6 +529,63 @@ class Appointment():
 
                     print("Appointment successfully updated")
 
+    def delete_appointment(self):
+        while True:
+            try:
+                appointment_id = int(input("Appointment ID:"))
+                if not self.validate_user_login(appointment_id):
+                    print("Appointment ID must be greater than 0")
+                    continue
+                break
+            except ValueError:
+                print("Appointment ID must be numbers")
+        try:
+            cursor.execute("""
+            SELECT * FROM appointment
+            WHERE appointment_id = ?
+            """,(appointment_id,))
+
+        except sqlite3.Error as e:
+            print("Database Error", e)
+            return
+
+        row = cursor.fetchone()
+        if not row:
+            print("No appointment found")
+            return 
+        else:
+            patient_appointment = Appointment(
+                row[1],
+                row[2],
+                row[3],
+                row[4]
+                )
+            print(row[0])
+            patient_appointment.show_details_appointment()
+
+            while True:
+                delete = input("Are you sure you want to delete this appointment(Y/N)?").lower()
+                if not self.validate_yes_no(delete):
+                    print("Enter either Y or N to proceed")
+                    continue
+                if delete == 'n':
+                    print("Appointment - delete process aborted")
+                    break 
+                else:
+                    try:
+                        cursor.execute("""
+                        DELETE FROM appointment
+                        WHERE appointment_id = ?
+                        """,(appointment_id,))
+
+                        conn.commit()
+
+                    except sqlite3.Error as e:
+                        print("Database Error", e)
+                        return
+                    
+                print("Appointment deleted sucessfully")
+                return
         
 test = Appointment(
     "patient_id",
