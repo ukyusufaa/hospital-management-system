@@ -166,5 +166,5 @@ class Prescription():
 test = Prescription(
     "appointment_id"
     )
-test.delete_prescription()
+test.create_prescription()
 
