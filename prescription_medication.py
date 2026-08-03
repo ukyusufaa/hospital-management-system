@@ -119,24 +119,11 @@ class PrescriptionMedication():
             except ValueError:
                 print("Prescription ID must be numbers")
                 continue 
-
-        while True:
-                try:
-                    self.medication_id = int(input("Medication ID:"))
-                    if not self.validate_login_id(self.medication_id):
-                        print("Medication ID must be greater than 0")
-                        continue 
-                    break 
-    
-                except ValueError:
-                    print("Medication ID must be numbers")
-                    continue
         try:
             cursor.execute("""
             SELECT * FROM prescription_medication
-            WHERE medication_id = ?
-            AND prescription_id = ?
-            """,(self.medication_id,self.prescription_id))
+            WHERE prescription_id = ?
+            """,(self.prescription_id,))
 
         except sqlite3.Error as e:
             print("Database Error", e)
@@ -242,5 +229,5 @@ test = PrescriptionMedication(
     "prescription_id",
     "medication_id"
     )
-test.display_all_prescription_medications()
+test.create_prescription_medication()
         

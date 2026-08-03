@@ -107,7 +107,7 @@ class GpSurgery:
                     row[1],
                     row[2]
                 )
-                print(row[0])
+                print(f"Surgery ID:{row[0]}")
                 clinic.show_gpsurgery_details()
         return
     
@@ -139,7 +139,7 @@ class GpSurgery:
             return
         else:
             clinic = GpSurgery(row[1],row[2])
-            print(row[0])
+            (f"Surgery ID:{row[0]}")
             clinic.show_gpsurgery_details()
         return
     
@@ -171,7 +171,7 @@ class GpSurgery:
             return 
         else:
             gpsurgery = GpSurgery(row[1],row[2])
-            print(row[0])
+            (f"Surgery ID:{row[0]}")
             gpsurgery.show_gpsurgery_details()
 
             update = input("Are you sure you want to update?")
@@ -271,7 +271,7 @@ class GpSurgery:
             return
         else:
             gpsurgery = GpSurgery(row[1],row[2])
-            print(row[0])
+            (f"Surgery ID:{row[0]}")
             gpsurgery.show_gpsurgery_details()
 
             delete = input("Are you sure you want to delete?")
@@ -293,7 +293,7 @@ class GpSurgery:
                 return
 
             else:
-                print("Deletion process aborted!")
+                print("Delete process aborted!")
 
 test = GpSurgery(
         "surgery_name",

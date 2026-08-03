@@ -13,8 +13,8 @@ class Gp:
 
     def show_details_gp(self):
         print("-" * 30)
-        print(f"First Name: {self.first_name}")
-        print(f"Last Name: {self.surname}")
+        print(f"GP First Name: {self.first_name}")
+        print(f"GP Last Name: {self.surname}")
         print(f"Surgery ID: {self.surgery_id}")
         print("-" * 30)
 
@@ -213,7 +213,7 @@ class Gp:
                     break 
                 
                 while True:
-                    updated_surname = input("Last Name:")
+                    updated_surname = input("GP Last Name:")
                     if updated_surname == "":
                         print("Last Name - Do not leave blank!")
                         continue 
@@ -307,6 +307,13 @@ class Gp:
                     
                     print("GP sucesssfully deleted")
                     return
+
+test = Gp(
+    "fisrt_name",
+    "surname",
+    "surgery_id"
+    )
+test.create_gp()
 
 
 

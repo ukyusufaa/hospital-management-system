@@ -52,7 +52,7 @@ class Department():
         
         print("Department inserted at Medina Hospital successfully")
         row = cursor.lastrowid
-        print(row)
+        print(f"Department ID:{row}")
         self.show_department_details()
         return
     
@@ -74,7 +74,7 @@ class Department():
                 new_dept = Department(
                 row[1]
                 )
-                print(row[0])
+                print(f"Department ID:{row[0]}")
                 new_dept.show_department_details()
         return
     
@@ -108,7 +108,7 @@ class Department():
             dept = Department(
                 row[1]
             )
-            print(row[0])
+            print(f"Department ID:{row[0]}")
             dept.show_department_details()
             return
     
@@ -142,7 +142,7 @@ class Department():
             dept = Department(
                 row[0]
             )
-            print(row[0])
+            print(f"Department ID:{row[0]}")
             dept.show_department_details()
 
             update = input("Are you sure you want to update?")
@@ -207,7 +207,7 @@ class Department():
                 dept = Department(
                     row[1]
                 )
-                print(row[0])
+                print(f"Department ID:{row[0]}")
                 dept.show_department_details()
     
                 delete = input("Are you sure you want to delete?")

@@ -586,6 +586,25 @@ class Appointment():
                     
                 print("Appointment deleted sucessfully")
                 return
+
+    def appointment_prescription_join(self):
+        try:
+            cursor.execute("""
+                SELECT *
+                FROM appointment
+                INNER JOIN prescription
+                ON appointment.appointment_id =
+            prescription.appointment_id
+            """)
+
+        except sqlite3.Error as e:
+            print("Database Error", e)
+            return
+
+        rows = cursor.fetchall()
+
+        for row in rows:
+                print(row)
         
 test = Appointment(
     "patient_id",
@@ -593,7 +612,9 @@ test = Appointment(
     "appointment_date",
     "appointment_time"
     )
-test.display_all_appointments()
+test.appointment_prescription_join()
+
+
 
 
 

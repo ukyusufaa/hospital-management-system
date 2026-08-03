@@ -94,8 +94,10 @@ CREATE TABLE IF NOT EXISTS bill(
                bill_id INTEGER PRIMARY KEY AUTOINCREMENT,
                total_amount REAL NOT NULL,
                appointment_id INTEGER,
+               payment_status TEXT NOT NULL,
                FOREIGN KEY(appointment_id)
                REFERENCES appointment(appointment_id))
+
 """)
 
 conn.commit()

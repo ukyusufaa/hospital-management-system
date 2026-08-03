@@ -296,6 +296,6 @@ test = Medication(
     "medication",
     "cost"
 )
-test.display_all_medications()
+test.create_medication()
         
     

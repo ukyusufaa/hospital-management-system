@@ -38,16 +38,31 @@ class Prescription():
 
         try:
             cursor.execute("""
-            INSERT INTO prescription(
-                        appointment_id)
-            VALUES(?)
+            SELECT * FROM prescription
+            WHERE appointment_id = ?
             """,(self.appointment_id,))
-
-            conn.commit()
 
         except sqlite3.Error as e:
             print("Database Error", e)
-            return 
+
+
+        searched_row = cursor.fetchone()
+        if searched_row:
+            print("Prescription rejected, this appointment already has a prescription")
+            return
+        else:
+            try:
+                cursor.execute("""
+                INSERT INTO prescription(
+                    appointment_id)
+                VALUES(?)
+                """,(self.appointment_id,))
+
+                conn.commit()
+
+            except sqlite3.Error as e:
+                print("Database Error", e)
+                return 
 
         print("Prescription inserted sucessfully")
         row = cursor.lastrowid
