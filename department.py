@@ -230,12 +230,6 @@ class Department():
                 else:
                     print("Delete process aborted")
                     return
-        
-                        
-test = Department(
-    "department"
-    )
 
-test.create_department()
 
             

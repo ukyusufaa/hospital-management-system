@@ -8,8 +8,8 @@ cursor.execute("PRAGMA foreign_keys = ON;")
 
 class Appointment():
 
-    def __init__(self, patient_id, appointment_date, 
-                 appointment_time, consultant_id):
+    def __init__(self, patient_id = None, appointment_date = None, 
+                 appointment_time = None, consultant_id = None):
         
         self.patient_id = patient_id
         self.appointment_date = appointment_date
@@ -606,13 +606,7 @@ class Appointment():
         for row in rows:
                 print(row)
         
-test = Appointment(
-    "patient_id",
-    "consultant_id",
-    "appointment_date",
-    "appointment_time"
-    )
-test.appointment_prescription_join()
+
 
 
 

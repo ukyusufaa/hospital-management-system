@@ -7,7 +7,9 @@ cursor = conn.cursor()
 cursor.execute("PRAGMA foreign_keys = ON;")
 
 class Patient():
-    def __init__(self, first_name, surname, dob, address, gp_id):
+    def __init__(self, first_name = None, surname = None, 
+                 dob = None, address = None, 
+                 gp_id = None):
         self.first_name = first_name
         self.surname = surname
         self.dob = dob
@@ -575,15 +577,7 @@ class Patient():
                     
                     print("Patient sucessfully deleted")
                     return
-                
-test = Patient(
-    "first_name",
-    "surname",
-    "dob",
-    "address",
-    "gp_id"
-    )
-test.create_patient()
+
         
         
 

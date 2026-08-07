@@ -5,7 +5,7 @@ conn = sqlite3.connect("hospital.db")
 cursor = conn.cursor()
 
 class Medication():
-    def __init__(self,medication_name,cost):
+    def __init__(self,medication_name = None, cost = None):
         self.medication_name = medication_name
         self.cost = cost
     
@@ -292,10 +292,6 @@ class Medication():
                 print("Delete process aborted!")
                 return
 
-test = Medication(
-    "medication",
-    "cost"
-)
-test.create_medication()
+
         
     

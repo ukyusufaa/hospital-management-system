@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS gp(
                first_name TEXT NOT NULL,
                surname TEXT NOT NULL,
                surgery_id INTEGER,
+
                FOREIGN KEY(surgery_id)
                REFERENCES gp_surgery(surgery_id))
 """)
@@ -42,6 +43,7 @@ CREATE TABLE IF NOT EXISTS patient(
                dob TEXT NOT NULL,
                address TEXT NOT NULL,
                gp_id INTEGER,
+
                FOREIGN KEY(gp_id)
                REFERENCES gp(gp_id))
 """)
@@ -52,6 +54,7 @@ CREATE TABLE IF NOT EXISTS consultant(
                first_name TEXT NOT NULL,
                surname TEXT NOT NULL,
                department_id INTEGER,
+
                FOREIGN KEY(department_id)
                REFERENCES department(department_id))
 """)
@@ -63,8 +66,10 @@ CREATE TABLE IF NOT EXISTS appointment(
                appointment_date TEXT NOT NULL,
                appointment_time TEXT NOT NULL,
                consultant_id INTEGER,
+
                FOREIGN KEY(patient_id)
                REFERENCES patient(patient_id),
+
                FOREIGN KEY(consultant_id)
                REFERENCES consultant(consultant_id))
 """)
@@ -72,7 +77,8 @@ CREATE TABLE IF NOT EXISTS appointment(
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS prescription(
                prescription_id INTEGER PRIMARY KEY AUTOINCREMENT,
-               appointment_id INTEGER,
+               appointment_id INTEGER UNIQUE,
+
                FOREIGN KEY(appointment_id)
                REFERENCES appointment(appointment_id))
 """)
@@ -82,19 +88,24 @@ CREATE TABLE IF NOT EXISTS prescription_medication(
                prescription_instructions TEXT NOT NULL,
                prescription_id INTEGER,
                medication_id INTEGER,
+
                FOREIGN KEY(prescription_id)
                REFERENCES prescription(prescription_id),
+
                FOREIGN KEY(medication_id)
-               REFERENCES medication(medication_id))
-              
+               REFERENCES medication(medication_id),
+
+               UNIQUE(prescription_id, medication_id))
+            
 """)
 
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS bill(
                bill_id INTEGER PRIMARY KEY AUTOINCREMENT,
                total_amount REAL NOT NULL,
-               appointment_id INTEGER,
+               appointment_id INTEGER UNIQUE,
                payment_status TEXT NOT NULL,
+
                FOREIGN KEY(appointment_id)
                REFERENCES appointment(appointment_id))
 

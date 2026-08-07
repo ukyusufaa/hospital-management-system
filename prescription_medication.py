@@ -7,7 +7,8 @@ cursor = conn.cursor()
 cursor.execute("PRAGMA foreign_keys = ON;")
 
 class PrescriptionMedication():
-    def __init__(self,prescription_instructions, prescription_id, medication_id):
+    def __init__(self,prescription_instructions = None, 
+                 prescription_id = None, medication_id = None):
         self.prescription_instructions = prescription_instructions
         self.prescription_id = prescription_id
         self.medication_id = medication_id
@@ -222,12 +223,4 @@ class PrescriptionMedication():
                     print("Medical Instructions updated sucessfully")
                     return
 
-
-            
-test = PrescriptionMedication(
-    "prescription_medication",
-    "prescription_id",
-    "medication_id"
-    )
-test.create_prescription_medication()
         

@@ -5,7 +5,7 @@ conn = sqlite3.connect("hospital.db")
 cursor = conn.cursor()
 
 class GpSurgery:
-    def __init__(self,surgery_name,address):
+    def __init__(self,surgery_name = None, address = None):
         self.surgery_name = surgery_name
         self.address = address 
     
@@ -295,11 +295,7 @@ class GpSurgery:
             else:
                 print("Delete process aborted!")
 
-test = GpSurgery(
-        "surgery_name",
-        "address"
-    )
-test.create_gpsurgery()
+
 
 
 

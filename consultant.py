@@ -6,7 +6,8 @@ cursor = conn.cursor()
 cursor.execute("PRAGMA foreign_keys = ON;")
 
 class Consultant():
-    def __init__(self,first_name,surname,department_id):
+    def __init__(self,first_name = None,surname = None,
+                 department_id = None):
         self.first_name = first_name
         self.surname = surname
         self.department_id = department_id
@@ -302,11 +303,5 @@ class Consultant():
                     print("Consultant sucesssfully deleted")
                     return
         
-test = Consultant(
-    "first_name",
-    "surname",
-    "department_id"
-)
-test.create_consultant()
     
         

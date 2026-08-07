@@ -6,7 +6,8 @@ cursor = conn.cursor()
 
 class Gp:
 
-    def __init__(self, first_name, surname, surgery_id):
+    def __init__(self, first_name = None, surname = None, 
+                 surgery_id = None):
         self.first_name = first_name
         self.surname = surname
         self.surgery_id = surgery_id
@@ -125,7 +126,7 @@ class Gp:
             dr.show_patient_details()
             return
             
-    def search(self):
+    def search_gp(self):
         while True:
             try:
                 gp_id = int(input("GP ID:"))
@@ -307,13 +308,7 @@ class Gp:
                     
                     print("GP sucesssfully deleted")
                     return
-
-test = Gp(
-    "fisrt_name",
-    "surname",
-    "surgery_id"
-    )
-test.create_gp()
+                
 
 
 

@@ -7,7 +7,7 @@ cursor = conn.cursor()
 cursor.execute("PRAGMA foreign_keys = ON;")
 
 class Prescription():
-    def __init__(self,appointment_id):
+    def __init__(self,appointment_id = None):
         self.appointment_id = appointment_id
 
     def show_prescription_details(self):
@@ -175,11 +175,6 @@ class Prescription():
                             return 
 
                         print("Prescription deleted successfully")
-                        return 
+                        return
 
-
-test = Prescription(
-    "appointment_id"
-    )
-test.create_prescription()
 
