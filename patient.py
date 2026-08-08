@@ -17,11 +17,13 @@ class Patient():
         self.gp_id = gp_id
     
     def show_patient_details(self):
+        print("-" * 30)
         print(f"First Name:{self.first_name}")
         print(f"Last Name:{self.surname}")
         print(f"Date of Birth:{self.dob}")
         print(f"Address:{self.address}")
         print(f"GP ID:{self.gp_id}")
+        print("-" * 30)
     
     def validation_name(self,name):
         for letter in name:

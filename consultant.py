@@ -13,9 +13,11 @@ class Consultant():
         self.department_id = department_id
     
     def show_details_consultant(self):
+        print("-" * 30)
         print(f"First Name:{self.first_name}")
         print(f"Last Name:{self.surname}")
         print(f"Department ID:{self.department_id}")
+        print("-" * 30)
     
     def validate_login_id(self,number):
         if number < 1:

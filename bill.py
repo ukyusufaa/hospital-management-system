@@ -14,8 +14,10 @@ class Bill():
         self.payment_status = payment_status
 
     def show_bill_details(self):
+        print("-" * 30)
         print(f"Total Amount:{self.total_amount}")
         print(f"Appointment ID:{self.appointment_id}")
+        print("-" * 30)
 
     def validate_login_id(self,number):
         if number < 1:

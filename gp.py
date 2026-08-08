@@ -105,7 +105,7 @@ class Gp:
 
     def display_all_gps(self):
         try:
-            cursor.execute("SELECT * FROM patient")
+            cursor.execute("SELECT * FROM gp")
 
         except sqlite3.Error as e:
                 print("Database Error", e)
@@ -113,7 +113,7 @@ class Gp:
         
         rows = cursor.fetchall()
         if not rows:
-            print("No patients found")
+            print("No patient GP's found")
             return
         else:
             for row in rows:
@@ -122,8 +122,8 @@ class Gp:
                     row[2],
                     row[3]
                 )
-            print(row[0])
-            dr.show_patient_details()
+                print(row[0])
+                dr.show_details_gp()
             return
             
     def search_gp(self):
@@ -158,7 +158,7 @@ class Gp:
                 row[3]
                 )
         print(row[0])
-        dr.show_patient_details()
+        dr.show_details_gp()
         return
 
     def update_gp(self):
@@ -226,7 +226,8 @@ class Gp:
                 while True:
                     try:
                         updated_surgery_id = int(input("Surgery ID:"))
-                        if not self.validate_login_id(updated_surgery_id):
+                        if not self.validate_login_digits(updated_surgery_id):
+                            print("Surgery ID must be greater than 0")
                             continue
                         break
                     
@@ -240,10 +241,10 @@ class Gp:
                     surname = ?,
                     surgery_id = ?
                 WHERE gp_id = ?
-                """, (self.first_name, 
-                      self.surname, 
-                      self.surgery_id,
-                      gp_id))#
+                """, (updated_first_name,
+                      updated_surname,
+                      updated_surgery_id,
+                      gp_id))
 
                 conn.commit()
 
@@ -287,7 +288,7 @@ class Gp:
         dr.show_details_gp()
 
         while True:
-                delete = input("Are you sure you want to delete?").lower()
+                delete = input("Are you sure you want to delete(Y/N)?").lower()
                 if not self.validate_yes_no(delete):
                     continue 
                 if delete == "n":

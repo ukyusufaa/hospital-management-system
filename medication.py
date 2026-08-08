@@ -10,8 +10,10 @@ class Medication():
         self.cost = cost
     
     def show_medication_details(self):
+        print("-" * 30)
         print(f"Medication Name:{self.medication_name}")
         print(f"Cost:{self.cost}")
+        print("-" * 30)
     
     def validate_login_id(self,number):
         if number < 1:

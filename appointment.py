@@ -17,10 +17,12 @@ class Appointment():
         self.consultant_id = consultant_id
 
     def show_details_appointment(self):
+        print("-" * 30)
         print(f"Patient ID:{self.patient_id}")
         print(f"Appointment Date:{self.appointment_date}")
         print(f"Appointment Time:{self.appointment_time}")
         print(f"Consultant ID:{self.consultant_id}")
+        print("-" * 30)
 
     def validate_user_login(self,number):
         if number < 1:

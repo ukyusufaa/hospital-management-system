@@ -5,11 +5,13 @@ conn = sqlite3.connect("hospital.db")
 cursor = conn.cursor()
 
 class Department():
-    def __init__(self, department_name):
+    def __init__(self, department_name = None):
         self.department_name = department_name
     
     def show_department_details(self):
+        print("-" * 30)
         print(f"Department Name:{self.department_name}")
+        print("-" * 30)
     
     def validate_department_name(self,name):
         for letter in name:
@@ -29,7 +31,8 @@ class Department():
                 print("Department Name - Do not leave blank!")
                 continue 
             if not self.validate_department_name(self.department_name):
-                print("For department name use alphabet and tap space bar if required")
+                print("Department name must use alphabet only "
+                "and can also use space if required")
                 continue 
             break 
 
@@ -50,7 +53,7 @@ class Department():
             print("Database Error", e)
             return
         
-        print("Department inserted at Medina Hospital successfully")
+        print("Department successfully inserted")
         row = cursor.lastrowid
         print(f"Department ID:{row}")
         self.show_department_details()
@@ -145,7 +148,7 @@ class Department():
             print(f"Department ID:{row[0]}")
             dept.show_department_details()
 
-            update = input("Are you sure you want to update?")
+            update = input("Are you sure you want to update(Y/N)?")
             if update == "y":
                 while True:
                     new_dept_name = input("Department Name:")
@@ -153,6 +156,8 @@ class Department():
                         print("Department Name - Do not leave blank!")
                         continue 
                     if not self.validate_department_name(new_dept_name):
+                        print("Department name must use alphabet only "
+                        "and can also use space if required")
                         continue 
                     break 
 
@@ -210,7 +215,7 @@ class Department():
                 print(f"Department ID:{row[0]}")
                 dept.show_department_details()
     
-                delete = input("Are you sure you want to delete?")
+                delete = input("Are you sure you want to delete(Y/N)?")
                 if delete == "y":
 
                     try:

@@ -11,7 +11,9 @@ class Prescription():
         self.appointment_id = appointment_id
 
     def show_prescription_details(self):
+        print("-" * 30)
         print(f"Appointment ID:{self.appointment_id}")
+        print("-" * 30)
 
     def validate_login_id(self,number):
         if number < 1:

@@ -14,9 +14,11 @@ class PrescriptionMedication():
         self.medication_id = medication_id
 
     def show_prescription_medication_details(self):
+        print("-" * 30)
         print(f"Prescription Instructions:{self.prescription_instructions}")
         print(f"Prescription ID:{self.prescription_id}")
         print(f"Medication ID:{self.medication_id}")
+        print("-" * 30)
 
     def validate_login_id(self,number):
         if number < 1:

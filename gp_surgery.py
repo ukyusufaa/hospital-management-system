@@ -10,8 +10,10 @@ class GpSurgery:
         self.address = address 
     
     def show_gpsurgery_details(self):
+        print("-" * 30)
         print(f"Surgery Name:{self.surgery_name}")
         print(f"Address:{self.address}")
+        print("-" * 30)
     
     def validate_surgeryname(self,name):
         for letter in name:
@@ -42,7 +44,8 @@ class GpSurgery:
                 continue
 
             if not " " in self.address:
-                print("For address tap space bar")
+                print("Address - A space must exist " \
+                "between parts of the address")
                 continue
             
             invalid_char = False

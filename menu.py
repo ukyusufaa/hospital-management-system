@@ -11,149 +11,87 @@ from bill import Bill
 
 def menu():
     while True:
-        print("=== King Charles Hospital ===".center(50))
+        print("=== Holly Hospital ===".center(50))
         print("=== Welcome to the Main Menu ===".center(50))
-        print("1. Patient Management")
-        print("2. Consultant  Management")
-        print("3. Department Management")
-        print("4. Appointment Management")
-        print("5. Prescription Managment")
-        print("6. Medication Management")
-        print("7. Billing Management")
-        print("8. Exit")
+        print("1. Hospital Administration")
+        print("2. Patient Management")
+        print("3. Appointment Management")
+        print("4. Prescription Management")
+        print("5. Billing Management")
+        print("6. Exit")
 
         choice = input("Enter a choice from Main Menu: ")
 
         if choice == "1":
-            patient_management()
+            hospital_administration()
 
         elif choice == "2":
-            consultant_management()
+            patient_management()
+
+        elif choice == "3":
+            appointment_management()
+
+        elif choice == "4":
+            prescription_management()
+
+        elif choice == "5":
+            billing_management
+
+        elif choice == "6":
+            print("Exiting Holly Hospital Management System")
+            break 
+
+        else:
+            print("\nInvalid choice. Please enter " \
+            "a number between 1 and 6.")
+
+            input("Press Enter to try again...")
+
+    input("Press Enter to exit Holly Hospital System...")
+            
+def hospital_administration():
+    while True:
+        print("--- Holly Hospital ---".center(50))
+        print("--- Hospital Administration Menu ---".center(50))
+        print("1. Patient Medical Practice Management")
+        print("2. Patient GP Management")
+        print("3. Department Management")
+        print("4. Consultant Management")
+        print("5. Medication Management")
+        print("6. Return to Main Menu")
+
+        choice = input("Enter a choice: ")
+
+        if choice == "1":
+            gp_surgery_management()
+
+        elif choice == "2":
+            gp_management()
 
         elif choice == "3":
             department_management()
 
         elif choice == "4":
-            appointment_management()
+            consultant_management()
 
         elif choice == "5":
             prescription_management()
 
         elif choice == "6":
-            medication_management()
-
-        elif choice == "7":
-            billing_management()
-
-        elif choice == "8":
-            print("Exiting King Charles Hospital Management System")
-            break 
-
-        else:
-            print("\nInvalid choice. Please enter " \
-            "a number between 1 and 8.")
-
-            input("Press Enter to return to the Main Menu")
-            
-
-def patient_management():
-    while True:
-        print("--- King Charles Hospital ---".center(50)) 
-        print("--- Patient Menu ---".center(50))
-        print("1. Insert Patient Data")
-        print("2. Search Patient Data")
-        print("3. Update Patient Data")
-        print("4. Delete Patient Data")
-        print("5. Display All Patients Data")
-        print("6. Patient GP Management")
-        print("7. Patient Medical Practice Managmement")
-        print("8. Return to Main Menu")
-
-        choice = input("Enter a choice: ")
-
-
-        if choice == "1":
-            patient = Patient()
-            patient.create_patient()
-
-        elif choice == "2":
-            patient = Patient()
-            patient.search_patient()
-
-        elif choice == "3":
-            patient = Patient()
-            patient.update_patient()
-
-        elif choice == "4":
-            patient = Patient()
-            patient.delete_patient()
-
-        elif choice == "5":
-            patient = Patient()
-            patient.display_all_patients()
-
-        elif choice == "6":
-            patient_gp_management()
-
-        elif choice == "7":
-            patient_gp_surgery_management()
-
-        elif choice == "8":
             print("Returning to Main Menu")
             break
-
-        else:
-            print("\nInvalid choice. Please enter " \
-            "a number between 1 and 8.")
-            
-            input("Press Enter to return to the Main Menu")
-           
-def patient_gp_management():
-    while True:
-        print("--- King Charles Hospital ---".center(50)) 
-        print("--- Patient ---".center(50))
-        print("--- GP Menu ---".center(50))
-        print("1. Insert GP")
-        print("2. Search GP")
-        print("3. Update GP")
-        print("4. Delete GP")
-        print("5. Display All Patient GP's")
-        print("6. Return to Hospital Patient Menu ")
-
-        choice = input("Enter a choice")
-
-        if choice == "1":
-            gp = Gp()
-            gp.create_gp()
-
-        elif choice == "2":
-            gp = Gp()
-            gp.search_gp()
-
-        elif choice == "3":
-            gp = Gp()
-            gp.update_gp()
-
-        elif choice == "4":
-            gp = Gp()
-            gp.delete_gp()
-
-        elif choice == "5":
-            gp = Gp()
-            gp.display_all_gps()
-
-        elif choice == "6":
-            print("Returning to Patient Menu")
-            break 
+        
         else:
             print("\nInvalid choice. Please enter " \
             "a number between 1 and 6.")
-            
-            input("Press Enter to return to the Patient Menu")
+                        
+            input("Press Enter to try again...")
 
-def patient_gp_surgery_management():
+    input("Press Enter to return to the Main Menu...")
+
+def gp_surgery_management():
     while True:
-        print("--- King Charles Hospital ---".center(50)) 
+        print("--- Holly Hospital ---".center(50)) 
         print("--- Patient ---".center(50)) 
         print("--- Medical Practice Menu ---".center(50))
         print("1. Insert Medical Practice")
@@ -186,18 +124,110 @@ def patient_gp_surgery_management():
             gpsurgery.display_all_gpsurgery()
 
         elif choice == "6":
-            print("Returning to Patient Menu")
+            print("Returning to Hospital Administration Menu...")
             break 
 
         else:
             print("\nInvalid choice. Please enter " \
             "a number between 1 and 6.")
             
-            input("Press Enter to return to the Patient Menu")
+            input("Press Enter to try again...")
 
+    input("Press Enter to return to the Hospital Administration Menu...")
+
+def gp_management():
+    while True:
+        print("--- Holly Hospital ---".center(50)) 
+        print("--- Patient ---".center(50))
+        print("--- GP Menu ---".center(50))
+        print("1. Insert GP")
+        print("2. Search GP")
+        print("3. Update GP")
+        print("4. Delete GP")
+        print("5. Display All Patient GP's")
+        print("6. Return to Hospital Patient Menu ")
+
+        choice = input("Enter a choice: ")
+
+        if choice == "1":
+            gp = Gp()
+            gp.create_gp()
+
+        elif choice == "2":
+            gp = Gp()
+            gp.search_gp()
+
+        elif choice == "3":
+            gp = Gp()
+            gp.update_gp()
+
+        elif choice == "4":
+            gp = Gp()
+            gp.delete_gp()
+
+        elif choice == "5":
+            gp = Gp()
+            gp.display_all_gps()
+
+        elif choice == "6":
+            print("Returning to Hospital Administration Menu")
+            break 
+        else:
+            print("\nInvalid choice. Please enter " \
+            "a number between 1 and 6.")
+            
+            input("Press Enter to try again...")
+
+    input("Press Enter to return to the Hospital Administration Menu...")
+
+def department_management():
+    while True:
+        print("--- Holly Hospital ---".center(50))
+        print("--- Department Menu ---".center(50))
+        print("1. Insert Department")
+        print("2. Search Department")
+        print("3. Update Department")
+        print("4. Delete Department")
+        print("5. Display All Hospital Departments")
+        print("6. Return to Main Menu")
+
+        choice = input("Enter a choice: ")
+
+        if choice == "1":
+            department = Department()
+            department.create_department()
+
+        elif choice == "2":
+            department = Department()
+            department.search_department()
+
+        elif choice == "3":
+            department = Department()
+            department.update_department()
+
+        elif choice == "4":
+            department = Department()
+            department.delete_department()
+
+        elif choice == "5":
+            department = Department()
+            department.display_all_departments()
+
+        elif choice == "6":
+            print("Returning to Main Menu")
+            break
+
+        else:
+            print("\nInvalid choice. Please enter " \
+            "a number between 1 and 6.")
+                        
+            input("Press Enter to try again...")
+
+    input("Press Enter to return to the Hospital Administration Menu...")
+            
 def consultant_management():
     while True:
-        print("--- Hospital ---".center(50))
+        print("--- Holly Hospital ---".center(50))
         print("--- Consultant Menu ---".center(50))
         print("1. Insert Consultant")
         print("2. Search Consultant")
@@ -236,54 +266,104 @@ def consultant_management():
             print("\nInvalid choice. Please enter " \
             "a number between 1 and 6.")
             
-            input("Press Enter to return to the Main Menu")
+            input("Press Enter to try again...")
 
-def department_management():
+    input("Press Enter to return to the Hospital Administration Menu...")
+
+def medication_management():
     while True:
-        print("--- King Charles Hospital ---".center(50))
-        print("--- Department Menu ---".center(50))
-        print("1. Insert Department")
-        print("2. Search Department")
-        print("3. Update Department")
-        print("4. Delete Department")
-        print("5. Display All Hospital Departments")
+        print("--- Holly Hospital ---".center(50))
+        print("--- Medication Menu ---".center(50))
+        print("1. Insert Medication")
+        print("2. Search Medication")
+        print("3. Update Medication")
+        print("4. Delete Medication")
+        print("5. Display All Hospital Medications")
         print("6. Return to Main Menu")
 
-        choice = input("Enter a choice:")
+        choice = input("Enter a choice: ")
 
         if choice == "1":
-            department = Department()
-            department.create_department()
+            medication = Medication()
+            medication.create_medication()
 
         elif choice == "2":
-            department = Department()
-            department.search_department()
+            medication = Medication ()
+            medication.search_medication()
 
         elif choice == "3":
-            department = Department()
-            department.update_department()
+            medication = Medication()
+            medication.update_medication()
 
         elif choice == "4":
-            department = Department()
-            department.delete_department()
+            medication = Medication()
+            medication.delete_medication()
 
         elif choice == "5":
-            department = Department()
-            department.display_all_departments()
+            medication = Medication()
+            medication.display_all_medications()
 
         elif choice == "6":
             print("Returning to Main Menu")
+            break
 
         else:
             print("\nInvalid choice. Please enter " \
             "a number between 1 and 6.")
                         
-            input("Press Enter to return to the Main Menu")
+            input("Press Enter to try again...")
+
+    input("Press Enter to return to the Hospital Administration Menu...")
+
+def patient_management():
+    while True:
+        print("--- Holly Hospital ---".center(50)) 
+        print("--- Patient Menu ---".center(50))
+        print("1. Insert Patient Data")
+        print("2. Search Patient Data")
+        print("3. Update Patient Data")
+        print("4. Delete Patient Data")
+        print("5. Display All Patients Data")
+        print("8. Return to Main Menu")
+
+        choice = input("Enter a choice: ")
+
+
+        if choice == "1":
+            patient = Patient()
+            patient.create_patient()
+
+        elif choice == "2":
+            patient = Patient()
+            patient.search_patient()
+
+        elif choice == "3":
+            patient = Patient()
+            patient.update_patient()
+
+        elif choice == "4":
+            patient = Patient()
+            patient.delete_patient()
+
+        elif choice == "5":
+            patient = Patient()
+            patient.display_all_patients()
+
+        elif choice == "6":
+            print("Returning to Main Menu")
+            break
+
+        else:
+            print("\nInvalid choice. Please enter " \
+            "a number between 1 and 6.")
             
+            input("Press Enter to try again...")
+
+    input("Press Enter to return to the Main Menu...")
 
 def appointment_management():
     while True:
-        print("--- King Charles Hospital ---".center(50))
+        print("--- Holly Hospital ---".center(50))
         print("--- Appointment Menu ---".center(50))
         print("1. Insert Appointment")
         print("2. Search Appointment")
@@ -292,7 +372,7 @@ def appointment_management():
         print("5. Display All Hospital Appointments")
         print("6. Return to Main Menu")
 
-        choice = input("Enter a choice:")
+        choice = input("Enter a choice: ")
 
         if choice == "1":
             appointment = Appointment()
@@ -316,17 +396,20 @@ def appointment_management():
 
         elif choice == "6":
             print("Returning to Main Menu")
+            break
 
         else:
             print("\nInvalid choice. Please enter " \
             "a number between 1 and 6.")
                         
-            input("Press Enter to return to the Main Menu")
+            input("Press Enter to try again...")
+
+    input("Press Enter to return to the Main Menu...")
 
 def prescription_management():
     while True:
-        print("--- King Charles Hospital ---".center(50))
-        print(--- "Prescription Menu ---".center(50))
+        print("--- Holly Hospital ---".center(50))
+        print("--- Prescription Menu ---".center(50))
         print("1. Insert Prescription")
         print("2. Search Prescription")
         print("3. Delete Prescription")
@@ -334,7 +417,7 @@ def prescription_management():
         print("5. Prescription Instructions Management")
         print("6. Return to Main Menu")
 
-        choice = input("Enter a choice:")
+        choice = input("Enter a choice: ")
 
         if choice == "1":
             prescription = Prescription()
@@ -357,16 +440,19 @@ def prescription_management():
 
         elif choice == "6":
             print("Returning to Main Menu")
+            break
 
         else:
             print("\nInvalid choice. Please enter " \
             "a number between 1 and 6.")
                         
-            input("Press Enter to return to the Main Menu")
+            input("Press Enter to try again...")
+
+    input("Press Enter to return to the Main Menu...")
 
 def prescription_instructions_management():
     while True:
-        print("--- King Charles Hospital ---".center(50))
+        print("--- Holly Hospital ---".center(50))
         print("--- Prescription ---".center(50))
         print("--- Instructions Menu ---".center(50))
         print("1. Insert Prescription Instructions")
@@ -375,7 +461,7 @@ def prescription_instructions_management():
         print("4. Display All Hospital Prescription Instructions")
         print("5. Return to Hospital Prescription Menu")
 
-        choice = input("Enter a choice:")
+        choice = input("Enter a choice: ")
 
         if choice == "1":
             instructions = PrescriptionMedication()
@@ -401,53 +487,13 @@ def prescription_instructions_management():
             print("\nInvalid choice. Please enter " \
             "a number between 1 and 5.")
                         
-            input("Press Enter to return to the Prescription Menu")
+            input("Press Enter to try again...")
 
-def medication_management():
-    while True:
-        print("--- King Charles Hospital ---".center(50))
-        print("--- Medication Menu ---".center(50))
-        print("1. Insert Medication")
-        print("2. Search Medication")
-        print("3. Update Medication")
-        print("4. Delete Medication")
-        print("5. Display All Hospital Medications")
-        print("6. Return to Main Menu")
-
-        choice = input("Enter a choice:")
-
-        if choice == "1":
-            medication = Medication()
-            medication.create_medication()
-
-        elif choice == "2":
-            medication = Medication ()
-            medication.search_medication()
-
-        elif choice == "3":
-            medication = Medication()
-            medication.update_medication()
-
-        elif choice == "4":
-            medication = Medication()
-            medication.delete_medication()
-
-        elif choice == "5":
-            medication = Medication()
-            medication.display_all_medications()
-
-        elif choice == "6":
-            print("Returning to Main Menu")
-
-        else:
-            print("\nInvalid choice. Please enter " \
-            "a number between 1 and 6.")
-                        
-            input("Press Enter to return to the Main Menu")
+    input("Press Enter to return to the Prescription Menu...")
 
 def billing_management():
     while True:
-        print("--- Hospital ---".center(50))
+        print("--- Holly Hospital ---".center(50))
         print("--- Billing Menu ---".center(50))
         print("1. Insert Billing")
         print("2. Search Billing")
@@ -475,12 +521,15 @@ def billing_management():
 
         elif choice == "5":
             print("Returning to Main Menu")
+            break 
 
         else:
             print("\nInvalid choice. Please enter " \
             "a number between 1 and 5.")
                         
-            input("Press Enter to return to the Main Menu")
+            input("Press Enter to try again...")
+
+    input("Press Enter to return to the Main Menu...")
 
 
 
