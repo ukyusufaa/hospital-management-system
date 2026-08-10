@@ -4,7 +4,7 @@ conn = sqlite3.connect("hospital.db")
 
 cursor = conn.cursor()
 cursor.execute("PRAGMA foreign_keys = ON;")
-        # Enable foreign key constraints for related database records
+        # Enable foreign key constraints for related database records.
 
 class Consultant():
     def __init__(self,first_name = None,surname = None,
