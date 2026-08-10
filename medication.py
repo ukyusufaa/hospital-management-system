@@ -55,7 +55,7 @@ class Medication():
                     number_found = True
                     break 
             if number_found == False:
-                print("Medication Name - A medication dosage must be entered ")
+                print("Medication Name - A medication strength must be entered ")
                 continue
 
             space_found = False
@@ -64,13 +64,13 @@ class Medication():
                     space_found = True
                     break 
             if space_found == False:
-                print("Medication Name- Invalid partial "
-                "medication name, please re-insert the full medication "
-                "name using space bar where applicable ")
+                print("Medication Name - Enter a medication name and its strength " \
+                "separated by a space")
                 continue
 
             if not self.validate_medication_name(self.medication_name):
-                print("For medication name use alphabet and tap space bar if required")
+                print("Medication name - must exactly contain " \
+                "letters, numbers and space")
                 continue 
             break
 
@@ -202,7 +202,8 @@ class Medication():
                         print("Medication Name - Do not leave blank!")
                         continue
                     if not self.validate_medication_name(new_medication_name):
-                        print("For medication name use alphabet and tap space bar if required")
+                        print("Medication name - must exactly contain " \
+                        "letters, numbers and space")
                         continue 
                     break
 

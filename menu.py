@@ -75,7 +75,7 @@ def hospital_administration():
             consultant_management()
 
         elif choice == "5":
-            prescription_management()
+            medication_management()
 
         elif choice == "6":
             print("Returning to Main Menu")
