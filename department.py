@@ -12,7 +12,8 @@ class Department():
         print("-" * 30)
         print(f"Department Name:{self.department_name}")
         print("-" * 30)
-    
+
+        # Validate department names using letters and spaces only.
     def validate_department_name(self,name):
         for letter in name:
             if not letter.isalpha() and letter != " ":
@@ -24,15 +25,17 @@ class Department():
                 return False
             return True          
 
+        # Collect and validate department details before saving the record.
     def create_department(self):
         while True:
-            self.department_name = input("Department Name:")
+            self.department_name = input("Enter department name:")
             if self.department_name == "":
-                print("Department Name - Do not leave blank!")
+                print("Department Name is required. " \
+                "Please enter a department name.")
                 continue 
             if not self.validate_department_name(self.department_name):
-                print("Department name must use alphabet only "
-                "and can also use space if required")
+                print("Please use letters and " \
+                "spaces only")
                 continue 
             break 
 
@@ -41,6 +44,7 @@ class Department():
         )
 
         try:
+            # Insert the validated department into the database.
             cursor.execute("""
             INSERT INTO department(
                        department_name)
@@ -50,27 +54,31 @@ class Department():
             conn.commit()
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print("Unable to save the department. " \
+            "Please try again.", e)
             return
         
-        print("Department successfully inserted")
+        print("Department created successfully")
         row = cursor.lastrowid
         print(f"Department ID:{row}")
         self.show_department_details()
         return
-    
+
+        # Retrieve and display all departments stored in the database.
     def display_all_departments(self):
         try:
             cursor.execute("SELECT * FROM department")
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print("Unable to retrieve departments." \
+            "Please try again.", e)
             return
 
         rows = cursor.fetchall()
 
         if not rows:
-            print("No Departments found")
+            print("No departments are " \
+            "currently registered")
             return
         else:
             for row in rows: 
@@ -80,17 +88,20 @@ class Department():
                 print(f"Department ID:{row[0]}")
                 new_dept.show_department_details()
         return
-    
+
+        # Find a department using its unique department ID.
     def search_department(self):
         while True:
             try:
-                department_id = int(input("Department ID:"))
+                department_id = int(input("Enter department ID:"))
                 if not self.validate_id_input(department_id):
-                    print("Department ID - must be greater than 0")
+                    print("Please enter a valid " \
+                    "department ID.")
                     continue 
                 break
             except ValueError:
-                print("For Department ID use only numbers")
+                print("For Department ID " \
+                "must contain numbers only.")
                 return
 
         try:
@@ -100,12 +111,15 @@ class Department():
             """,(department_id,))
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print("Unable to search " \
+            "for the department. " \
+            "Please try again.", e)
             return
 
         row = cursor.fetchone()
         if not row:
-            print ("No department found")
+            print ("No department was found " \
+            "with that ID.")
             return
         else:
             dept = Department(
@@ -114,17 +128,20 @@ class Department():
             print(f"Department ID:{row[0]}")
             dept.show_department_details()
             return
-    
+
+        # Update the details of an existing department.
     def update_department(self):
         while True:
             try:
-                department_id = int(input("Department ID:"))
+                department_id = int(input("Enter department ID:"))
                 if not self.validate_id_input(department_id):
-                    print("Department ID - must be greater than 0")
+                    print("Please enter a valid " \
+                    "department ID.")
                     continue 
                 break 
             except ValueError:
-                print("For Department ID use only numbers")
+                print("Department ID must " \
+                "contain numbers only.")
                 continue 
 
         try:
@@ -134,30 +151,37 @@ class Department():
             """,(department_id,))
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print("Unable to retrieve the " \
+            "department. Please try again.", e)
             return
 
         row = cursor.fetchone()
         if not row:
-            print("No such department")
+            print("No department was found " \
+            "with that ID.")
             return
         else:
             dept = Department(
-                row[0]
+                row[1]
             )
             print(f"Department ID:{row[0]}")
             dept.show_department_details()
 
-            update = input("Are you sure you want to update(Y/N)?")
+            update = input(
+                "Update this department? (Y/N):"
+                ).lower()
             if update == "y":
                 while True:
-                    new_dept_name = input("Department Name:")
+                    new_dept_name = input(
+                        "Enter new department name:"
+                        )
                     if new_dept_name == "":
-                        print("Department Name - Do not leave blank!")
+                        print("Department name is required. " \
+                        "Please enter a department name.")
                         continue 
                     if not self.validate_department_name(new_dept_name):
-                        print("Department name must use alphabet only "
-                        "and can also use space if required")
+                        print("Please use letters " \
+                        "and spaces only.")
                         continue 
                     break 
 
@@ -173,25 +197,28 @@ class Department():
                     conn.commit()
 
                 except sqlite3.Error as e:
-                    print("Database Error", e)
+                    print("Unable to update the " \
+                    "department. Please try again.", e)
                     return
 
-                print("Department updated successfully")
+                print("Department updated successfully.")
                 return
             else:
-                print("Update process aborted")
+                print("Department update cancelled.")
                 return
 
+        # Confirm and remove an existing department from the database.
     def delete_department(self):
             while True:
                 try:
-                    department_id = int(input("Department ID:"))
+                    department_id = int(input("Enter department ID:"))
                     if not self.validate_id_input(department_id):
-                        print("Department ID - must be greater than 0")
+                        print("Please enter a valid " \
+                        "department ID.")
                         continue 
                     break 
                 except ValueError:
-                    print("For Department ID use only numbers")
+                    print("Department ID use only numbers.")
                     continue
 
             try:
@@ -201,12 +228,14 @@ class Department():
                 """,(department_id,))
 
             except sqlite3.Error as e:
-                print("Database Error", e)
+                print("Unable to retrieve the " \
+                "department. Please try again.", e)
                 return
     
             row = cursor.fetchone()
             if not row:
-                print("No such department found")
+                print("No department was found " \
+                "with that ID.")
                 return
             else:
                 dept = Department(
@@ -215,25 +244,27 @@ class Department():
                 print(f"Department ID:{row[0]}")
                 dept.show_department_details()
     
-                delete = input("Are you sure you want to delete(Y/N)?")
+                delete = input(
+                    "Delete this department? (Y/N)"
+                    ).lower()
                 if delete == "y":
-
                     try:
                         cursor.execute("""
                         DELETE FROM department
                         WHERE department_id = ?
                         """,(department_id,))
-    
+
                         conn.commit()
 
                     except sqlite3.Error as e:
-                        print("Database Error", e)
+                        print("Unable to delete the " \
+                        "department. Please try again.", e)
                         return
     
                     print("Department deleted successfully")
                     return
                 else:
-                    print("Delete process aborted")
+                    print("Department deletion cancelled.")
                     return
 
 

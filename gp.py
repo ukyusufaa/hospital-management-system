@@ -19,70 +19,84 @@ class Gp:
         print(f"Surgery ID: {self.surgery_id}")
         print("-" * 30)
 
+        # Validate names using letters and spaces only.
     def validation_name(self,name):
             for letter in name:
                 if not letter.isalpha() and not letter == " ":
                     return False
             return True
 
+        # Validate IDs to ensure they are positive integers.
     def validate_login_digits(self,number):
             if number < 1:
                 return False
             return True
-        
+
+        # Validate Y/N responses. 
     def validate_yes_no(self,choice):
             if choice != 'y' and choice != 'n':
                 return False
             return True
 
+        # Collect and validate GP details before saving the record.
     def create_gp(self):
         while True:
-            self.first_name = input("GP First Name:")
+            self.first_name = input("Enter GP first name:")
             if self.first_name == "":
-                print("GP First Name - Do not leave blank!")
+                print("First Name is required. " \
+                "Please enter a first name.")
                 continue
             if not self.validation_name(self.first_name):
-                print("First Name - Use alphabet and tap space bar if required")
+                print("Please use letters and " \
+                "spaces only.")
                 continue 
             break 
 
         while True:
-            self.surname = input("GP Last Name:")
+            self.surname = input("Enter GP last name:")
             if self.surname == "":
-                print("GP Last Name - Do not leave blank!")
+                print("Last name is required. " \
+                "Please enter a last name.")
                 continue 
             if not self.validation_name(self.surname):
-                print("GP Last Name - Use alphabet and tap space bar if required")
+                print("Please use letters and " \
+                "spaces only.")
                 continue 
             break 
 
         while True:
             try:
-                self.surgery_id = int(input("Surgery ID: "))
+                self.surgery_id = int(input("Enter surgery ID: "))
                 if not self.validate_login_digits(self.surgery_id):
-                    print("Surgery ID must be greater than 0")
+                    print("Please enter a valid surgery ID.")
                     continue
                 break 
             except ValueError:
-                print("For Surgery ID use only numbers")
+                print("Please enter the surgery ID " \
+                "using numbers only.")
                 continue
 
         try:
+            # Confirm that the selected medical practice exists before creating the GP.
             cursor.execute("""
             SELECT * FROM gp_surgery
             WHERE surgery_id = ?
             """,(self.surgery_id,))
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print("Unable to retrieve the " \
+            "medical practice. " \
+            "Please try again.", e)
             return
 
         row = cursor.fetchone()
         if not row:
-            print("No GP surgery found")
+            print("No medical practice was found " \
+            "with that ID.")
             return
         else:
             try:
+        # Insert the validated GP details into the database.
                 cursor.execute("""
                 INSERT INTO gp 
                         (first_name, 
@@ -94,26 +108,30 @@ class Gp:
                 conn.commit()
 
             except sqlite3.Error as e:
-                print("Database Error", e)
+                print("Unable to save the GP. " \
+                "Please try again.", e)
                 return
             
-        print("GP inserted successfully")
+        print("GP created successfully")
         row = cursor.lastrowid
         print(f"GP ID:{row}")
         self.show_details_gp()
         return
 
+        # Retrieve and display all GPs stored in the database.
     def display_all_gps(self):
         try:
             cursor.execute("SELECT * FROM gp")
 
         except sqlite3.Error as e:
-                print("Database Error", e)
+                print("Unable to retrieve GPs. " \
+                "Please try again.", e)
                 return
         
         rows = cursor.fetchall()
         if not rows:
-            print("No patient GP's found")
+            print("No GPs are currently " \
+            "registered.")
             return
         else:
             for row in rows:
@@ -122,20 +140,22 @@ class Gp:
                     row[2],
                     row[3]
                 )
-                print(row[0])
+                print(f"GP ID: {row[0]}")
                 dr.show_details_gp()
             return
-            
+
+        # Find a GP using their unique GP ID. 
     def search_gp(self):
         while True:
             try:
-                gp_id = int(input("GP ID:"))
+                gp_id = int(input("Enter GP ID:"))
                 if not self.validate_login_digits(gp_id):
-                    print("GP ID must be greater than 0")
+                    print("Please enter a valid GP ID.")
                     continue
                 break 
             except ValueError:
-                    print("For GP ID use only numbers")
+                    print("Please enter the GP ID " 
+                          "using numbers only.")
                     continue
         try:     
             cursor.execute("""
@@ -144,12 +164,14 @@ class Gp:
             """,(gp_id,))
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print("Unable to search for " \
+            "the GP. Please try again.", e)
             return
         
         row = cursor.fetchone()
         if not row:
-            print("Patient not found")
+            print("No GP was found " \
+            "with that ID.")
             return
         else:
             dr = Gp(
@@ -157,20 +179,22 @@ class Gp:
                 row[2],
                 row[3]
                 )
-        print(row[0])
+        print(f"GP ID: {row[0]}")
         dr.show_details_gp()
         return
 
+        # Update the details of an existing GP.
     def update_gp(self):
         while True:
             try:
-                gp_id = int(input("GP ID:"))
+                gp_id = int(input("Enter GP ID:"))
                 if not self.validate_login_digits(gp_id):
-                    print("GP ID must be greater than 0")
+                    print("Please enter a valid GP ID.")
                     continue
                 break 
             except ValueError:
-                print("For GP ID use only numbers")
+                print("Please enter the GP ID using " \
+                "only numbers.")
                 continue
         try:              
             cursor.execute("""
@@ -179,11 +203,13 @@ class Gp:
             """,(gp_id,))
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print("Unable to retrieve the GP. " \
+            "Please try again.", e)
                 
         row = cursor.fetchone()
         if not row:
-            print("GP not found")
+            print("No GP was found " \
+            "with that ID.")
             return
         else:
             dr = Gp(
@@ -191,48 +217,66 @@ class Gp:
                 row[2],
                 row[3]
                 )
-        print(row[0])
+        print(f"GP ID: {row[0]}")
         dr.show_details_gp()
 
         while True:
-            update = input("Do you want to update this GP's details?(y/n)").lower()
+            update = input(
+                "Update this GPs details? (Y/N):"
+                ).lower()
             if not self.validate_yes_no(update):
-                print("Invalid input")
+                print("Please enter Y/y " \
+                "or N/n.")
                 continue
             if update == "n":
-                print("Update aborted")
+                print("GP update cancelled.")
                 return
             else:
                 while True:
-                    updated_first_name = input("GP First Name:")
+                    updated_first_name = input(
+                        "Enter new GP " \
+                        "first name: "
+                    )
                     if updated_first_name == "":
-                        print("GP First Name - Do not leave name blank!")
+                        print("First name is required. " \
+                        "Please enter a first name.")
                         continue
                     if not self.validation_name(updated_first_name):
-                        print("First Name - Use alphabet and tap space bar if required")
+                        print("Please use letters " \
+                        "and spaces only.")
                         continue 
                     break 
                 
                 while True:
-                    updated_surname = input("GP Last Name:")
+                    updated_surname = input(
+                        "Enter new GP " \
+                        "last name: "
+                    )
                     if updated_surname == "":
-                        print("Last Name - Do not leave blank!")
+                        print("Last name is required. " \
+                        "Please enter a last name.")
                         continue 
                     if not self.validation_name(updated_surname):
-                        print("Last Name - Use alphabet and tap space bar if required")
+                        print("Please use letters and " \
+                        "spaces only.")
                         continue 
                     break
 
                 while True:
                     try:
-                        updated_surgery_id = int(input("Surgery ID:"))
+                        updated_surgery_id = int(
+                            input("Enter medical " \
+                            "practice ID: ")
+                            )
                         if not self.validate_login_digits(updated_surgery_id):
-                            print("Surgery ID must be greater than 0")
+                            print("Please enter a valid "
+                            "surgery ID.")
                             continue
                         break
                     
                     except ValueError:
-                        print("For Surgery ID use only numbers")
+                        print("Please enter the surgery ID " \
+                        "using numbers only.")
                         continue
             try:
                 cursor.execute("""
@@ -249,22 +293,25 @@ class Gp:
                 conn.commit()
 
             except sqlite3.Error as e:
-                print("Database Error", e)
+                print("Unable to update the GP." \
+                "Please try again.", e)
                 return
     
-            print("GP updated successfully")
+            print("GP updated successfully.")
             return
 
+        # Confirm and remove an existing GP from the database.
     def delete_gp(self):
         while True:
             try:
-                gp_id = int(input("GP ID:"))
+                gp_id = int(input("Enter GP ID:"))
                 if not self.validate_login_digits(gp_id):
-                    print("GP ID must be greater than 0")
+                    print("Please Enter a valid GP ID.")
                     continue
                 break 
             except ValueError:
-                    print("For GP ID use only numbers")
+                    print("Please enter the GP ID " \
+                    "using numbers only.")
                     continue
         try:    
             cursor.execute("""
@@ -273,26 +320,33 @@ class Gp:
             """,(gp_id,))
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print("Unable to retrieve the GP. " \
+            "Please try again.", e)
         
         row = cursor.fetchone()
         if not row:
-            print("GP not found")
+            print("No GP was found " \
+            "with that ID.")
         else:
             dr = Gp(
                 row[1],
                 row[2],
                 row[3]
             )
-        print(row[0])
+        print(f"GP ID: {row[0]}")
         dr.show_details_gp()
 
         while True:
-                delete = input("Are you sure you want to delete(Y/N)?").lower()
+                delete = input(
+                    "Delete this " \
+                    "GP? (Y/N): "
+                ).lower()
                 if not self.validate_yes_no(delete):
+                    print("Please enter Y/y " \
+                    "or N/n.")
                     continue 
                 if delete == "n":
-                    print("GP not deleted - aborted")
+                    print("GP deletion cancelled.")
                     return
                 else:
                     try:
@@ -304,10 +358,11 @@ class Gp:
                         conn.commit()
 
                     except sqlite3.Error as e:
-                        print("Database Error", e)
+                        print("Unable to delete the GP. " \
+                        "Please try again.", e)
                         return
                     
-                    print("GP sucesssfully deleted")
+                    print("GP sucesssfully deleted.")
                     return
                 
 

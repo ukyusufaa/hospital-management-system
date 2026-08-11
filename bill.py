@@ -34,7 +34,6 @@ class Bill():
             return False
         return True
             
-
     def create_bill(self):
         # Validate the appointment ID entered by user.
         while True:
@@ -63,7 +62,8 @@ class Bill():
             """,(self.appointment_id,))
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print("Unable to find the prescription. " \
+            "Please try again.", e)
             return 
 
         # Retrieve the prescription because only one is expected.
@@ -82,7 +82,9 @@ class Bill():
                 """,(self.prescription_id,))
 
             except sqlite3.Error as e:
-                print("Database Error", e)
+                print("Unable to retrieve the " \
+                "prescription medications. Please " \
+                "try again.", e)
                 return
         # A prescription contain multiple medications, so fetchall() is used.
             prescription_medication_rows = cursor.fetchall()
@@ -105,7 +107,8 @@ class Bill():
                         """,(self.medication_id,))
 
                     except sqlite3.Error as e:
-                        print("Database Error", e)
+                        print("Unable to retrieve the " \
+                        "medications. Please try again.", e)
                         return
 
                     medication_row = cursor.fetchone()
@@ -153,7 +156,8 @@ class Bill():
             conn.commit()
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print("Unable to create the bill. " \
+            "Please try again.", e)
             return
 
         print("Bill created successfully")
@@ -169,7 +173,8 @@ class Bill():
             cursor.execute("SELECT * FROM bill")
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print("Unable to retrieve bills. " \
+            "Please try again.", e)
             return
 
         bill_rows = cursor.fetchall()
@@ -206,10 +211,16 @@ class Bill():
                 continue 
 
         # Search for a bill using the appointment ID.
-        cursor.execute("""
-        SELECT * FROM bill
-        WHERE appointment_id = ?
-        """,(self.appointment_id,))
+        try:
+            cursor.execute("""
+            SELECT * FROM bill
+            WHERE appointment_id = ?
+            """,(self.appointment_id,))
+
+        except sqlite3.Error as e:
+            print("Unable to search for the bill. " \
+            "Please try again.", e)
+            return
 
         bill_row = cursor.fetchone()
         if not bill_row:
@@ -242,14 +253,20 @@ class Bill():
                 continue 
 
         # Find the bill associated with the appointment.
-        cursor.execute("""
-        SELECT * FROM bill
-        WHERE appointment_id = ?
-        """,(self.appointment_id,))
+        try:
+            cursor.execute("""
+            SELECT * FROM bill
+            WHERE appointment_id = ?
+            """,(self.appointment_id,))
+
+        except sqlite3.Error as e:
+            print("Unable to retrieve the bill. " \
+            "Please try again.", e)
+            return
 
         bill_row = cursor.fetchone()
         if not bill_row:
-            print("Patient bill not found")
+            print("Patient bill not found.")
             return 
         else:
             billing = Bill(
@@ -283,7 +300,8 @@ class Bill():
                         conn.commit()
 
                     except sqlite3.Error as e:
-                        print("Database Error", e)
+                        print("Unable to update the bill. " \
+                        "Please try again.", e)
                         return
 
                     print("Bill payment status updated succesfully")

@@ -56,7 +56,8 @@ class Appointment():
             """,(self.patient_id,))
 
         except sqlite3.Error as e:
-            print("Database error:", e)
+            print("Unable to find the patient record. " \
+            "Please try again.", e)
             return
 
         # Retrieve the patient record using fetchone()
@@ -87,7 +88,8 @@ class Appointment():
             """,(self.consultant_id,))
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print("Unable to find the consultant record. " \
+            "Please try again.", e)
             return
         # Retrieve the consultant record using fetchone().          
         row = cursor.fetchone()
@@ -234,7 +236,8 @@ class Appointment():
                 self.appointment_time))
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print("Unable to check appointment " \
+            "availability. Please try again.", e)
             return
         # Retrieve any matching appointment.
         row = cursor.fetchone()
@@ -262,7 +265,8 @@ class Appointment():
                 conn.commit()
 
             except sqlite3.Error as e:
-                print("Database Error", e)
+                print("Unable to book the " \
+                "appointment. Please try again.", e)
                 return
 
             print("Appointment booked successfully.")
@@ -278,7 +282,8 @@ class Appointment():
             cursor.execute("SELECT * FROM appointment")
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print("Unable to retrieve appointments." \
+            "Please try again.", e)
             return
 
         # Retrieve all appointments records returned by the query.
@@ -322,7 +327,8 @@ class Appointment():
             """,(appointment_id,))
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print("Unable to search for the appointment. " \
+            "Please try again.", e)
             return
         # Retrieve the matching appointment record.
         row = cursor.fetchone()
@@ -365,7 +371,8 @@ class Appointment():
             """,(appointment_id,))
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print("Unable to retrieve the appointment. " \
+            "Please try again.", e)
             return
 
         # Retrieve the existing appointment record.
@@ -582,7 +589,8 @@ class Appointment():
                         patient_appointment.appointment_time))
 
                 except sqlite3.Error as e:
-                    print("Database Error", e)
+                    print("Unable to check appointment " \
+                    "availability. Please try again.", e)
                     return
 
                 row = cursor.fetchone()
@@ -608,7 +616,8 @@ class Appointment():
                         conn.commit()
 
                     except sqlite3.Error as e:
-                        print ("Database Error", e)
+                        print ("Unable to update the " \
+                        "appointment. Please try again.", e)
                         return
 
                     print("Appointment updated successfully.")
@@ -633,7 +642,8 @@ class Appointment():
             """,(appointment_id,))
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print("Unable to retrieve the " \
+            "appointment. Please try again.", e)
             return
 
         # Retrieve the appointment record before deletion
@@ -677,7 +687,8 @@ class Appointment():
                         conn.commit()
 
                     except sqlite3.Error as e:
-                        print("Database Error", e)
+                        print("Unable to delete the " \
+                        "appointment. Please try again.", e)
                         return
                     
                 print("Appointment deleted successfully.")
