@@ -1,11 +1,8 @@
+# Import SQLite to work with the database
 import sqlite3
 
-conn = sqlite3.connect("hospital.db")
-
-cursor = conn.cursor()
-
-# Enable foreign key constraints to maintain relationships between tables.
-cursor.execute("PRAGMA foreign_keys = ON;")
+# Import the shared database connection and cursor from database.py module.
+from database import conn, cursor
 
 class PrescriptionMedication():
         # Store the prescription-medication relationship and associated instructions.
@@ -77,31 +74,54 @@ class PrescriptionMedication():
                     "using numbers only.")
                     continue
 
+        # Check whether this medication is already linked to the prescription.
         try:
-        # Create the link between the prescription and medication.
-        # Store the associated regimen instructions.
             cursor.execute("""
-            INSERT INTO prescription_medication(
-                        prescription_instructions,
-                        prescription_id,
-                        medication_id)
-            VALUES(?,?,?)
-            """,(self.prescription_instructions,
-             self.prescription_id,
-             self.medication_id))
-
-        # Save the new prescription-medication record to the database.
-            conn.commit()
+            SELECT * FROM prescription_medication
+            WHERE prescription_id = ?
+            AND medication_id = ?
+            """,(self.prescription_id,
+                 self.medication_id))
 
         except sqlite3.Error as e:
-            print("Unable to add the " \
-            "regimen. Please " \
+            print("Unable to check the prescription " \
+            "medication relationship. Please " \
             "try again.", e)
             return
 
-        print("Regimen added successfully.")
-        self.show_prescription_medication_details()
-        return
+        row = cursor.fetchone()
+
+        if row:
+            print("This medication is already " \
+            "included on the prescription.")
+            return
+        else:
+            try:
+        # As the medication is not linked.
+        # Create the link between the prescription and medication.
+        # Store the associated regimen instructions.
+                cursor.execute("""
+                INSERT INTO prescription_medication(
+                        prescription_instructions,
+                        prescription_id,
+                        medication_id)
+                VALUES(?,?,?)
+                """,(self.prescription_instructions,
+                self.prescription_id,
+                self.medication_id))
+
+        # Save the new prescription-medication record to the database.
+                conn.commit()
+
+            except sqlite3.Error as e:
+                print("Unable to add the " \
+                "regimen. Please " \
+                "try again.", e)
+                return
+
+            print("Regimen added successfully.")
+            self.show_prescription_medication_details()
+            return
 
     def display_all_prescription_medications(self):
         try:
@@ -140,13 +160,29 @@ class PrescriptionMedication():
             except ValueError:
                 print("Please enter a valid " \
                 "prescription ID using numbers only.")
+                continue
+
+        while True:
+            try:
+                self.medication_id = int(
+                    input("Please enter medication ID: "))
+                if not self.validate_login_id(self.medication_id):
+                    print("Please enter valid medication ID.")
+                    continue 
+                break 
+
+            except ValueError:
+                print("Please enter a valid " \
+                "medication ID using numbers only.")
                 continue 
         try:
         # Find the regimen associated with the specified medication.
             cursor.execute("""
             SELECT * FROM prescription_medication
             WHERE prescription_id = ?
-            """,(self.prescription_id,))
+            AND medication_id = ?
+            """,(self.prescription_id,
+                 self.medication_id))
 
         except sqlite3.Error as e:
             print("Unable to search for " \
@@ -266,5 +302,93 @@ class PrescriptionMedication():
                     
                     print("Regimen instructions updated successfully.")
                     return
+
+    def delete_prescription_medication(self):
+        while True:
+            try:
+                self.prescription_id = int(
+                input("Please enter prescription ID: "))
+                if not self.validate_login_id(self.prescription_id):
+                    print("Please enter valid prescription ID.")
+                    continue 
+                break 
+            except ValueError:
+                print("Please enter a valid " \
+                "prescription ID using numbers only.")
+                continue 
+
+        while True:
+            try:
+                self.medication_id = int(
+                    input("Please enter medication ID: "))
+                if not self.validate_login_id(self.medication_id):
+                    print("Please enter valid medication ID.")
+                    continue 
+                break 
+
+            except ValueError:
+                print("Please enter a valid " \
+                "medication ID using numbers only.")
+                continue 
+                
+        try:
+        # Find the regimen associated with the specified medication.
+            cursor.execute("""
+            SELECT * FROM prescription_medication
+            WHERE prescription_id = ?
+            AND medication_id = ?
+            """,(self.prescription_id,
+                 self.medication_id))
+        
+        except sqlite3.Error as e:
+            print("Unable to search for " \
+            "the regimen.", e)
+            return 
+        
+        row = cursor.fetchone()
+        if not row:
+            print("No regimen was found " \
+            "for this prescription")
+            return
+        else:
+            self.prescription_instructions = row[0]
+            self.prescription_id = row[1]
+            self.medication_id = row[2]
+            self.show_prescription_medication_details()
+
+            while True:
+                delete = input("Delete " \
+                    "this prescription medication? (Y/N):").lower()
+
+                if not self.validate_yes_no(delete):
+                    print("Please enter Y/y " \
+                    "or N/n.")
+                    continue 
+
+                if delete == "n":
+                    print("Deletion cancelled.")
+                    break 
+                else:
+                    try:
+                        cursor.execute("""
+                        DELETE FROM prescription_medication
+                        WHERE prescription_id = ?
+                        AND medication_id = ?
+                        """,(self.prescription_id,
+                             self.medication_id))
+
+                        conn.commit()
+
+                    except sqlite3.Error as e:
+                        print("Unable to delete " \
+                        "the prescription. Please " \
+                        "try again.", e)
+
+                    print("Prescription medication " \
+                    "deleted successfully.")
+                    return 
+
+                    
+        
 
         

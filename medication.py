@@ -1,8 +1,5 @@
 import sqlite3
-
-conn = sqlite3.connect("hospital.db")
-
-cursor = conn.cursor()
+from database import conn, cursor
 
 class Medication():
     def __init__(self,medication_name = None, cost = None):
@@ -219,14 +216,13 @@ class Medication():
             print(f"(Medication ID: {row[0]}")
             meds.show_medication_details()
             
-            update = input("Update this medication?").lower()
+            update = input("Update " 
+                "this medication? (Y/N): ").lower()
             if update == "y":
                 while True:
-                    new_medication_name = input
-                    (
+                    new_medication_name = input(
                         "Enter new "
-                        "medication name and strength: "
-                    )
+                        "medication name and strength: ")
                     if new_medication_name == "":
                         print("Medication name is " \
                         "required. Please enter " \
@@ -240,12 +236,9 @@ class Medication():
 
                 while True:
                     try:
-                        new_cost = float(input
-                        (
+                        new_cost = float(input(
                             "Enter new medication " \
-                            "cost (£): "
-
-                        ))
+                            "cost (£): "))
                         if not self.validate_medication_cost(new_cost):
                             print("Medication cost must be " \
                             "greater than £0:00 and have " \
@@ -319,9 +312,8 @@ class Medication():
             print(f"Medication ID:{row[0]}")
             meds.show_medication_details()
 
-            delete = input(
-                "Delete this medication? (Y/N): "
-            ).lower()
+            delete = input("Delete "
+            "this medication? (Y/N): ").lower()
             if delete == "y":
 
                 try:

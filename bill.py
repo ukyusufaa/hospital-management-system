@@ -1,10 +1,5 @@
 import sqlite3
-
-conn = sqlite3.connect("hospital.db")
-
-cursor = conn.cursor()
-
-cursor.execute("PRAGMA foreign_keys = ON;")
+from database import conn, cursor
 
 class Bill():
     def __init__(self, total_amount = None, 
@@ -38,11 +33,8 @@ class Bill():
         # Validate the appointment ID entered by user.
         while True:
             try:
-                self.appointment_id = int
-                (
-                    input("Please enter "/
-                          "the appointment ID:")
-                )
+                self.appointment_id = int(input("Please enter "
+                    "the appointment ID:"))
                 if not self.validate_login_id(self.appointment_id):
                     print("Please enter a valid " \
                     "appointment ID.")

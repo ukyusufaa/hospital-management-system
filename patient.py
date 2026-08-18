@@ -1,10 +1,6 @@
 import sqlite3 
 from datetime import datetime
-
-conn = sqlite3.connect("hospital.db")
-
-cursor = conn.cursor()
-cursor.execute("PRAGMA foreign_keys = ON;")
+from database import conn, cursor
 
 class Patient():
     def __init__(self, first_name = None, surname = None, 
@@ -178,11 +174,9 @@ class Patient():
             break
     
         while True:
-            gp = input
-            (
+            gp = input(
                 "Does the patient have " 
-                "a GP? (Y/N):"
-            ).lower()
+                "a GP? (Y/N): ").lower()
             if not self.validate_yes_no(gp):
                 print("Enter Y/y " \
                 "or N/n.")
@@ -360,11 +354,8 @@ class Patient():
             sick.show_patient_details()
 
             while True:
-                update = input
-                (
-                    "Update this patients "
-                    "details? (Y/N):"
-                ).lower()
+                update = input("Update " 
+                    "this patients details? (Y/N): ").lower()
                 if not self.validate_yes_no(update):
                     print("Please enter Y/y " \
                     "or N/n.")
@@ -375,20 +366,20 @@ class Patient():
                     return
                 else:
                     while True:
-                        updated_first_name = input
-                        ("Enter new first name: ")
+                        updated_first_name = input("Enter new "
+                            "first name: ")
                         if updated_first_name == "":
                             print("First name is required.")
                             continue
                         if not self.validation_name(updated_first_name):
-                            print("Please use letters " \
-                            "and spaces only.")
+                            print("Please use letters"
+                            " and spaces only.")
                             continue 
                         break 
             
                     while True:
-                        updated_surname = input
-                        ("Enter new last name:")
+                        updated_surname = input("Enter new "
+                            "last name:")
                         if updated_surname == "":
                             print("Last name is required.")
                             continue 
@@ -483,7 +474,7 @@ class Patient():
                             print("Address is required.")
                             continue
 
-                        if not " " in self.address:
+                        if not " " in updated_address:
                             print("Please enter the address " \
                             "using spaces betweeen " \
                             "address parts.")
@@ -514,24 +505,17 @@ class Patient():
                         break 
                     
                     while True:
-                        gp = input
-                        ("Does the patient "
-                        "have a GP? (Y/N):"
-                        ).lower()
+                        gp = input("Does the patient "
+                            "have a GP? (Y/N): ").lower()
                         if not self.validate_yes_no(gp):
                             print("Please enter Y/y " \
-                            "or N/n.")
+                                "or N/n.")
                             continue
                         if gp == "y":
                             while True:
                                 try:
-                                    updated_gp_id = int
-                                    (
-                                        input
-                                        (
-                                            "Enter GP ID:"
-                                        )
-                                    )
+                                    updated_gp_id = int(input(
+                                        "Enter GP ID: "))
                                     if not self.validate_login_digits(updated_gp_id):
                                         print("Please enter a " \
                                         "valid GP ID.")
@@ -559,6 +543,7 @@ class Patient():
                                     "with that ID.")
                                     continue
                                 break
+                            break
                         else:
                             updated_gp_id = None
                             break 
@@ -640,10 +625,8 @@ class Patient():
             sick.show_patient_details()
             
             while True:
-                delete = input
-                (
-                    "Delete this patient? (Y/N):"
-                )
+                delete = input("Delete " 
+                    "this patient? (Y/N): ").lower()
                 if not self.validate_yes_no(delete):
                     print("Please enter Y/y " \
                     "or N/n.")

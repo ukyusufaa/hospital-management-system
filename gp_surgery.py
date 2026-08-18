@@ -1,8 +1,5 @@
 import sqlite3
-
-conn = sqlite3.connect("hospital.db")
-
-cursor = conn.cursor()
+from database import conn, cursor
 
 class GpSurgery:
     def __init__(self,surgery_name = None, address = None):
@@ -169,7 +166,7 @@ class GpSurgery:
             try:
                 surgery_id = int(input("Enter medical practice ID:"))
                 if not self.validate_id_input(surgery_id):
-                    print("Enter a valid medical practice")
+                    print("Enter a valid medical practice.")
                     continue 
                 break
             except ValueError:
@@ -190,17 +187,15 @@ class GpSurgery:
         row = cursor.fetchone()
 
         if not row:
-            print("GP Surgery not found")
+            print("GP Surgery not found.")
             return 
         else:
             gpsurgery = GpSurgery(row[1],row[2])
             (f"Surgery ID:{row[0]}")
             gpsurgery.show_gpsurgery_details()
 
-            update = input(
-                "Would you like to update " 
-                "this medical practice? (Y/N):"
-                )
+            update = input("Update " 
+                "this medical practice? (Y/N):").lower()
             if update == "n":
                 print("Medical practice update cancelled.")
                 return
@@ -315,13 +310,9 @@ class GpSurgery:
             (f"Surgery ID:{row[0]}")
             gpsurgery.show_gpsurgery_details()
 
-            delete = input(
-                "Are you sure you want " 
-                "to delete this medical practice? "
-                "(Y/N)"
-            ).lower()
+            delete = input("Delete " 
+                "this medical practice?(Y/N): ").lower()
             if delete == "y":
-
                 try:
                     cursor.execute("""
                     DELETE FROM gp_surgery

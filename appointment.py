@@ -1,10 +1,11 @@
+# Import SQLite to work with the database.
 import sqlite3
+
+# Import datetime for appointment date validation.
 from datetime import datetime
 
-conn = sqlite3.connect("hospital.db")
-
-cursor = conn.cursor()
-cursor.execute("PRAGMA foreign_keys = ON;")
+# Import the shared database connection and cursor from database.py module.
+from database import conn, cursor
 
 class Appointment():
 
@@ -77,7 +78,7 @@ class Appointment():
                 break
 
             except ValueError:
-                print("Please enter the consultant ID " \
+                print("Please enter the consultant ID." \
                 "using numbers only.")
                 continue
         try:
@@ -94,7 +95,7 @@ class Appointment():
         # Retrieve the consultant record using fetchone().          
         row = cursor.fetchone()
         if not row:
-            print("We couldn't find a consultant " \
+            print("We couldn't find a consultant." \
             "with that ID.")
             return
     
@@ -301,7 +302,7 @@ class Appointment():
                     row[3],
                     row[4]
                     )
-                print(f"Enter the appointment ID:{row[0]}")
+                print(f"Appointment ID:{row[0]}")
                 patient_appointment.show_details_appointment()
 
     def search_appointment(self):
@@ -394,10 +395,8 @@ class Appointment():
 
             while True:
          # Confirm whether the user wants to update the appointment.
-                update = input(
-                    "Would you like to update this "
-                    "appointment?(Y/N):"
-                ).lower()
+                update = input("Update "
+                    "this appointment? (Y/N): ").lower()
                 if not self.validate_yes_no(update):
                     print("Please enter Y/y for yes " \
                     "or N/n for no.")
@@ -607,10 +606,12 @@ class Appointment():
                         consultant_id = ?,
                         appointment_date = ?,
                         appointment_time = ?
+                        WHERE appointment_id = ?
                         """,(patient_appointment.patient_id,
                          patient_appointment.consultant_id,
                          patient_appointment.appointment_date,
-                         patient_appointment.appointment_time))
+                         patient_appointment.appointment_time,
+                         appointment_id))
                         
         # Save the updated appointment to the database
                         conn.commit()
@@ -659,15 +660,13 @@ class Appointment():
                 row[3],
                 row[4]
                 )
-            print(row[0])
+            print(f"Appointment ID: {row[0]}")
             patient_appointment.show_details_appointment()
 
             while True:
         # Confirm that the user wants to delete the appointment.
-                delete = input(
-                    "Are you sure you want " 
-                    "to delete this appointment? (Y/N):"
-                ).lower()
+                delete = input("Delete "
+                    "this appointment? (Y/N): ").lower()
                 if not self.validate_yes_no(delete):
                     print("Please Y/y for yes " \
                     "or N/n for no.")

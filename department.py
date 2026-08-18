@@ -1,8 +1,5 @@
 import sqlite3
-
-conn = sqlite3.connect("hospital.db")
-
-cursor = conn.cursor()
+from database import conn, cursor
 
 class Department():
     def __init__(self, department_name = None):
@@ -167,14 +164,12 @@ class Department():
             print(f"Department ID:{row[0]}")
             dept.show_department_details()
 
-            update = input(
-                "Update this department? (Y/N):"
-                ).lower()
+            update = input("Update " 
+                "this department? (Y/N): ").lower()
             if update == "y":
                 while True:
                     new_dept_name = input(
-                        "Enter new department name:"
-                        )
+                        "Enter new department name: ")
                     if new_dept_name == "":
                         print("Department name is required. " \
                         "Please enter a department name.")
@@ -244,9 +239,8 @@ class Department():
                 print(f"Department ID:{row[0]}")
                 dept.show_department_details()
     
-                delete = input(
-                    "Delete this department? (Y/N)"
-                    ).lower()
+                delete = input("Delete " 
+                    "this department? (Y/N): ").lower()
                 if delete == "y":
                     try:
                         cursor.execute("""

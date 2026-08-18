@@ -1,14 +1,8 @@
-# Establish a connection to the hospital database.
-# Create a cursor for executing SQL statements.
-# Enable SQlite foreign key constraints.
-
+# Import SQLite to work with the database
 import sqlite3
 
-conn = sqlite3.connect("hospital.db")
-
-cursor = conn.cursor()
-
-cursor.execute("PRAGMA foreign_keys = ON;")
+# Import the shared database connection and cursor from database.py module.
+from database import conn, cursor
 
 class Prescription():
         # Store the appointment associated with the prescription.

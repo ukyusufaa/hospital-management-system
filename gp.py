@@ -1,8 +1,5 @@
 import sqlite3
-
-conn = sqlite3.connect("hospital.db")
-conn.execute("PRAGMA foreign_keys = ON;")
-cursor = conn.cursor()
+from database import conn, cursor
 
 class Gp:
 
@@ -16,7 +13,7 @@ class Gp:
         print("-" * 30)
         print(f"GP First Name: {self.first_name}")
         print(f"GP Last Name: {self.surname}")
-        print(f"Surgery ID: {self.surgery_id}")
+        print(f"Medical Practice ID: {self.surgery_id}")
         print("-" * 30)
 
         # Validate names using letters and spaces only.
@@ -221,9 +218,8 @@ class Gp:
         dr.show_details_gp()
 
         while True:
-            update = input(
-                "Update this GPs details? (Y/N):"
-                ).lower()
+            update = input("Update " 
+                "this GPs details? (Y/N): ").lower()
             if not self.validate_yes_no(update):
                 print("Please enter Y/y " \
                 "or N/n.")
@@ -337,10 +333,8 @@ class Gp:
         dr.show_details_gp()
 
         while True:
-                delete = input(
-                    "Delete this " \
-                    "GP? (Y/N): "
-                ).lower()
+                delete = input("Delete " 
+                    "this GP? (Y/N): ").lower()
                 if not self.validate_yes_no(delete):
                     print("Please enter Y/y " \
                     "or N/n.")

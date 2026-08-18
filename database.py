@@ -1,8 +1,14 @@
+# Import SQLite to work with the database.
 import sqlite3
 
+# Create a connection to the hospital database.
 conn = sqlite3.connect("hospital.db")
 
+# Create a cursor to execute SQL commands.
 cursor = conn.cursor()
+
+# Enabale foreign keys to enforce table relationships.
+cursor.execute("PRAGMA foreign_keys = ON;")
 
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS gp_surgery(
@@ -112,5 +118,3 @@ CREATE TABLE IF NOT EXISTS bill(
 """)
 
 conn.commit()
-
-conn.close()

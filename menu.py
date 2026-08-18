@@ -35,7 +35,7 @@ def menu():
             prescription_management()
 
         elif choice == "5":
-            billing_management
+            billing_management()
 
         elif choice == "6":
             print("Exiting Holly Hospital Management System")
@@ -324,7 +324,7 @@ def patient_management():
         print("3. Update Patient Data")
         print("4. Delete Patient Data")
         print("5. Display All Patients Data")
-        print("8. Return to Main Menu")
+        print("6. Return to Main Menu")
 
         choice = input("Enter a choice: ")
 
@@ -459,7 +459,8 @@ def prescription_instructions_management():
         print("2. Search Prescription Instructions")
         print("3. Update Prescription Instructions")
         print("4. Display All Hospital Prescription Instructions")
-        print("5. Return to Hospital Prescription Menu")
+        print("5. Delete Prescription Instructions")
+        print("6. Return to Hospital Prescription Menu")
 
         choice = input("Enter a choice: ")
 
@@ -480,6 +481,10 @@ def prescription_instructions_management():
             instructions.display_all_prescription_medications()
 
         elif choice == "5":
+            instructions = PrescriptionMedication()
+            instructions.delete_prescription_medication()
+
+        elif choice == "6":
             print("Returning to Prescription Menu")
             break 
 

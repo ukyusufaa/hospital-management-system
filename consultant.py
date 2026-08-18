@@ -1,10 +1,5 @@
 import sqlite3
-
-conn = sqlite3.connect("hospital.db")
-
-cursor = conn.cursor()
-cursor.execute("PRAGMA foreign_keys = ON;")
-        # Enable foreign key constraints for related database records.
+from database import conn, cursor
 
 class Consultant():
     def __init__(self,first_name = None,surname = None,
@@ -67,7 +62,7 @@ class Consultant():
                     continue 
                 break 
             except ValueError:
-                print("Department ID must contain numbers only")
+                print("Department ID must contain numbers only.")
                 continue
         
         specialist = Consultant(
@@ -197,12 +192,13 @@ class Consultant():
         specialist.show_details_consultant()
 
         while True:
-            update = input("Update this consultant?(Y/N):").lower()
+            update = input("Update "
+                "this consultant?(Y/N): ").lower()
             if not self.validate_yes_no(update):
                 print("Please enter Y/y or N/n.")
                 continue
             if update == "n":
-                print("Consultant update cancelled")
+                print("Consultant update cancelled.")
                 return
             else:
                 while True:
@@ -216,7 +212,7 @@ class Consultant():
                         continue 
                     if not self.validate_name(updated_first_name):
                         print("Please use letters " \
-                        "and spaces only")
+                        "and spaces only.")
                         continue
                     break
 
@@ -239,7 +235,7 @@ class Consultant():
                     try:
                         updated_department_id = int(
                             input("Enter new "
-                            "department ID:")
+                            "department ID: ")
                         )
                         if not self.validate_login_id(updated_department_id):
                             print("Please enter a valid " \
@@ -271,7 +267,7 @@ class Consultant():
                     "Please try again.", e)
                     return
                 
-                print("Consultant updated successfully")
+                print("Consultant updated successfully.")
                 return
 
         # Find a consultant, confirm deletion, and remove the record from the database.
@@ -280,11 +276,11 @@ class Consultant():
             try:
                 consultant_id = int(input("Enter consultant ID:"))
                 if not self.validate_login_id(consultant_id):
-                    print("Please enter a valid consultant ID")
+                    print("Please enter a valid consultant ID.")
                     continue 
                 break 
             except ValueError:
-                print("Consultant ID must contain" \
+                print("Consultant ID must contain " \
                 "numbers only.")
                 continue 
         try:
@@ -314,10 +310,8 @@ class Consultant():
             specialist.show_details_consultant()
 
             while True:
-                delete = input(
-                    "Delete this "
-                    "consultant?(Y/N):"
-                ).lower()
+                delete = input("Delete "
+                "this consultant? (Y/N): ").lower()
                 if not self.validate_yes_no(delete):
                     print("Please enter Y/y or N/n.")
                     continue 
