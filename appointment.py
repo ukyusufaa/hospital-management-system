@@ -338,15 +338,12 @@ class Appointment():
             "with that ID.")
             return
         else:
-        # Create an Appointment object from the database record.
-            patient_appointment = Appointment(
-                row[1],
-                row[2],
-                row[3],
-                row[4]
-                )
+            self.patient_id = row[1]
+            self.consultant_id = row[2]
+            self.appointment_date = row[3]
+            self.appointment_time = row[4]
             print(f"Appointment ID:{row[0]}")
-            patient_appointment.show_details_appointment()
+            self.show_details_appointment()
             return
 
     def update_appointment(self):
@@ -383,15 +380,13 @@ class Appointment():
             "with that ID.")
             return
         else:
-        # Create an Appointment object from the database record.
-            patient_appointment = Appointment(
-                row[1],
-                row[2],
-                row[3],
-                row[4]
-                )
+            self.patient_id = row[1]
+            self.consultant_id = row[2]
+            self.appointment_date = row[3]
+            self.appointment_time = row[4]
+
             print(f"Appointment ID:{row[0]}")
-            patient_appointment.show_details_appointment()
+            self.show_details_appointment()
 
             while True:
          # Confirm whether the user wants to update the appointment.
@@ -403,7 +398,7 @@ class Appointment():
                     continue
                 if update == "n":
                     print("Appointment update cancelled.")
-                    break
+                    return
 
                 else:
         # Validate the new patient ID
@@ -520,7 +515,7 @@ class Appointment():
                             continue
 
                         appointment_date = datetime.strptime(
-                            patient_appointment.appointment_date,"%d/%m/%Y")
+                            self.appointment_date,"%d/%m/%Y")
                         if appointment_date.date() <= datetime.now().date():
                             print("Please choose a date from tommorrow. " \
                             "onwards.")
@@ -571,10 +566,10 @@ class Appointment():
                                continue
                         break 
     
-                patient_appointment.patient_id = updated_patient_id
-                patient_appointment.consultant_id = updated_consultant_id
-                patient_appointment.appointment_date = updated_appointment_date
-                patient_appointment.appointment_time = updated_appointment_time
+                self.patient_id = updated_patient_id
+                self.consultant_id = updated_consultant_id
+                self.appointment_date = updated_appointment_date
+                self.appointment_time = updated_appointment_time
 
                 try:
         # Check that the new consultant, date and time are available.
@@ -583,9 +578,9 @@ class Appointment():
                     WHERE consultant_id = ?
                     AND appointment_date = ?
                     AND appointment_time = ?
-                    """,(patient_appointment.consultant_id,
-                        patient_appointment.appointment_date,
-                        patient_appointment.appointment_time))
+                    """,(self.consultant_id,
+                        self.appointment_date,
+                        self.appointment_time))
 
                 except sqlite3.Error as e:
                     print("Unable to check appointment " \
@@ -607,10 +602,10 @@ class Appointment():
                         appointment_date = ?,
                         appointment_time = ?
                         WHERE appointment_id = ?
-                        """,(patient_appointment.patient_id,
-                         patient_appointment.consultant_id,
-                         patient_appointment.appointment_date,
-                         patient_appointment.appointment_time,
+                        """,(self.patient_id,
+                         self.consultant_id,
+                         self.appointment_date,
+                         self.appointment_time,
                          appointment_id))
                         
         # Save the updated appointment to the database
@@ -654,14 +649,13 @@ class Appointment():
             "an appointment with that ID.")
             return 
         else:
-            patient_appointment = Appointment(
-                row[1],
-                row[2],
-                row[3],
-                row[4]
-                )
+            self.patient_id = row[1]
+            self.consultant_id = row[2]
+            self.appointment_date = row[3]
+            self.appointment_time = row[4]
+
             print(f"Appointment ID: {row[0]}")
-            patient_appointment.show_details_appointment()
+            self.show_details_appointment()
 
             while True:
         # Confirm that the user wants to delete the appointment.

@@ -110,9 +110,11 @@ class Prescription():
         else:
         # Display each prescription returned from the database.
             for row in rows:
-                self.appointment_id = row[1]
+                prescription = Prescription(
+                    row[1]
+                )
                 print(f"Prescription ID:{row[0]}")
-                self.show_prescription_details()
+                prescription.show_prescription_details()
             return
 
     def search_prescription(self): 
@@ -155,6 +157,7 @@ class Prescription():
             return 
         else:
             self.appointment_id = row[1]
+
             print(f"Prescription ID:{row[0]}")
             self.show_prescription_details()
             return
@@ -196,6 +199,7 @@ class Prescription():
             return 
         else:
             self.appointment_id = row[1]
+
             print(f"Prescription ID:{row[0]}")
             self.show_prescription_details()
 

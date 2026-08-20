@@ -171,13 +171,12 @@ class Gp:
             "with that ID.")
             return
         else:
-            dr = Gp(
-                row[1],
-                row[2],
-                row[3]
-                )
+           self.first_name = row[1]
+           self.surname = row[2]
+           self.surgery_id = row[3]
+
         print(f"GP ID: {row[0]}")
-        dr.show_details_gp()
+        self.show_details_gp()
         return
 
         # Update the details of an existing GP.
@@ -209,13 +208,12 @@ class Gp:
             "with that ID.")
             return
         else:
-            dr = Gp(
-                row[1],
-                row[2],
-                row[3]
-                )
+            self.first_name = row[1]
+            self.surname = row[2]
+            self.surgery_id = row[3]
+
         print(f"GP ID: {row[0]}")
-        dr.show_details_gp()
+        self.show_details_gp()
 
         while True:
             update = input("Update " 
@@ -324,13 +322,12 @@ class Gp:
             print("No GP was found " \
             "with that ID.")
         else:
-            dr = Gp(
-                row[1],
-                row[2],
-                row[3]
-            )
+            self.first_name = row[1]
+            self.surname = row[2]
+            self.surgery_id = row[3]
+
         print(f"GP ID: {row[0]}")
-        dr.show_details_gp()
+        self.show_details_gp()
 
         while True:
                 delete = input("Delete " 

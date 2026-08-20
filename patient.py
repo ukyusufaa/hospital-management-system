@@ -300,15 +300,14 @@ class Patient():
             "with that ID.")
             return
         else:
-            sick = Patient(
-                row[1],
-                row[2],
-                row[3],
-                row[4],
-                row[5]
-            )
+            self.first_name = row[1]
+            self.surname = row[2]
+            self.dob = row[3]
+            self.address = row[4]
+            self.gp = row[5]
+
             print(f"Patient ID: {row[0]}")
-            sick.show_patient_details()
+            self.show_patient_details()
             return
 
         # Update the details of an existing patient.
@@ -343,15 +342,14 @@ class Patient():
             "with that ID.")
             return
         else:
-            sick = Patient(
-                row[1],
-                row[2],
-                row[3],
-                row[4],
-                row[5]
-            )
+            self.first_name = row[1]
+            self.surname = row[2]
+            self.dob = row[3]
+            self.address = row[4]
+            self.gp = row[5]
+
             print(f"Patient ID: {row[0]}")
-            sick.show_patient_details()
+            self.show_patient_details()
 
             while True:
                 update = input("Update " 
@@ -548,11 +546,11 @@ class Patient():
                             updated_gp_id = None
                             break 
 
-                sick.first_name = updated_first_name
-                sick.surname = updated_surname
-                sick.dob = updated_dob
-                sick.address = updated_address
-                sick.gp_id = updated_gp_id
+                self.first_name = updated_first_name
+                self.surname = updated_surname
+                self.dob = updated_dob
+                self.address = updated_address
+                self.gp_id = updated_gp_id
 
                 try:
                     cursor.execute("""
@@ -563,11 +561,11 @@ class Patient():
                         address = ?,
                         gp_id = ?
                     WHERE patient_id =?
-                        """,(sick.first_name,
-                        sick.surname,
-                        sick.dob,
-                        sick.address,
-                        sick.gp_id,
+                        """,(self.first_name,
+                        self.surname,
+                        self.dob,
+                        self.address,
+                        self.gp_id,
                         patient_id
                         ))
                 
@@ -614,15 +612,14 @@ class Patient():
             "found with that ID.")
             return
         else:
-            sick = Patient(
-                row[1],
-                row[2],
-                row[3],
-                row[4],
-                row[5]
-            )
+            self.first_name = row[1]
+            self.surname = row[2]
+            self.dob = row[3]
+            self.address = row[4]
+            self.gp = row[5]
+
             print(f"Patient ID: {row[0]}")
-            sick.show_patient_details()
+            self.show_patient_details()
             
             while True:
                 delete = input("Delete " 

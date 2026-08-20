@@ -198,6 +198,7 @@ class PrescriptionMedication():
             self.prescription_instructions = row[0]
             self.prescription_id = row[1]
             self.medication_id = row[2]
+
             self.show_prescription_medication_details()
             return
 
@@ -254,6 +255,7 @@ class PrescriptionMedication():
             self.prescription_instructions = row[0]
             self.prescription_id = row[1]
             self.medication_id = row[2]
+
             self.show_prescription_medication_details()
 
             while True:
@@ -354,6 +356,7 @@ class PrescriptionMedication():
             self.prescription_instructions = row[0]
             self.prescription_id = row[1]
             self.medication_id = row[2]
+            
             self.show_prescription_medication_details()
 
             while True:

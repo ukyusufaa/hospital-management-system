@@ -44,8 +44,9 @@ class Bill():
             except ValueError:
                 print("Please enter the appointment ID "/
                       "using numbers only.")
+                continue
 
-        # Find the prescription associated with the prescription.
+        # Find the prescription associated with the appointment.
         
         try:
             cursor.execute("""
@@ -58,14 +59,19 @@ class Bill():
             "Please try again.", e)
             return 
 
-        # Retrieve the prescription because only one is expected.
+        # Get the prescription row from the database.
         prescription_row = cursor.fetchone()
-        
+
+        # Check if a prescription was found.
         if prescription_row:
-    
+        
+        # The prescription_id was not created in __init__.
+        # We create the object attribute here using self and store the ID from the database row.
             self.prescription_id = prescription_row[0]
-            print("Prescription found.", prescription_row)
+
+        # self.prescription_id can be used by other methods and queries for this bill object.
             print("Prescription ID:", self.prescription_id)
+
         # Find all medications linked through the prescription_medication junction table.
             try:
                 cursor.execute("""
@@ -82,16 +88,22 @@ class Bill():
             prescription_medication_rows = cursor.fetchall()
             print("Medications linked /"
             "to this prescription",prescription_medication_rows)
-         
+
+        # Check that the prescription has at least one medication.
             if prescription_medication_rows:
+
+        # Start the bill total at zero.
                 self.total_amount = 0
 
+        # Go through each medication linked to this prescription.
                 for prescription_medication_row in prescription_medication_rows:
                     print("Checking Medication details...",prescription_medication_row)
-                
+
+        # Get the medication ID from the junction table.
+        # Store the medication ID in the Bill object.
                     self.medication_id = prescription_medication_row[2]
 
-        # Use the medication ID from the junction table to find the medcation details.
+        # Use the medication ID stored in the Bill object.
                     try:
                         cursor.execute("""
                         SELECT * FROM medication
@@ -103,20 +115,22 @@ class Bill():
                         "medications. Please try again.", e)
                         return
 
+        # Get the one mataching medication from the the database.
                     medication_row = cursor.fetchone()
                     print("Medication found")
 
+        # Check if a medication was found.
                     if medication_row:
         # Add each medication cost to the bill total.
                         self.medication_cost = medication_row[2]
                         self.total_amount += self.medication_cost
                     else:
-                        print("The medication record \
-                              could not be found")
+                        print("Medication not found " \
+                        "in the database.")
                         return 
             else:
-                print("No medications are linked "/
-                      "to this prescription ")
+                print("No medications are linked " \
+                "to this prescription.")
                 return
         else:
             print("No prescription is linked "/ 
@@ -125,13 +139,6 @@ class Bill():
         
         # Set the initial payement status.
         self.payment_status = "UNPAID"
-
-        # Create the Bill object using the calculated details.
-        receipt = Bill(
-        self.total_amount,
-        self.appointment_id,
-        self.payment_status
-        )
 
         # Insert the calculated bill into the database.
         try:
@@ -152,12 +159,12 @@ class Bill():
             "Please try again.", e)
             return
 
-        print("Bill created successfully")
+        print("Bill created successfully.")
         bill_number = cursor.lastrowid
         print(f"Bill ID:{bill_number}")
 
         # Display the newly created bill.
-        receipt.show_bill_details()
+        self.show_bill_details()
 
     def display_all_bills(self):
         try:
@@ -219,15 +226,13 @@ class Bill():
             print("No bill was found for this appointment")
             return 
         else:
-            billing = Bill(
-                bill_row[1],
-                bill_row[2],
-                bill_row[3]
-            )
+            self.total_amount = bill_row[1]
+            self.appointment_id = bill_row[2]
+            self.payment_status = bill_row[3]
             print(f"Bill ID:{bill_row[0]}")
 
         # Display the matching bill.
-            billing.show_bill_details()
+            self.show_bill_details()
             return
 
     def bill_update(self):
@@ -261,13 +266,13 @@ class Bill():
             print("Patient bill not found.")
             return 
         else:
-            billing = Bill(
-                bill_row[1],
-                bill_row[2],
-                bill_row[3]
-            )
+            self.total_amount = bill_row[1]
+            self.appointment_id = bill_row[2]
+            self.payment_status = bill_row[3]
+
             print(f"Bill ID:{bill_row[0]}")
-            billing.show_bill_details()
+            print(f"Bill ID:{bill_row[0]}")
+            self.show_bill_details()
 
             while True:
         # Ask the user whether the bill has been paid.
@@ -277,17 +282,18 @@ class Bill():
                           "or N/n for no")
                     continue
                 if bill_paid == 'n':
-                    print("The bill remains unpaid")
+                    print("The bill remains unpaid.")
+                    return
                 else:
         # Update the payment status to PAID
-                    billing.payment_status = "PAID"
+                    self.payment_status = "PAID"
                     try:
                         cursor.execute("""
                         UPDATE bill
                         SET payment_status = ?
                         WHERE appointment_id = ?
-                        """,(billing.payment_status,
-                        billing.appointment_id))
+                        """,(self.payment_status,
+                        self.appointment_id))
         # Save the updated payment status.
                         conn.commit()
 
@@ -296,10 +302,10 @@ class Bill():
                         "Please try again.", e)
                         return
 
-                    print("Bill payment status updated succesfully")
+                    print("Bill payment status updated successfully.")
                     print(f"Billing ID:{bill_row[0]}")
         # Display the updated bill
-                    billing.show_bill_details()
+                    self.show_bill_details()
                     return
 
 

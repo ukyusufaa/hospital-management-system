@@ -36,17 +36,13 @@ class Department():
                 continue 
             break 
 
-        dept = Department(
-            self.department_name
-        )
-
         try:
             # Insert the validated department into the database.
             cursor.execute("""
             INSERT INTO department(
                        department_name)
             VALUES(?)             
-            """,(dept.department_name,))
+            """,(self.department_name,))
 
             conn.commit()
 
@@ -119,11 +115,10 @@ class Department():
             "with that ID.")
             return
         else:
-            dept = Department(
-                row[1]
-            )
+            self.department_name = row[1]
+            
             print(f"Department ID:{row[0]}")
-            dept.show_department_details()
+            self.show_department_details()
             return
 
         # Update the details of an existing department.
@@ -158,11 +153,10 @@ class Department():
             "with that ID.")
             return
         else:
-            dept = Department(
-                row[1]
-            )
+            self.department_name = row[1]
+            
             print(f"Department ID:{row[0]}")
-            dept.show_department_details()
+            self.show_department_details()
 
             update = input("Update " 
                 "this department? (Y/N): ").lower()
@@ -180,14 +174,14 @@ class Department():
                         continue 
                     break 
 
-                dept.department_name = new_dept_name
+                self.department_name = new_dept_name
 
                 try:
                     cursor.execute("""
                     UPDATE department
                     SET department_name = ?
                     WHERE department_id = ?
-                    """,(dept.department_name,department_id))
+                    """,(self.department_name,department_id))
 
                     conn.commit()
 
@@ -233,11 +227,10 @@ class Department():
                 "with that ID.")
                 return
             else:
-                dept = Department(
-                    row[1]
-                )
+                self.department_name = row[1]
+                
                 print(f"Department ID:{row[0]}")
-                dept.show_department_details()
+                self.show_department_details()
     
                 delete = input("Delete " 
                     "this department? (Y/N): ").lower()

@@ -155,9 +155,9 @@ class GpSurgery:
             "with that ID.")
             return
         else:
-            clinic = GpSurgery(row[1],row[2])
-            (f"Medical practice ID:{row[0]}")
-            clinic.show_gpsurgery_details()
+            self.surgery_name = row[1]
+            self.address = row[2]
+            self.show_gpsurgery_details()
         return
 
         # Update the details of an existing medical practice.
@@ -190,9 +190,9 @@ class GpSurgery:
             print("GP Surgery not found.")
             return 
         else:
-            gpsurgery = GpSurgery(row[1],row[2])
-            (f"Surgery ID:{row[0]}")
-            gpsurgery.show_gpsurgery_details()
+            self.surgery_name = row[1]
+            self.address = row[2]
+            self.show_gpsurgery_details()
 
             update = input("Update " 
                 "this medical practice? (Y/N):").lower()
@@ -248,9 +248,8 @@ class GpSurgery:
                         continue 
                     break
                         
-
-            gpsurgery.surgery_name = new_surgery_name
-            gpsurgery.address = new_address
+            self.surgery_name = new_surgery_name
+            self.address = new_address
 
             try:
                 cursor.execute("""
@@ -258,7 +257,7 @@ class GpSurgery:
                     SET surgery_name = ?,
                     address = ?
                     WHERE surgery_id = ?
-                    """,(gpsurgery.surgery_name,gpsurgery.address,surgery_id))
+                    """,(self.surgery_name, self.address,surgery_id))
 
                 conn.commit()
 
@@ -306,9 +305,9 @@ class GpSurgery:
             "found with that ID.")
             return
         else:
-            gpsurgery = GpSurgery(row[1],row[2])
-            (f"Surgery ID:{row[0]}")
-            gpsurgery.show_gpsurgery_details()
+            self.surgery_name = row[1]
+            self.address = row[2]
+            self.show_gpsurgery_details()
 
             delete = input("Delete " 
                 "this medical practice?(Y/N): ").lower()

@@ -91,11 +91,6 @@ class Medication():
                 "a number (decimal).")
                 continue
 
-        meds = Medication(
-        self.medication_name,
-        self.cost
-        )
-
         try:
             # Insert the validated medication details into the database.
             cursor.execute("""
@@ -103,7 +98,7 @@ class Medication():
                     medication_name,
                     cost)
             VALUES(?,?)
-            """,(meds.medication_name, meds.cost))
+            """,(self.medication_name, self.cost))
 
             conn.commit()
 
@@ -115,7 +110,7 @@ class Medication():
         print("Medication created successfully.")
         row = cursor.lastrowid
         print(f"Medication ID: {row}")
-        meds.show_medication_details()
+        self.show_medication_details()
         return
 
 
@@ -171,12 +166,11 @@ class Medication():
             "with that ID.")
             return
         else:
-            meds = Medication(
-                row[1],
-                row[2]
-            )
+            self.medication_name = row[1]
+            self.cost = row[2]
+        
             print(f"Medication ID: {row[0]}")
-            meds.show_medication_details()
+            self.show_medication_details()
             return
 
         # Update the details of an existing medication.
@@ -209,12 +203,11 @@ class Medication():
             "found with that ID.")
             return 
         else:
-            meds = Medication(
-                row[1],
-                row[2]
-            )
+            self.medication_name = row[1]
+            self.cost = row[2]
+
             print(f"(Medication ID: {row[0]}")
-            meds.show_medication_details()
+            self.show_medication_details()
             
             update = input("Update " 
                 "this medication? (Y/N): ").lower()
@@ -250,8 +243,8 @@ class Medication():
                         "cost as a number.")
                         continue
                 
-                meds.medication_name = new_medication_name
-                meds.cost = new_cost
+                self.medication_name = new_medication_name
+                self.cost = new_cost
 
                 try:
                     cursor.execute("""
@@ -259,7 +252,7 @@ class Medication():
                     SET medication_name = ?,
                         cost = ?
                     WHERE medication_id = ?
-                    """,(meds.medication_name,meds.cost,medication_id))
+                    """,(self.medication_name, self.cost,medication_id))
 
                     conn.commit()
 
@@ -305,12 +298,11 @@ class Medication():
             "with that ID.")
             return
         else:
-            meds = Medication(
-                row[1],
-                row[2]
-                )
+            self.medication_name = row[1]
+            self.cost = row[2]
+
             print(f"Medication ID:{row[0]}")
-            meds.show_medication_details()
+            self.show_medication_details()
 
             delete = input("Delete "
             "this medication? (Y/N): ").lower()

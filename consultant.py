@@ -65,12 +65,6 @@ class Consultant():
                 print("Department ID must contain numbers only.")
                 continue
         
-        specialist = Consultant(
-            self.first_name,
-            self.surname,
-            self.department_id
-        )
-        
         try:
             # Insert the validated consultant details into the database.
             cursor.execute("""
@@ -79,7 +73,7 @@ class Consultant():
                        surname,
                        department_id)
             VALUES(?,?,?)
-            """,(specialist.first_name,specialist.surname,specialist.department_id))
+            """,(self.first_name,self.surname,self.department_id))
 
             conn.commit()
         except sqlite3.Error as e:
@@ -147,13 +141,12 @@ class Consultant():
             print("No consultant was found with that ID.")
             return
         else:
-            specialist = Consultant(
-                row[1],
-                row[2],
-                row[3]
-            )
+            self.first_name = row[1]
+            self.surname = row[2]
+            self.department_id = row[3]
+
             print(f"Consultant ID: {row[0]}")
-            specialist.show_details_consultant()
+            self.show_details_consultant()
             return
 
         # Find an existing consultant, confirm the change and update their details.
@@ -175,7 +168,7 @@ class Consultant():
             """,(consultant_id,))
 
         except sqlite3.Error as e:
-            print("Unable to retieve the consultant. " \
+            print("Unable to retrieve the consultant. " \
             "Please try again.", e)
         
         row = cursor.fetchone()
@@ -183,13 +176,12 @@ class Consultant():
             print("No consultant was found with that ID.")
             return
         else:
-            specialist = Consultant(
-                row[1],
-                row[2],
-                row[3]
-            )
+            self.first_name = row[1]
+            self.surname = row[2]
+            self.department_id = row[3]
+
         print(f"Consultant ID: {row[0]}")
-        specialist.show_details_consultant()
+        self.show_details_consultant()
 
         while True:
             update = input("Update "
@@ -301,13 +293,12 @@ class Consultant():
             "with that ID.")
             return
         else:
-            specialist = Consultant(
-            row[1],
-            row[2],
-            row[3]
-            )
+            self.first_name = row[1]
+            self.surname = row[2]
+            self.department_id = row[3]
+
             print(f"Consultant ID: {row[0]}")
-            specialist.show_details_consultant()
+            self.show_details_consultant()
 
             while True:
                 delete = input("Delete "
@@ -316,7 +307,7 @@ class Consultant():
                     print("Please enter Y/y or N/n.")
                     continue 
                 if delete == "n":
-                    print("Consultant deletion cancelled")
+                    print("Consultant deletion cancelled.")
                     return
                 else:
                     try:
@@ -333,7 +324,7 @@ class Consultant():
                         "Please try again.", e)
                         return
                     
-                    print("Consultant deleted successfully")
+                    print("Consultant deleted successfully.")
                     return
         
     
