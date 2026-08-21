@@ -17,20 +17,16 @@ class Prescription():
 
         # Validate the appointment ID is a positive number.
     def validate_login_id(self,number):
-        if number < 1:
-            return False
-        return True
+        return number >= 1
 
         # Validate the user's confirmation choice before performing deletion.
     def validate_yes_no(self,option):
-        if option != 'y' and not option =='n':
-            return False
-        return True
+        return option in ("y", "n")
 
     def create_prescription(self):
+        # Get and validate the appointment ID.
         while True:
             try:
-        # Request the appointment ID associated with the new prescription.
                 self.appointment_id = int(input(
                     "Enter appointment ID: "
                 ))
@@ -46,8 +42,8 @@ class Prescription():
                 "using numbers only.")
                 continue 
 
+        # Check whether a prescription already exists.
         try:
-        # Check whether the appointment already has existing prescription.
             cursor.execute("""
             SELECT * FROM prescription
             WHERE appointment_id = ?
@@ -59,42 +55,44 @@ class Prescription():
             "try again.", e)
             return
 
-        # Retrieve the first matching prescription, if one exists.
-        searched_row = cursor.fetchone()
+        # Retrieve the prescription, if one exists.
+        prescription_row = cursor.fetchone()
 
         # Prevent duplicate prescriptions from being created for the same appointment.
-        if searched_row:
+        if prescription_row:
             print("A prescription already exists " \
             "for this appointment.")
             return
-        else:
-            try:
-        # Create a new prescription when no existing prescription was found.
-                cursor.execute("""
+        
+        # Create the prescription.
+        try:
+            cursor.execute("""
                 INSERT INTO prescription(
-                    appointment_id)
+                appointment_id)
                 VALUES(?)
-                """,(self.appointment_id,))
+            """,(self.appointment_id,))
 
         # Save the new prescription to the database.
-                conn.commit()
+            conn.commit()
 
-            except sqlite3.Error as e:
-                print("Unable to create " \
-                "the prescription.", e)
-                return 
-
-        print("Prescription created successfully.")
+        except sqlite3.Error as e:
+            print("Unable to create " \
+            "the prescription.", e)
+            return 
 
         # Retrieve the ID automatically generated for the new prescription.
-        row = cursor.lastrowid
-        print(f"Prescription ID: {row}")
+        prescription_id = cursor.lastrowid
+
+        print("Prescription created successfully.")
+        print(f"Prescription ID: {prescription_id}")
+
+        # Display the prescription stored in this object.
         self.show_prescription_details()
-        return
+        
 
     def display_all_prescriptions(self):
+        # Retrieve all prescriptions from the database.
         try:
-        # Retrieve all prescriptions stored in the database.
             cursor.execute("SELECT * FROM prescription")
 
         except sqlite3.Error as e:
@@ -102,25 +100,24 @@ class Prescription():
             "prescriptions. Please try again.", e)
             return 
 
-        # Retrieve all rows returned by the query.
+        # Retrieve all queried rows.
         rows = cursor.fetchall()
         if not rows:
             print("No prescriptions are " \
             "currently available.")
-        else:
-        # Display each prescription returned from the database.
-            for row in rows:
-                prescription = Prescription(
-                    row[1]
-                )
-                print(f"Prescription ID:{row[0]}")
-                prescription.show_prescription_details()
             return
+        
+        # Create an object for each database record
+        for row in rows:
+            prescription = Prescription(row[1])
 
-    def search_prescription(self): 
+            print(f"Prescription ID:{row[0]}")
+            prescription.show_prescription_details()
+
+    def search_prescription(self):
+        # Get and validate the appointment ID.
         while True:
             try:
-        # Request the appointment ID used to locate the prescription.
                 self.appointment_id = int(
                     input("Enter the appointment ID: "))
                 if not self.validate_login_id(self.appointment_id):
@@ -129,16 +126,16 @@ class Prescription():
                     continue 
                 break 
     
-            except sqlite3.Error as e:
+            except ValueError:
                 print("Appointment ID must " \
                 "be in numbers only.")
                 continue 
 
+        # Search for the prescription linked to the appointment.
         try:
-        # Search for the prescription associated with the specified appointment.
             cursor.execute("""
-            SELECT * FROM prescription
-            WHERE appointment_id = ?
+                SELECT * FROM prescription
+                WHERE appointment_id = ?
             """,(self.appointment_id,))
     
         except sqlite3.Error as e:
@@ -148,24 +145,24 @@ class Prescription():
             return 
 
         # Retrieve the matching prescription, if one exists.
-        row = cursor.fetchone()
+        prescription_row = cursor.fetchone()
 
-        if not row:
+        if not prescription_row:
         # Handle the case where no prescription exists for the appointment.
             print("No prescription was " \
             "found for this appointment.")
             return 
-        else:
-            self.appointment_id = row[1]
 
-            print(f"Prescription ID:{row[0]}")
-            self.show_prescription_details()
-            return
-    
+        # Store the database value in the current object.
+        self.appointment_id = prescription_row[1]
+
+        print(f"Prescription ID:{prescription_row[0]}")
+        self.show_prescription_details()
+            
     def delete_prescription(self):
+        # Get and validate the appointment ID.
         while True:
             try:
-        # Request the appointment ID associated with the prescription to be deleted.
                 self.appointment_id = int(
                     input("Enter appointment ID:"))
                 if not self.validate_login_id(self.appointment_id):
@@ -174,68 +171,70 @@ class Prescription():
                     continue 
                 break 
 
-            except sqlite3.Error as e:
+            except ValueError:
                 print("Appointment ID must " \
                 "be in numbers only.")
-                continue 
+                continue
+
+         # Locate the prescription before attempting deletion.
         try:
-        # Locate the prescription before attempting deletion.
             cursor.execute("""
-            SELECT * FROM prescription
-            WHERE appointment_id = ?
+                SELECT * FROM prescription
+                WHERE appointment_id = ?
             """,(self.appointment_id,))
 
         except sqlite3.Error as e:
             print("Unable to find the " \
             "prescription. Please try again.", e)
-            return 
-
-        row = cursor.fetchone()
+            return
+        
+        prescription_row = cursor.fetchone()
 
         # Stop the deletion if no prescription exists for the appointment.
-        if not row:
+        if not prescription_row:
             print("No prescription was " \
             "found for this appointment.")
             return 
-        else:
-            self.appointment_id = row[1]
+        
+        self.appointment_id = prescription_row[1]
 
-            print(f"Prescription ID:{row[0]}")
-            self.show_prescription_details()
+        print(f"Prescription ID:{prescription_row[0]}")
+        self.show_prescription_details()
 
-            while True:
-                delete = input(
-
+        while True:
+            delete = input(
         # Confirm the deletion with the user before modifying the database.
-                    "Are you sure you want to " 
-                    "delete prescription? (Y/N):").lower()
-                if not self.validate_yes_no(delete):
+                "Are you sure you want to " 
+                "delete prescription? (Y/N):").lower()
 
-        # Validate the user's confirmation choice.
-                    print("Please enter Y/y " \
-                    "or N/n.")
-                    continue 
-                if delete == 'n':
-                    print("Prescription deletion cancelled.")
-                    break 
-                else:
-                    while True:
-                        try:
+            if not self.validate_yes_no(delete):
+            # Validate the user's confirmation choice.
+                print("Please enter Y/y " \
+                "or N/n.")
+                continue 
+            
+            if delete == 'n':
+                print("Prescription deletion cancelled.")
+                return
+            
+            break
+
         # Delete the prescription associated with the specified appointment.
-                            cursor.execute("""
-                            DELETE FROM prescription
-                            WHERE appointment_id = ?
-                            """,(self.appointment_id,))
+        try:
+            cursor.execute("""
+                DELETE FROM prescription
+                WHERE appointment_id = ?
+            """,(self.appointment_id,))
 
         # Save the deletion to the database.
-                            conn.commit()
+            conn.commit()
 
-                        except sqlite3.Error as e:
-                            print("Unable to delete " \
-                            "the prescription.", e)
-                            return 
+        except sqlite3.Error as e:
+            print("Unable to delete " \
+            "the prescription.", e)
+            return 
 
-                        print("Prescription deleted successfully.")
-                        return
+        print("Prescription deleted successfully.")
+        
 
 
