@@ -32,13 +32,13 @@ class Bill():
                 
                 if not self.validate_login_id(self.appointment_id):
                     print("Please enter a valid " \
-                    "appointment ID.")
+                            "appointment ID.")
                     continue 
                 break 
 
             except ValueError:
                 print("Please enter the appointment ID " \
-                      "using numbers only.")
+                        "using numbers only.")
                 continue
 
         # Find the prescription associated with the appointment.
@@ -50,7 +50,7 @@ class Bill():
 
         except sqlite3.Error as e:
             print("Unable to find the prescription. " \
-            "Please try again.", e)
+                    "Please try again.", e)
             return 
 
         # Get the prescription row from the database.
@@ -58,7 +58,7 @@ class Bill():
 
         if not prescription_row:
             print("No prescription is linked to " \
-            "this appointment.")
+                    "this appointment.")
             return
 
         # If prescription found.
@@ -76,8 +76,8 @@ class Bill():
 
         except sqlite3.Error as e:
             print("Unable to retrieve the " \
-            "prescription medications. Please " \
-            "try again.", e)
+                    "prescription medications. Please " \
+                        "try again.", e)
             return
 
         # A prescription can contain multiple medications, so fetchall() is used.
@@ -85,7 +85,7 @@ class Bill():
     
         if not prescription_medication_rows:
             print("No medications are linked " \
-            "to this prescription.")
+                    "to this prescription.")
             return
 
         # Start the bill total at zero.
@@ -107,7 +107,7 @@ class Bill():
 
         except sqlite3.Error as e:
             print("Unable to retrieve the " \
-            "medications. Please try again.", e)
+                    "medications. Please try again.", e)
             return
 
         # Get the one mataching medication from the the database.
@@ -162,7 +162,7 @@ class Bill():
         bill_rows = cursor.fetchall()
         if not bill_rows:
             print("No bills are " \
-            "are currently recorded")
+                    "are currently recorded")
             return
         
         for bill_row in bill_rows:
@@ -188,7 +188,7 @@ class Bill():
 
             except ValueError:
                 print("Please enter the appointment ID " \
-                "using numbers only")
+                        "using numbers only")
                 continue 
 
         # Search for a bill using the appointment ID.
@@ -200,7 +200,7 @@ class Bill():
 
         except sqlite3.Error as e:
             print("Unable to search for the bill. " \
-            "Please try again.", e)
+                    "Please try again.", e)
             return
 
         bill_row = cursor.fetchone()
@@ -230,7 +230,7 @@ class Bill():
 
             except ValueError:
                 print("Please enter the appointment ID " \
-                    "using numbers only.")
+                        "using numbers only.")
                 continue 
 
         # Find the bill associated with the appointment.
@@ -263,7 +263,7 @@ class Bill():
             bill_paid = input("Has this bill been paid? (Y/N)").lower()
             if not self.validate_yes_no(bill_paid):
                 print("Please enter Y/y for yes " \
-                      "or N/n for no.")
+                        "or N/n for no.")
                 continue
 
             if bill_paid == 'n':
@@ -286,7 +286,7 @@ class Bill():
 
             except sqlite3.Error as e:
                 print("Unable to update the bill. " \
-                    "Please try again.", e)
+                        "Please try again.", e)
                 return
 
             print("Bill payment status updated successfully.")

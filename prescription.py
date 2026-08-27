@@ -28,18 +28,17 @@ class Prescription():
         while True:
             try:
                 self.appointment_id = int(input(
-                    "Enter appointment ID: "
-                ))
+                    "Enter appointment ID: "))
         # Validate that the appointment ID is a positive number
                 if not self.validate_login_id(self.appointment_id):
                     print("Enter a valid " \
-                    "appointment ID.")
+                            "appointment ID.")
                     continue 
                 break 
 
             except ValueError:
                 print("Please enter a valid appointment ID " \
-                "using numbers only.")
+                        "using numbers only.")
                 continue 
 
         # Check whether a prescription already exists.
@@ -51,8 +50,8 @@ class Prescription():
 
         except sqlite3.Error as e:
             print("Unable to search for " \
-            "the prescription. Please " \
-            "try again.", e)
+                    "the prescription. Please " \
+                    "try again.", e)
             return
 
         # Retrieve the prescription, if one exists.
@@ -61,7 +60,7 @@ class Prescription():
         # Prevent duplicate prescriptions from being created for the same appointment.
         if prescription_row:
             print("A prescription already exists " \
-            "for this appointment.")
+                    "for this appointment.")
             return
         
         # Create the prescription.
@@ -77,7 +76,7 @@ class Prescription():
 
         except sqlite3.Error as e:
             print("Unable to create " \
-            "the prescription.", e)
+                    "the prescription.", e)
             return 
 
         # Retrieve the ID automatically generated for the new prescription.
@@ -97,14 +96,14 @@ class Prescription():
 
         except sqlite3.Error as e:
             print("Unable to display the " \
-            "prescriptions. Please try again.", e)
+                    "prescriptions. Please try again.", e)
             return 
 
         # Retrieve all queried rows.
         rows = cursor.fetchall()
         if not rows:
             print("No prescriptions are " \
-            "currently available.")
+                    "currently available.")
             return
         
         # Create an object for each database record
@@ -122,13 +121,13 @@ class Prescription():
                     input("Enter the appointment ID: "))
                 if not self.validate_login_id(self.appointment_id):
                     print("Please enter a valid " \
-                    "appointment ID.")
+                            "appointment ID.")
                     continue 
                 break 
     
             except ValueError:
                 print("Appointment ID must " \
-                "be in numbers only.")
+                        "be in numbers only.")
                 continue 
 
         # Search for the prescription linked to the appointment.
@@ -140,8 +139,8 @@ class Prescription():
     
         except sqlite3.Error as e:
             print("Unable to search for " \
-            "the prescription. Please" \
-            "try again.", e)
+                    "the prescription. Please" \
+                    "try again.", e)
             return 
 
         # Retrieve the matching prescription, if one exists.
@@ -150,7 +149,7 @@ class Prescription():
         if not prescription_row:
         # Handle the case where no prescription exists for the appointment.
             print("No prescription was " \
-            "found for this appointment.")
+                    "found for this appointment.")
             return 
 
         # Store the database value in the current object.
@@ -167,13 +166,13 @@ class Prescription():
                     input("Enter appointment ID:"))
                 if not self.validate_login_id(self.appointment_id):
                     print("Please enter a valid " \
-                    "appointment ID.")
+                            "appointment ID.")
                     continue 
                 break 
 
             except ValueError:
                 print("Appointment ID must " \
-                "be in numbers only.")
+                        "be in numbers only.")
                 continue
 
          # Locate the prescription before attempting deletion.
@@ -185,7 +184,7 @@ class Prescription():
 
         except sqlite3.Error as e:
             print("Unable to find the " \
-            "prescription. Please try again.", e)
+                    "prescription. Please try again.", e)
             return
         
         prescription_row = cursor.fetchone()
@@ -193,7 +192,7 @@ class Prescription():
         # Stop the deletion if no prescription exists for the appointment.
         if not prescription_row:
             print("No prescription was " \
-            "found for this appointment.")
+                    "found for this appointment.")
             return 
         
         self.appointment_id = prescription_row[1]
@@ -203,7 +202,6 @@ class Prescription():
 
         while True:
             delete = input(
-        # Confirm the deletion with the user before modifying the database.
                 "Are you sure you want to " 
                 "delete prescription? (Y/N):").lower()
 

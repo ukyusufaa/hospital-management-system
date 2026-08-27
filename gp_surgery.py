@@ -19,6 +19,11 @@ class GpSurgery:
                 return False
         return True
 
+    def validate_yes_no(self,selected):
+        if selected != 'y' and selected != 'n':
+            return False
+        return True
+
         # Validate IDs to ensure they are positive integers.
     def validate_id_input(self,number):
         if number < 1:
@@ -45,8 +50,8 @@ class GpSurgery:
 
             if not " " in self.address:
                 print("Please enter the full address " \
-                "including spaces between address " \
-                "details.")
+                        "including spaces between address " \
+                            "details.")
                 continue
             
             invalid_char = False
@@ -60,7 +65,7 @@ class GpSurgery:
                     break 
             if invalid_char == True:
                 print("Please enter a valid address " \
-                "using standard charcaters.")
+                        "using standard charcaters.")
                 continue
 
             digit_in_address = False
@@ -70,7 +75,7 @@ class GpSurgery:
                     break 
             if digit_in_address == False:
                 print("Please include a building or house " \
-                "number in the full address.")
+                        "number in the full address.")
                 continue 
             break 
 
@@ -87,14 +92,15 @@ class GpSurgery:
 
         except sqlite3.Error as e:
             print("Unable to save the medical practice " \
-            "details. Please try again.", e)
+                    "details. Please try again.", e)
             return
 
         print("Medical practice created successfully.")
-        row = cursor.lastrowid
-        print(f"Medical practice ID:{row}")
+
+        surgery_id = cursor.lastrowid
+        print(f"Medical practice ID: {surgery_id}")
         self.show_gpsurgery_details()
-        return
+        
 
         # Retrieve and display all medical practices stored in the database.
     def display_all_gpsurgery(self):
@@ -103,24 +109,25 @@ class GpSurgery:
 
         except sqlite3.Error as e:
             print("Unable to retrieve medical practices." \
-            "Please try again.", e)
+                    "Please try again.", e)
             return
 
-        rows = cursor.fetchall()
+        surgery_rows = cursor.fetchall()
 
-        if len(rows) == 0:
+        if len(surgery_rows) == 0:
             print("No medical practices are " \
-            "currently registered.")
+                    "currently registered.")
             return
-        else:
-            for row in rows:
-                clinic = GpSurgery(
-                    row[1],
-                    row[2]
-                )
-                print(f"Medical practice ID:{row[0]}")
-                clinic.show_gpsurgery_details()
-        return
+        
+        for surgery_row in surgery_rows:
+            clinic = GpSurgery(
+                surgery_row[1],
+                surgery_row[2]
+            )
+
+            print(f"Medical practice ID: {surgery_row[0]}")
+            clinic.show_gpsurgery_details()
+    
 
         # Find a medical practice using its unique surgery ID.
     def search_gpsurgery(self):
@@ -134,7 +141,7 @@ class GpSurgery:
                 break
             except ValueError:
                 print("Please enter the surgery ID " \
-                "using numbers only.")
+                        "using numbers only.")
                 continue
         try:
             cursor.execute("""
@@ -144,21 +151,23 @@ class GpSurgery:
 
         except sqlite3.Error as e:
             print("Unable to search for the " \
-            "medical practice. " \
-            "Please try again.", e)
+                    "medical practice. " \
+                        "Please try again.", e)
             return
 
-        row = cursor.fetchone()
+        surgery = cursor.fetchone()
 
-        if not row:
+        if not surgery:
             print("No medical practice was found. " \
-            "with that ID.")
+                    "with that ID.")
             return
-        else:
-            self.surgery_name = row[1]
-            self.address = row[2]
-            self.show_gpsurgery_details()
-        return
+        
+        self.surgery_name = surgery[1]
+        self.address = surgery[2]
+
+        print(f"Medical practice ID: {surgery[0]}")
+        self.show_gpsurgery_details()
+    
 
         # Update the details of an existing medical practice.
     def update_gpsurgery(self):
@@ -171,7 +180,7 @@ class GpSurgery:
                 break
             except ValueError:
                 print("Please enter the medical practice ID " \
-                "using numbers only.")
+                        "using numbers only.")
                 continue
         try:
             cursor.execute("""
@@ -181,72 +190,82 @@ class GpSurgery:
 
         except sqlite3.Error as e:
             print("Unable to retrieve the " \
-            "medical practice. Please try again.", e)
+                    "medical practice. Please try again.", e)
             return
 
-        row = cursor.fetchone()
+        surgery = cursor.fetchone()
 
-        if not row:
+        if not surgery:
             print("GP Surgery not found.")
             return 
-        else:
-            self.surgery_name = row[1]
-            self.address = row[2]
-            self.show_gpsurgery_details()
+        
+        self.surgery_name = surgery[1]
+        self.address = surgery[2]
 
+        print(f"Medical practice ID: {surgery[0]}")
+        self.show_gpsurgery_details()
+
+        while True:
             update = input("Update " 
                 "this medical practice? (Y/N):").lower()
+
+            if not self.validate_yes_no(update):
+                print("Please enter Y/y or N/n.")
+                continue
+            
             if update == "n":
                 print("Medical practice update cancelled.")
                 return
-            else:
-                while True:
-                    new_surgery_name = input(
-                        "Enter new "
-                        "medical practice name: "
-                        )
-                    if new_surgery_name == "":
-                        print("Medical practice name cannot " \
-                        "be blank.")
-                        continue 
-                    if not self.validate_surgeryname(new_surgery_name):
-                        print("Please use letters " \
-                        "and spaces only.")
-                        continue 
-                    break
+            break
+
+        while True:
+            new_surgery_name = input(
+                "Enter new "
+                "medical practice name: "
+            )
+
+            if new_surgery_name == "":
+                print("Medical practice name cannot be blank.")
+                continue
+
+            if not self.validate_surgeryname(new_surgery_name):
+                print("Please use letters and spaces only.")
+                continue 
+            break
                
-                while True:
-                    new_address = input(
-                        "Enter new medical "
-                        "practice address: ")
-                    if new_address == "":
-                        print("Address cannot be blank.")
-                        continue 
+        while True:
+            new_address = input("Enter new medical practice address: ")
+
+            if new_address == "":
+                print("Address cannot be blank.")
+                continue 
     
-                    invalid_char = False
-                    for character in new_address:
-                        if character.isalpha() or character.isdigit():
-                            continue
-                        if character in["&", " ", "-", "'", ",", ".", "/"]:
-                            continue
-                        else:
-                            invalid_char == True
-                            break 
-                    if invalid_char == True:
-                            print("Please enter a valid address " \
-                            "using the standard characters.")
-                            continue
-                
-                    digit_in_address = False
-                    for num in new_address:
-                        if num.isdigit():
-                            digit_in_address = True
-                            break 
-                    if digit_in_address == False:
-                        print("Please include a building " \
-                        "or house number in the address.")
-                        continue 
+            invalid_char = False
+            for character in new_address:
+                if character.isalpha() or character.isdigit():
+                    continue
+                if character in["&", " ", "-", "'", ",", ".", "/"]:
+                    continue
+                else:
+                    invalid_char == True
                     break
+
+            if invalid_char:
+                print("Please enter a valid address " \
+                        "using the standard characters.")
+                continue
+                
+            digit_in_address = False
+            for character in new_address:
+                if character.isdigit():
+                    digit_in_address = True
+                    break
+
+                if not digit_in_address:
+                    print("Please include a building " \
+                            "or house number in the address.")
+                    continue 
+                break
                         
             self.surgery_name = new_surgery_name
             self.address = new_address
@@ -255,36 +274,39 @@ class GpSurgery:
                 cursor.execute("""
                     UPDATE gp_surgery
                     SET surgery_name = ?,
-                    address = ?
+                        address = ?
                     WHERE surgery_id = ?
-                    """,(self.surgery_name, self.address,surgery_id))
+                """,(self.surgery_name, self.address,surgery_id))
 
                 conn.commit()
 
             except sqlite3.Error as e:
                 print("Unable to update the medical " \
-                "practice. Please try again.", e)
+                        "practice. Please try again.", e)
                 return
             
             print("Medical practice updated sucessfully!")
-            return
+    
 
         # Confirm and remove an existing medical practice from the database.
     def delete_gpsurgery(self):
-        surgery_id = int(input("Enter medical practice ID:"))
         while True:
             try:
+                surgery_id = int(input("Enter medical practice ID: "))
+
                 if surgery_id == "":
                     print("Medical practice cannot be blank.")
-                    continue 
+                    continue
+
                 if not self.validate_id_input(surgery_id):
                     print("Please enter a " \
-                    "valid medical practice ID.")
+                            "valid medical practice ID.")
                     continue 
                 break
+
             except ValueError:
                 print("Please enter the medical " \
-                "practice ID using numbers only.")
+                        "practice ID using numbers only.")
                 continue
 
         try:
@@ -298,19 +320,27 @@ class GpSurgery:
             "medical practice. Please try again.", e)
             return
 
-        row = cursor.fetchone()
+        surgery = cursor.fetchone()
 
-        if not row:
+        if not surgery:
             print("No medical practice was " \
-            "found with that ID.")
+                    "found with that ID.")
             return
-        else:
-            self.surgery_name = row[1]
-            self.address = row[2]
-            self.show_gpsurgery_details()
+        
+        self.surgery_name = surgery[1]
+        self.address = surgery[2]
 
+        print(f"Medical practice ID: {surgery[0]}")
+        self.show_gpsurgery_details()
+
+        while True:
             delete = input("Delete " 
                 "this medical practice?(Y/N): ").lower()
+
+            if not self.validate_yes_no(delete):
+                print("Please enter Y/y or N/n.")
+                continue
+            
             if delete == "y":
                 try:
                     cursor.execute("""
@@ -322,16 +352,16 @@ class GpSurgery:
 
                 except sqlite3.Error as e:
                     print("Unable to delete the " \
-                    "medical practice. Please try again.", e)
+                            "medical practice. Please try again.", e)
                     return
 
                 print("Medical practice deleted " \
-                "sucessfully.")
+                        "successfully.")
                 return
-
-            else:
-                print("Medical surgery deletion " \
-                "process cancelled.")
+            
+            print("Medical surgery deletion " \
+                    "process cancelled.")
+            return
 
 
 
