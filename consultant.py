@@ -85,7 +85,7 @@ class Consultant():
 
         except sqlite3.Error as e:
             print("Unable to save the consultant. " \
-            "Please try again.", e)
+                    "Please try again.", e)
             return
 
         print("Consultant created successfully.")
@@ -103,7 +103,7 @@ class Consultant():
 
         except sqlite3.Error as e:
             print("Unable to retrieve consultants. " \
-            "Please try again.", e)
+                    "Please try again.", e)
             return
         
         consultant_rows = cursor.fetchall()
@@ -138,13 +138,13 @@ class Consultant():
                 continue 
         try:
             cursor.execute("""
-            SELECT * FROM consultant
-            WHERE consultant_id = ?
+                SELECT * FROM consultant
+                WHERE consultant_id = ?
             """,(consultant_id,))
 
         except sqlite3.Error as e:
             print("Unable to search for the consultant. " \
-            "Please try again.", e)
+                    "Please try again.", e)
             return
 
         consultant_row = cursor.fetchone()
@@ -177,13 +177,13 @@ class Consultant():
                 continue 
         try:
             cursor.execute("""
-            SELECT * FROM consultant
-            WHERE consultant_id = ?
+                SELECT * FROM consultant
+                WHERE consultant_id = ?
             """,(consultant_id,))
 
         except sqlite3.Error as e:
             print("Unable to retrieve the consultant. " \
-            "Please try again.", e)
+                    "Please try again.", e)
             return
         
         consultant_row = cursor.fetchone()
@@ -303,8 +303,8 @@ class Consultant():
                 continue 
         try:
             cursor.execute("""
-            SELECT * FROM consultant
-            WHERE consultant_id = ?
+                SELECT * FROM consultant
+                WHERE consultant_id = ?
             """,(consultant_id,))
 
         except sqlite3.Error as e:

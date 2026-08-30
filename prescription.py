@@ -29,6 +29,7 @@ class Prescription():
             try:
                 self.appointment_id = int(input(
                     "Enter appointment ID: "))
+                
         # Validate that the appointment ID is a positive number
                 if not self.validate_login_id(self.appointment_id):
                     print("Enter a valid " \
@@ -45,7 +46,7 @@ class Prescription():
         try:
             cursor.execute("""
             SELECT * FROM prescription
-            WHERE appointment_id = ?
+                WHERE appointment_id = ?
             """,(self.appointment_id,))
 
         except sqlite3.Error as e:
@@ -55,10 +56,10 @@ class Prescription():
             return
 
         # Retrieve the prescription, if one exists.
-        prescription_row = cursor.fetchone()
+        prescription_record = cursor.fetchone()
 
         # Prevent duplicate prescriptions from being created for the same appointment.
-        if prescription_row:
+        if prescription_record:
             print("A prescription already exists " \
                     "for this appointment.")
             return
@@ -100,17 +101,18 @@ class Prescription():
             return 
 
         # Retrieve all queried rows.
-        rows = cursor.fetchall()
-        if not rows:
+        prescription_records = cursor.fetchall()
+
+        if not prescription_records:
             print("No prescriptions are " \
                     "currently available.")
             return
         
         # Create an object for each database record
-        for row in rows:
-            prescription = Prescription(row[1])
+        for prescription_record in prescription_records:
+            prescription = Prescription(prescription_record[1])
 
-            print(f"Prescription ID:{row[0]}")
+            print(f"Prescription ID:{prescription_record[0]}")
             prescription.show_prescription_details()
 
     def search_prescription(self):
@@ -144,26 +146,27 @@ class Prescription():
             return 
 
         # Retrieve the matching prescription, if one exists.
-        prescription_row = cursor.fetchone()
+        prescription_record = cursor.fetchone()
 
-        if not prescription_row:
+        if not prescription_record:
         # Handle the case where no prescription exists for the appointment.
             print("No prescription was " \
                     "found for this appointment.")
             return 
 
         # Store the database value in the current object.
-        self.appointment_id = prescription_row[1]
+        self.appointment_id = prescription_record[1]
 
-        print(f"Prescription ID:{prescription_row[0]}")
+        print(f"Prescription ID:{prescription_record[0]}")
         self.show_prescription_details()
             
     def delete_prescription(self):
         # Get and validate the appointment ID.
         while True:
             try:
-                self.appointment_id = int(
-                    input("Enter appointment ID:"))
+                self.appointment_id = int(input(
+                    "Enter appointment ID:"))
+                
                 if not self.validate_login_id(self.appointment_id):
                     print("Please enter a valid " \
                             "appointment ID.")
@@ -187,17 +190,17 @@ class Prescription():
                     "prescription. Please try again.", e)
             return
         
-        prescription_row = cursor.fetchone()
+        prescription_record = cursor.fetchone()
 
         # Stop the deletion if no prescription exists for the appointment.
-        if not prescription_row:
+        if not prescription_record:
             print("No prescription was " \
                     "found for this appointment.")
-            return 
+            return
         
-        self.appointment_id = prescription_row[1]
+        self.appointment_id = prescription_record[1]
 
-        print(f"Prescription ID:{prescription_row[0]}")
+        print(f"Prescription ID:{prescription_record[0]}")
         self.show_prescription_details()
 
         while True:

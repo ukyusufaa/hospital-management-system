@@ -61,8 +61,9 @@ class Appointment():
             return
 
         # Retrieve the patient record using fetchone()
-        row = cursor.fetchone()
-        if not row:
+        patient_record = cursor.fetchone()
+
+        if not patient_record:
             print("We couldn't find a patient " \
                     "with that ID.")
             return
@@ -83,8 +84,8 @@ class Appointment():
         try:
         # Find the consultant ID associated with the appointment.
             cursor.execute("""
-            SELECT * FROM consultant
-            WHERE consultant_id = ?
+                SELECT * FROM consultant
+                WHERE consultant_id = ?
             """,(self.consultant_id,))
 
         except sqlite3.Error as e:
@@ -92,8 +93,9 @@ class Appointment():
                     "Please try again.", e)
             return
         # Retrieve the consultant record using fetchone().          
-        row = cursor.fetchone()
-        if not row:
+        consultant_record = cursor.fetchone()
+
+        if not consultant_record:
             print("We couldn't find a consultant." \
                     "with that ID.")
             return
@@ -186,11 +188,10 @@ class Appointment():
         # Check whether the consultant is already booked at this date and time.
         try:
             cursor.execute("""
-            SELECT * FROM appointment
-            WHERE consultant_id = ? 
+                SELECT * FROM appointment
+                WHERE consultant_id = ? 
                 AND appointment_date = ? 
                 AND appointment_time = ?
-            
             """,(self.consultant_id,
                 self.appointment_date,
                 self.appointment_time))
@@ -252,21 +253,22 @@ class Appointment():
             return
 
         # Retrieve all appointments records returned by the query.
-        rows = cursor.fetchall()
-        if not rows:
+        appointment_records = cursor.fetchall()
+
+        if not appointment_records:
             print("There are currently no appointments " \
                     "to display.")
             return
         
         # Create and display an Appointment object for each database record.
-        for appointment_row in rows:
+        for appointment_record in appointment_records:
             appointment = Appointment(
-                appointment_row[1],
-                appointment_row[2],
-                appointment_row[3],
-                appointment_row[4]
+                appointment_record[1],
+                appointment_record[2],
+                appointment_record[3],
+                appointment_record[4]
                 )
-            print(f"Appointment ID:{appointment_row[0]}")
+            print(f"Appointment ID:{appointment_record[0]}")
             appointment.show_details_appointment()
 
     def search_appointment(self):
@@ -287,8 +289,8 @@ class Appointment():
         try:
         # Search for the appointment ID using its primary key.
             cursor.execute("""
-            SELECT * FROM appointment
-            WHERE appointment_id = ?
+                SELECT * FROM appointment
+                WHERE appointment_id = ?
             """,(appointment_id,))
 
         except sqlite3.Error as e:
@@ -297,19 +299,19 @@ class Appointment():
             return
         
         # Retrieve the matching appointment record.
-        appointment_row = cursor.fetchone()
+        appointment_record = cursor.fetchone()
 
-        if not appointment_row:
+        if not appointment_record:
             print("We couldn't find an appointment " \
                     "with that ID.")
             return
         
-        self.patient_id = appointment_row[1]
-        self.consultant_id = appointment_row[2]
-        self.appointment_date = appointment_row[3]
-        self.appointment_time = appointment_row[4]
+        self.patient_id = appointment_record[1]
+        self.consultant_id = appointment_record[2]
+        self.appointment_date = appointment_record[3]
+        self.appointment_time = appointment_record[4]
 
-        print(f"Appointment ID:{appointment_row[0]}")
+        print(f"Appointment ID:{appointment_record[0]}")
         self.show_details_appointment()
         return
 
@@ -331,8 +333,8 @@ class Appointment():
         try:
         # Find the appointment that will be updated.
             cursor.execute("""
-            SELECT * FROM appointment
-            WHERE appointment_id = ?
+                SELECT * FROM appointment
+                WHERE appointment_id = ?
             """,(appointment_id,))
 
         except sqlite3.Error as e:
@@ -341,19 +343,19 @@ class Appointment():
             return
 
         # Retrieve the existing appointment record.
-        appointment_row = cursor.fetchone()
+        appointment_record = cursor.fetchone()
 
-        if not appointment_row:
+        if not appointment_record:
             print("We couldn't find an appointment " \
                     "with that ID.")
             return
         
-        self.patient_id = appointment_row[1]
-        self.consultant_id = appointment_row[2]
-        self.appointment_date = appointment_row[3]
-        self.appointment_time = appointment_row[4]
+        self.patient_id = appointment_record[1]
+        self.consultant_id = appointment_record[2]
+        self.appointment_date = appointment_record[3]
+        self.appointment_time = appointment_record[4]
 
-        print(f"Appointment ID:{appointment_row[0]}")
+        print(f"Appointment ID:{appointment_record[0]}")
         self.show_details_appointment()
 
         while True:
@@ -550,39 +552,41 @@ class Appointment():
         while True:
             try:
                 appointment_id = int(input("Enter the appointment ID:"))
+
                 if not self.validate_user_login(appointment_id):
                     print("Please enter a valid appointment ID.")
                     continue
                 break
+
             except ValueError:
                 print("Please enter the appointment ID " \
                         "using numbers only.")
         try:
         # Find the appointment that will be deleted.
             cursor.execute("""
-            SELECT * FROM appointment
-            WHERE appointment_id = ?
+                SELECT * FROM appointment
+                WHERE appointment_id = ?
             """,(appointment_id,))
 
         except sqlite3.Error as e:
             print("Unable to retrieve the " \
-            "appointment. Please try again.", e)
+                    "appointment. Please try again.", e)
             return
 
         # Retrieve the appointment record before deletion
-        appointment_row = cursor.fetchone()
+        appointment_record = cursor.fetchone()
 
-        if not appointment_row:
+        if not appointment_record:
             print("We couldn't find " \
             "an appointment with that ID.")
             return 
         
-        self.patient_id = appointment_row[1]
-        self.consultant_id = appointment_row[2]
-        self.appointment_date = appointment_row[3]
-        self.appointment_time = appointment_row[4]
+        self.patient_id = appointment_record[1]
+        self.consultant_id = appointment_record[2]
+        self.appointment_date = appointment_record[3]
+        self.appointment_time = appointment_record[4]
 
-        print(f"Appointment ID: {appointment_row[0]}")
+        print(f"Appointment ID: {appointment_record[0]}")
         self.show_details_appointment()
 
         while True:
@@ -625,7 +629,7 @@ class Appointment():
                 FROM appointment
                 INNER JOIN prescription
                 ON appointment.appointment_id =
-            prescription.appointment_id
+                prescription.appointment_id
             """)
 
         except sqlite3.Error as e:
