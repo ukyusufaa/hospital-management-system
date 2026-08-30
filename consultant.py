@@ -74,11 +74,11 @@ class Consultant():
         try:
             # Insert the validated consultant details into the database.
             cursor.execute("""
-            INSERT INTO consultant(
-                       first_name,
-                       surname,
-                       department_id)
-            VALUES(?,?,?)
+                INSERT INTO consultant(
+                    first_name,
+                    surname,
+                    department_id)
+                VALUES(?,?,?)
             """,(self.first_name,self.surname,self.department_id))
 
             conn.commit()
