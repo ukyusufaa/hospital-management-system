@@ -39,7 +39,7 @@ class Appointment():
         while True:
             try:
                 self.patient_id = int(input("Enter the Patient's ID:"))
-                if not self.validate_user_login(self.patient_id):
+                if not self.validate_login_id(self.patient_id):
                     print("Please enter a valid patient ID.")
                     continue
                 break
@@ -72,7 +72,7 @@ class Appointment():
             try:
         # Validate the consultant ID entered by the user.
                 self.consultant_id = int(input("Enter the Consultant's ID:"))
-                if not self.validate_user_login(self.consultant_id):
+                if not self.validate_login_id(self.consultant_id):
                     print("Please enter a valid consultant ID.")
                     continue
                 break
@@ -103,7 +103,7 @@ class Appointment():
         while True:
         # Validate the appointment date entered by the user.
             self.appointment_date = (input("Enter the " \
-                "appointment date(MM/DD/YYYY):"))
+                "appointment date(DD/MM/YYYY):"))
             if self.appointment_date == "":
                 print("Please enter an appointment date.")
                 continue 
@@ -111,8 +111,9 @@ class Appointment():
                 print("The appointment date must be in the " \
                         "format DD/MM/YYYY.")
                 continue
+
             if self.appointment_date[2] != "/" or self.appointment_date[5] != "/":
-                print("Please use / between the day, " \
+                print("Please use between the day, " \
                         "month and year.")
                 continue
 
@@ -178,36 +179,61 @@ class Appointment():
             if hour < 8 or hour > 18:
                 print("Appointments are available between " \
                         "08:00 and 18:00.")
+                continue
 
             if minutes not in (0, 15, 30, 45):
                 print("Please choose an appointment time " \
                         "ending in 00, 15, 30 or 45 minutes only.")
                 continue
-            break
-
-        # Check whether the consultant is already booked at this date and time.
-        try:
-            cursor.execute("""
-                SELECT * FROM appointment
-                WHERE consultant_id = ? 
-                AND appointment_date = ? 
-                AND appointment_time = ?
-            """,(self.consultant_id,
-                self.appointment_date,
-                self.appointment_time))
-
-        except sqlite3.Error as e:
-            print("Unable to check appointment " \
-                    "availability. Please try again.", e)
-            return
         
-        # Retrieve any matching appointment.
-        matching_appointment = cursor.fetchone()
+             # Check whether the consultant is already booked at this date and time.
+            try:
+                cursor.execute("""
+                    SELECT * FROM appointment
+                    WHERE consultant_id = ? 
+                    AND appointment_date = ? 
+                    AND appointment_time = ?
+                """,(self.consultant_id,
+                    self.appointment_date,
+                    self.appointment_time))
 
-        if matching_appointment:
-            print("The consultant is already booked "
-                    "at this date or time.")
-            return
+            except sqlite3.Error as e:
+                    print("Unable to check appointment " \
+                        "availability. Please try again.", e)
+                    return
+        
+            # Retrieve any matching appointment.
+            matching_appointment1 = cursor.fetchone()
+
+            if matching_appointment1:
+                print("The consultant is already booked "
+                        "at this date or time.")
+                return
+
+            # Check whether the patient is already booked
+            try:
+                cursor.execute("""
+                    SELECT * FROM appointment
+                    WHERE patient_id = ?
+                    AND appointment_date = ?
+                    AND appointment_time = ?
+                """,(self.patient_id,
+                    self.appointment_date,
+                    self.appointment_time))
+
+            except sqlite3.Error as e:
+                print("Unable to check appointment " \
+                        "availabilty. Please try again.")
+                return
+
+            matching_appointment2 = cursor.fetchone()
+
+            if matching_appointment2:
+                print("Cannot book this appointment. " \
+                    "The patient already has an " \
+                    "appointment at this time.")  
+                return
+            break    
         
         print("The appointment slot is available.")
 
@@ -276,7 +302,7 @@ class Appointment():
         while True:
             try:
                 appointment_id = int(input("Appointment ID:"))
-                if not self.validate_user_login(appointment_id):
+                if not self.validate_login_id(appointment_id):
                     print("Please enter a valid appointment ID.")
                     continue
                 break
@@ -320,7 +346,7 @@ class Appointment():
         while True:
             try:
                 appointment_id = int(input("Enter the appointment ID:"))
-                if not self.validate_user_login(appointment_id):
+                if not self.validate_login_id(appointment_id):
                     print("Please enter a valid appointment ID.")
                     continue
                 break
@@ -378,7 +404,7 @@ class Appointment():
             try:
                 updated_patient_id = int(input("Enter the Patient's ID:"))
 
-                if not self.validate_user_login(updated_patient_id):
+                if not self.validate_login_id(updated_patient_id):
                     print("Please enter a valid patient ID.")
                     continue
                 break
@@ -394,7 +420,7 @@ class Appointment():
                 updated_consultant_id = int(input("Enter the " 
                     "consultant's ID:"))
                     
-                if not self.validate_user_login(updated_consultant_id):
+                if not self.validate_login_id(updated_consultant_id):
                     print("Please enter a valid " \
                             "consultant ID.")
                     continue
@@ -408,7 +434,7 @@ class Appointment():
         while True:
         # Validate the appointment date entered by the user.
             updated_appointment_date = (input("Enter the " \
-                "appointment date(MM/DD/YYYY):"))
+                "appointment date(DD/MM/YYYY):"))
 
             if updated_appointment_date == "":
                 print("Please enter an appointment date.")
@@ -419,14 +445,14 @@ class Appointment():
                         "format DD/MM/YYYY.")
                 continue
 
-            if updated_appointment_date[2] != "/" or self.appointment_date[5] != "/":
-                print("Please use / between the day, " \
+            if updated_appointment_date[2] != "/" or updated_appointment_date[5] != "/":
+                print("Please use between the day, " \
                         "month and year.")
                 continue
     
             not_number = False
 
-            for value in self.appointment_date:
+            for value in updated_appointment_date:
                 if value == "/":
                     continue 
                 if not value.isdigit():
@@ -495,33 +521,59 @@ class Appointment():
                 print("Please choose an appointment time " \
                         "ending in 00, 15, 30 or 45 minutes only.")
                 continue
-            break
 
-        try:
-        # Check that the new consultant, date and time are available.
-            cursor.execute("""
-                SELECT * FROM appointment
-                WHERE consultant_id = ?
-                AND appointment_date = ?
-                AND appointment_time = ?
-                AND appointment_id != ?
-            """,(updated_consultant_id,
-                updated_appointment_date,
-                updated_appointment_time,
-                appointment_id))
+            # Check that the new consultant, date and time are available.
+            try:
+                cursor.execute("""
+                    SELECT * FROM appointment
+                    WHERE consultant_id = ?
+                    AND appointment_date = ?
+                    AND appointment_time = ?
+                    AND appointment_id != ?
+                """,(updated_consultant_id,
+                    updated_appointment_date,
+                    updated_appointment_time,
+                    appointment_id))
 
-        except sqlite3.Error as e:
-            print("Unable to check appointment " \
+            except sqlite3.Error as e:
+                print("Unable to check appointment " \
                     "availability. Please try again.", e)
-            return
+                return
 
-        matching_appointment = cursor.fetchone()
+            matching_appointment1 = cursor.fetchone()
 
-        if matching_appointment:
-            print("The consultant is already " \
-                    "booked at this time or date.")
-            return
+            if matching_appointment1:
+                print("The consultant is already " \
+                        "booked at this time or date.")
+                return
 
+            # Check whether the patient is already booked
+            try:
+                cursor.execute("""
+                    SELECT * FROM appointment
+                    WHERE patient_id = ?
+                    AND appointment_date = ?
+                    AND appointment_time = ?
+                    AND appointment_id != ?
+                """,(updated_patient_id,
+                    updated_appointment_date,
+                    updated_appointment_time,
+                    appointment_id))
+
+            except sqlite3.Error as e:
+                print("Unable to check appointment " \
+                        "availabilty. Please try again.",e)
+                return
+
+            matching_appointment2 = cursor.fetchone()
+
+            if matching_appointment2:
+                print("Cannot book this appointment. " \
+                        "The patient already has an " \
+                        "appointment at this time.")  
+                return
+            break 
+             
         print("The appointment slot is available.")  
         try:
         # Update the appointment record in the database.
@@ -544,8 +596,9 @@ class Appointment():
         except sqlite3.Error as e:
             print ("Unable to update the " \
                     "appointment. Please try again.", e)
+            return
 
-            print("Appointment updated successfully.")
+        print("Appointment updated successfully.")
 
     def delete_appointment(self):
         # Validate the appointment ID entered by the user.
@@ -553,7 +606,7 @@ class Appointment():
             try:
                 appointment_id = int(input("Enter the appointment ID:"))
 
-                if not self.validate_user_login(appointment_id):
+                if not self.validate_login_id(appointment_id):
                     print("Please enter a valid appointment ID.")
                     continue
                 break

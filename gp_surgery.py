@@ -15,7 +15,8 @@ class GpSurgery:
         # Validate surgery names using letters and spaces.
     def validate_surgeryname(self,name):
         for letter in name:
-            if not letter.isalpha() and not letter == " ":
+            if (not letter.isalpha() and not letter == " "
+                and not letter == '&'):
                 return False
         return True
 
@@ -69,8 +70,8 @@ class GpSurgery:
                 continue
 
             digit_in_address = False
-            for num in self.address:
-                if num.isdigit():
+            for character in self.address:
+                if character.isdigit():
                     digit_in_address = True
                     break 
             if digit_in_address == False:
@@ -174,10 +175,12 @@ class GpSurgery:
         while True:
             try:
                 surgery_id = int(input("Enter medical practice ID:"))
+
                 if not self.validate_id_input(surgery_id):
                     print("Enter a valid medical practice.")
-                    continue 
+                    continue
                 break
+
             except ValueError:
                 print("Please enter the medical practice ID " \
                         "using numbers only.")
@@ -220,9 +223,7 @@ class GpSurgery:
 
         while True:
             new_surgery_name = input(
-                "Enter new "
-                "medical practice name: "
-            )
+                "Enter new medical practice name: ")
 
             if new_surgery_name == "":
                 print("Medical practice name cannot be blank.")
@@ -230,7 +231,7 @@ class GpSurgery:
 
             if not self.validate_surgeryname(new_surgery_name):
                 print("Please use letters and spaces only.")
-                continue 
+                continue
             break
                
         while True:
@@ -238,7 +239,12 @@ class GpSurgery:
 
             if new_address == "":
                 print("Address cannot be blank.")
-                continue 
+                continue
+
+            if not " " in new_address:
+                print("Please enter the full address " \
+                        "including spaces between address details.")
+                continue
     
             invalid_char = False
             for character in new_address:
@@ -247,7 +253,7 @@ class GpSurgery:
                 if character in["&", " ", "-", "'", ",", ".", "/"]:
                     continue
                 else:
-                    invalid_char == True
+                    invalid_char = True
                     break
 
             if invalid_char:
@@ -261,32 +267,33 @@ class GpSurgery:
                     digit_in_address = True
                     break
 
-                if not digit_in_address:
-                    print("Please include a building " \
-                            "or house number in the address.")
-                    continue 
-                break
+            if not digit_in_address:
+                print("Please include a building " \
+                        "or house number in the address.")
+                continue 
+            break
                         
-            self.surgery_name = new_surgery_name
-            self.address = new_address
+        self.surgery_name = new_surgery_name
+        self.address = new_address
 
-            try:
-                cursor.execute("""
-                    UPDATE gp_surgery
-                    SET surgery_name = ?,
-                        address = ?
-                    WHERE surgery_id = ?
-                """,(self.surgery_name, self.address,surgery_id))
+        try:
+            cursor.execute("""
+                UPDATE gp_surgery
+                SET surgery_name = ?,
+                    address = ?
+                WHERE surgery_id = ?
+            """,(self.surgery_name, self.address,surgery_id))
 
-                conn.commit()
+            conn.commit()
 
-            except sqlite3.Error as e:
-                print("Unable to update the medical " \
-                        "practice. Please try again.", e)
-                return
+        except sqlite3.Error as e:
+            print("Unable to update the medical " \
+                    "practice. Please try again.", e)
+            return
             
-            print("Medical practice updated sucessfully!")
-    
+        print("Medical practice updated sucessfully!")
+        return
+
 
         # Confirm and remove an existing medical practice from the database.
     def delete_gpsurgery(self):

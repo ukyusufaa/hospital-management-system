@@ -34,7 +34,7 @@ class Department():
 
             if not self.validate_department_name(self.department_name):
                 print("Please use letters and " \
-                        "spaces only")
+                        "spaces only.")
                 continue 
             break 
 

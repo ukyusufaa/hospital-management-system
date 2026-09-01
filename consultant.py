@@ -119,9 +119,9 @@ class Consultant():
                 consultant_row[3]
             )
 
-        print(f"Consultant ID: {consultant_row[0]}")
+            print(f"Consultant ID: {consultant_row[0]}")
 
-        specialist.show_details_consultant()
+            specialist.show_details_consultant()
 
         
     def search_consultant(self):

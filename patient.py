@@ -146,49 +146,47 @@ class Patient():
     
         while True:
             gp = input(
-                "Does the patient have " 
-                    "a GP? (Y/N): ").lower()
+                "Does the patient have a GP? (Y/N): ").lower()
             
             if not self.validate_yes_no(gp):
-                print("Enter Y/y " \
-                    "or N/n.")
+                print("Enter Y/y or N/n.")
                 continue
 
-            if gp == "y":
-                try:
-                    self.gp_id = int(input("Enter GP ID:"))
+            if gp == "n":
+                self.gp_id = None
+                break
 
-                    if not self.validate_login_digits(self.gp_id):
-                        print("Please use a valid GP ID.")
-                        continue
+            try:
+                self.gp_id = int(input("Enter GP ID:"))
 
-                except ValueError:
-                    print("Please enter the GP ID " \
-                            "using numbers only.")
-                    continue 
+                if not self.validate_login_digits(self.gp_id):
+                    print("Please use a valid GP ID.")
+                    continue
+                
 
-                try:
-                    cursor.execute("""
-                        SELECT * FROM gp
-                        WHERE gp_id = ?
-                    """,(self.gp_id,))
+            except ValueError:
+                print("Please enter the GP ID " \
+                        "using numbers only.")
+                continue 
 
-                except sqlite3.Error as e:
+            try:
+                cursor.execute("""
+                SELECT * FROM gp
+                    WHERE gp_id = ?
+                """,(self.gp_id,))
+
+            except sqlite3.Error as e:
                     print("Unable to verify the " \
                             "GP record. Please try again.",e)
                     return
 
-                gp_record = cursor.fetchone()
+            gp_record = cursor.fetchone()
 
-                if not gp_record:
-                    print("No GP was found " \
-                            "with that ID.")
-                    continue 
-                break
-            
-            else:
-                self.gp_id = None 
-                break
+            if not gp_record:
+                print("No GP was found " \
+                        "with that ID.")
+                return
+            break
 
         try:
         # Insert the validated patient details into the database.
@@ -451,51 +449,47 @@ class Patient():
 
         while True:
             gp = input(
-                "Does the patient have " 
-                    "a GP? (Y/N): ").lower()
+                "Does the patient have a GP? (Y/N): ").lower()
                     
             if not self.validate_yes_no(gp):
-                print("Enter Y/y " \
-                        "or N/n.")
+                print("Enter Y/y or N/n.")
                 continue
         
-            if gp == "y":
-                try:
-                    updated_gp_id = int(input("Enter GP ID:"))
-        
-                    if not self.validate_login_digits(updated_gp_id):
-                        print("Please use a valid GP ID.")
-                        continue
-        
-                except ValueError:
-                    print("Please enter the GP ID " \
-                            "using numbers only.")
-                    continue 
-        
-                try:
-                    cursor.execute("""
-                        SELECT * FROM gp
-                        WHERE gp_id = ?
-                    """,(updated_gp_id,))
-        
-                except sqlite3.Error as e:
-                    print("Unable to verify the " \
-                            "GP record. Please try again.",e)
-                    return
-        
-                gp_record = cursor.fetchone()
-        
-                if not gp_record:
-                    print("No GP was found " \
-                            "with that ID.")
-                    continue 
+            if gp == "n":
+                self.gp_id = None
                 break
-
-            else:
-                updated_gp_id = None 
-                break
+            
+            try:
+                updated_gp_id = int(input("Enter GP ID:"))
         
-          
+                if not self.validate_login_digits(updated_gp_id):
+                    print("Please use a valid GP ID.")
+                    continue
+        
+            except ValueError:
+                print("Please enter the GP ID " \
+                        "using numbers only.")
+                continue 
+        
+            try:
+                cursor.execute("""
+                    SELECT * FROM gp
+                    WHERE gp_id = ?
+                """,(updated_gp_id,))
+        
+            except sqlite3.Error as e:
+                print("Unable to verify the " \
+                        "GP record. Please try again.",e)
+                return
+        
+            gp_record = cursor.fetchone()
+        
+            if not gp_record:
+                print("No GP was found " \
+                        "with that ID.")
+                continue 
+            break
+        
         self.first_name = updated_first_name
         self.surname = updated_surname
         self.dob = updated_dob
