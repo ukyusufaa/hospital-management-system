@@ -377,9 +377,9 @@ class Appointment():
             return
         
         self.patient_id = appointment_record[1]
-        self.consultant_id = appointment_record[2]
-        self.appointment_date = appointment_record[3]
-        self.appointment_time = appointment_record[4]
+        self.appointment_date = appointment_record[2]
+        self.appointment_time = appointment_record[3]
+        self.consultant_id = appointment_record[4]
 
         print(f"Appointment ID:{appointment_record[0]}")
         self.show_details_appointment()
