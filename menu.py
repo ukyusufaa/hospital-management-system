@@ -370,7 +370,8 @@ def appointment_management():
         print("3. Update Appointment")
         print("4. Delete Appointment")
         print("5. Display All Hospital Appointments")
-        print("6. Return to Main Menu")
+        print("6. View Appointment Details")
+        print("7. Return to Main Menu")
 
         choice = input("Enter a choice: ")
 
@@ -395,6 +396,9 @@ def appointment_management():
             appointment.display_all_appointments()
 
         elif choice == "6":
+            appointment_details_menu()
+
+        elif choice == "7":
             print("Returning to Main Menu")
             break
 
@@ -405,6 +409,25 @@ def appointment_management():
             input("Press Enter to try again...")
 
     input("Press Enter to return to the Main Menu...")
+
+def appointment_details_menu():
+    while True:
+        print("--- Appointment Information ---".center(50))
+        print("1. Appointments with patients(INNER JOIN).")
+        print("2. All Appointments, Including Those Without Patients(LEFT JOIN).")
+        print("3. All Patients, Including Those Without Appointments(RIGHT JOIN).")
+        print("4. All Patients and Appointments(FULL OUTER JOIN).")
+        print("5. Every Possible Appointment/Patient Combination(CROSS JOIN).")
+        print("6. Return to Appointment.")
+
+        choice = input("Enter choice: ")
+
+        if choice == "1":
+            appointment = Appointment()
+            appointment.display_appointment_details()
+
+        if choice == "2":
+            break
 
 def prescription_management():
     while True:
