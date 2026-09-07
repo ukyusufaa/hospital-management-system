@@ -8,6 +8,7 @@ from prescription import Prescription
 from prescription_medication import PrescriptionMedication
 from medication import Medication
 from bill import Bill
+from appointment_patient import AppointmentPatient
 
 def menu():
     while True:
@@ -16,8 +17,9 @@ def menu():
         print("1. Hospital Administration")
         print("2. Patient Management")
         print("3. Appointment Management")
-        print("4. Prescription Management")
-        print("5. Billing Management")
+        print("4. Patient & Appointment Information")
+        print("5. Prescription Management")
+        print("6. Billing Management")
         print("6. Exit")
 
         choice = input("Enter a choice from Main Menu: ")
@@ -32,12 +34,15 @@ def menu():
             appointment_management()
 
         elif choice == "4":
-            prescription_management()
+            appointment_patient_menu()
 
         elif choice == "5":
-            billing_management()
+            prescription_management()
 
         elif choice == "6":
+            billing_management()
+
+        elif choice == "7":
             print("Exiting Holly Hospital Management System")
             break 
 
@@ -370,8 +375,7 @@ def appointment_management():
         print("3. Update Appointment")
         print("4. Delete Appointment")
         print("5. Display All Hospital Appointments")
-        print("6. View Appointment Details")
-        print("7. Return to Main Menu")
+        print("6. Return to Main Menu")
 
         choice = input("Enter a choice: ")
 
@@ -396,9 +400,6 @@ def appointment_management():
             appointment.display_all_appointments()
 
         elif choice == "6":
-            appointment_details_menu()
-
-        elif choice == "7":
             print("Returning to Main Menu")
             break
 
@@ -410,23 +411,30 @@ def appointment_management():
 
     input("Press Enter to return to the Main Menu...")
 
-def appointment_details_menu():
+def appointment_patient_menu():
     while True:
         print("--- Appointment Information ---".center(50))
-        print("1. Appointments with patients(INNER JOIN).")
-        print("2. All Appointments, Including Those Without Patients(LEFT JOIN).")
-        print("3. All Patients, Including Those Without Appointments(RIGHT JOIN).")
-        print("4. All Patients and Appointments(FULL OUTER JOIN).")
-        print("5. Every Possible Appointment/Patient Combination(CROSS JOIN).")
-        print("6. Return to Appointment.")
+        print("1. Patients WITH Appointments(INNER JOIN).")
+        print("2. All Patients, including those WITHOUT Appointments(LEFT JOIN).")
+        print("3. All Patients and Appointments(FULL OUTER JOIN).")
+        print("4. Every Possible Appointment/Patient Combination(CROSS JOIN).")
+        print("5. Return to Appointment.")
 
         choice = input("Enter choice: ")
 
         if choice == "1":
-            appointment = Appointment()
-            appointment.display_appointment_details()
+            appointment_patient = AppointmentPatient()
+            appointment_patient.display_appointment_details()
 
         if choice == "2":
+            appointment_patient = AppointmentPatient()
+            appointment_patient.display_all_patients_with_appointments()
+
+        if choice == "3":
+            appointment_patient = AppointmentPatient()
+            appointment_patient.display_all_patients_and_appointments()
+
+        if choice == "4":
             break
 
 def prescription_management():

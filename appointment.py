@@ -694,40 +694,6 @@ class Appointment():
         for row in rows:
                 print(row)
 
-    def display_appointment_details(self):
-        try:
-            cursor.execute("""
-
-            SELECT  appointment.appointment_date,
-                    appointment.appointment_time,
-                    patient.first_name,
-                    patient.surname
-
-            FROM    appointment
-
-            INNER JOIN patient
-
-            ON appointment.patient_id = patient.patient_id
-
-            ORDER BY    substr(appointment.appointment_date,7,4),
-                        substr(appointment.appointment_date,4,2),
-                        substr(appointment.appointment_date,1,2)
-            """)
-
-        except sqlite3.Error as e:
-            print("Database Error",e)
-            return 
-
-        rows = cursor.fetchall()
-
-        for row in rows:
-            (appointment_date,appointment_time,
-             first_name, surname) = row
-
-            print(f"Date: {appointment_date}")
-            print(f"Time: {appointment_time}")
-            print(f"Patient: {first_name} {surname}")
-            print("-"*40)
 
         
 
