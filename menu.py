@@ -417,8 +417,10 @@ def appointment_patient_menu():
         print("1. Patients WITH Appointments(INNER JOIN).")
         print("2. All Patients, including those WITHOUT Appointments(LEFT JOIN).")
         print("3. All Patients and Appointments(FULL OUTER JOIN).")
-        print("4. Every Possible Appointment/Patient Combination(CROSS JOIN).")
-        print("5. Return to Appointment.")
+        print("4. Patient, Appointment & Consultant Information.")
+        print("5. Patient, Appointment, Consultant & Department Information.")
+        print("6. Patient, GP & Medical Practice.")
+        print("7. Return to Main Menu.")
 
         choice = input("Enter choice: ")
 
@@ -426,16 +428,37 @@ def appointment_patient_menu():
             appointment_patient = AppointmentPatient()
             appointment_patient.display_appointment_details()
 
-        if choice == "2":
+        elif choice == "2":
             appointment_patient = AppointmentPatient()
             appointment_patient.display_all_patients_with_appointments()
 
-        if choice == "3":
+        elif choice == "3":
             appointment_patient = AppointmentPatient()
             appointment_patient.display_all_patients_and_appointments()
 
-        if choice == "4":
+        elif choice == "4":
+            appointment_patient = AppointmentPatient()
+            appointment_patient.display_patient_appointment_consultant()
+
+        elif choice == "5":
+            appointment_patient = AppointmentPatient()
+            appointment_patient.display_patient_appointment_consultant_department()
+
+        elif choice == "6":
+            appointment_patient = AppointmentPatient()
+            appointment_patient.display_patient_gp_gp_surgery()
+
+        elif choice == "7":
+            print("Returning to the main menu.")
             break
+
+        else:
+            print("\nInvalid choice. Please enter " \
+                    "a number between 1 and 7.")
+                                    
+            input("Press Enter to try again...")
+
+    input("Press Enter to return to the Main Menu...")
 
 def prescription_management():
     while True:
