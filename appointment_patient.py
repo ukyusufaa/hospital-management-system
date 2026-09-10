@@ -3,24 +3,24 @@ import sqlite3
 from database import conn, cursor
 
 class AppointmentPatient():
-    def display_appointment_details(self):
+    def display_patients_with_appointments(self):
         try:
             cursor.execute("""
 
-            SELECT  patient.first_name,
-                    patient.surname,
-                    appointment.appointment_date,
-                    appointment.appointment_time
+                SELECT  patient.first_name,
+                        patient.surname,
+                        appointment.appointment_date,
+                        appointment.appointment_time
 
-            FROM    patient
+                FROM    patient
 
-            INNER JOIN  appointment
+                INNER JOIN  appointment
 
-            ON  patient.patient_id = appointment.patient_id 
+                ON  patient.patient_id = appointment.patient_id 
 
-            ORDER BY    substr(appointment.appointment_date,7,4),
-                        substr(appointment.appointment_date,4,2),
-                        substr(appointment.appointment_date,1,2)
+                ORDER BY    substr(appointment.appointment_date,7,4),
+                            substr(appointment.appointment_date,4,2),
+                            substr(appointment.appointment_date,1,2)
             """)
 
         except sqlite3.Error as e:
@@ -38,7 +38,7 @@ class AppointmentPatient():
             print(f"Time: {appointment_time}")
             print("-"*40)
 
-    def display_all_patients_with_appointments(self):
+    def display_all_patients_with_or_without_appointments(self):
         try:
             cursor.execute("""
 
@@ -52,7 +52,10 @@ class AppointmentPatient():
                 LEFT JOIN   appointment
 
                 ON  patient.patient_id = appointment.patient_id
-        
+
+                ORDER BY    substr(appointment.appointment_date,7,4),
+                            substr(appointment.appointment_date,4,2),
+                            substr(appointment.appointment_date,1,2)
             """)
 
         except sqlite3.Error as e:
@@ -70,33 +73,43 @@ class AppointmentPatient():
             print(f"Time: {appointment_time}")
             print("-"*40)
 
-    def display_all_patients_and_appointments(self):
+    def display_all_patients_and_appointments_including_unmatched(self):
         try:
             cursor.execute("""
 
-                SELECT  patient.first_name,
-                        patient.surname,
-                        appointment.appointment_date,
-                        appointment.appointment_time
+                SELECT  *
+
+                FROM
+                (
+            
+                    SELECT  patient.first_name,
+                            patient.surname,
+                            appointment.appointment_date,
+                            appointment.appointment_time
                 
-                FROM    patient
+                    FROM    patient
 
-                LEFT JOIN  appointment
+                    LEFT JOIN  appointment
 
-                ON  patient.patient_id = appointment.patient_id
+                    ON  patient.patient_id = appointment.patient_id
 
-                UNION
+                    UNION
 
-                SELECT  patient.first_name,
-                        patient.surname,
-                        appointment.appointment_date,
-                        appointment.appointment_time
+                    SELECT  patient.first_name,
+                            patient.surname,
+                            appointment.appointment_date,
+                            appointment.appointment_time
                 
-                FROM    appointment
+                    FROM    appointment
 
-                LEFT JOIN   patient
+                    LEFT JOIN   patient
 
-                ON  appointment.patient_id = patient.patient_id
+                    ON  appointment.patient_id = patient.patient_id
+                
+                )
+                ORDER BY    substr(appointment_date,7,4),
+                            substr(appointment_date,4,2),
+                            substr(appointment_date,1,2)
 
             """)
 
@@ -133,6 +146,10 @@ class AppointmentPatient():
                             
                 INNER JOIN   consultant
                     ON  appointment.consultant_id = consultant.consultant_id
+                
+                ORDER BY    substr(appointment.appointment_date,7,4),
+                            substr(appointment.appointment_date,4,2),
+                            substr(appointment.appointment_date,1,2)
 
             """)
 
@@ -175,6 +192,10 @@ class AppointmentPatient():
                             
                 INNER JOIN   department
                     ON  consultant.department_id = department.department_id
+                
+                ORDER BY    substr(appointment.appointment_date,7,4),
+                            substr(appointment.appointment_date,4,2),
+                            substr(appointment.appointment_date,1,2)
             
             """)
 
@@ -235,6 +256,76 @@ class AppointmentPatient():
             print(f"Practice Address: {address}")
             print("-"*40)
 
-        
+    def display_prescription_medications(self):
+        try:
+            cursor.execute("""
 
-            
+                SELECT  prescription_medication.prescription_id,
+                        prescription_medication.medication_id,
+                        medication.medication_name
+                
+                FROM    prescription_medication
+
+                INNER JOIN  prescription
+                    ON  prescription_medication.prescription_id = prescription.prescription_id
+                
+                INNER JOIN medication
+                    ON  prescription_medication.medication_id = medication.medication_id
+                
+                ORDER BY   prescription_medication.prescription_id,
+                           prescription_medication.medication_id
+                           
+            """)
+
+        except sqlite3.Error as e:
+            print("Database Error", e)
+            return 
+
+        rows = cursor.fetchall()
+
+        last_prescription_id = None
+
+        for row in rows:
+            (prescription_id,medication_id,
+             medication_name) = row
+
+            if prescription_id != last_prescription_id:
+                print("="*40)
+                print(f"Prescription ID: {prescription_id}")
+                print("-"*40)
+                last_prescription_id = prescription_id
+            print(f"Medication ID: {medication_id}")
+            print(f"Medication: {medication_name}")
+            print("-"*40)
+
+    def display_advanced_queries(self):
+        try:
+            cursor.execute("""
+
+                SELECT  prescription_medication.prescription_id,
+                    COUNT(prescription_medication.medication_id)
+
+                FROM    prescription_medication
+
+                GROUP BY   prescription_medication.prescription_id
+
+                ORDER BY   prescription_medication.prescription_id
+
+
+            """)
+
+        except sqlite3.Error as e:
+                print("Database Error", e)
+                return
+
+        rows = cursor.fetchall()
+
+        for row in rows:
+            (prescription_id,medication_count) = row
+
+            print(f"Prescription ID: {prescription_id}")
+            print(f"Medication Count: {medication_count}")
+            print("-"*40)
+
+
+                

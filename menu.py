@@ -414,27 +414,29 @@ def appointment_management():
 def appointment_patient_menu():
     while True:
         print("--- Appointment Information ---".center(50))
-        print("1. Patients WITH Appointments(INNER JOIN).")
-        print("2. All Patients, including those WITHOUT Appointments(LEFT JOIN).")
-        print("3. All Patients and Appointments(FULL OUTER JOIN).")
+        print("1. Patients with Appointments(INNER JOIN).")
+        print("2. All Patients, including those without Appointments(LEFT JOIN).")
+        print("3. All Patients and Appointments Including Unmatched(FULL OUTER JOIN).")
         print("4. Patient, Appointment & Consultant Information.")
         print("5. Patient, Appointment, Consultant & Department Information.")
         print("6. Patient, GP & Medical Practice.")
-        print("7. Return to Main Menu.")
+        print("7. Prescription & Medication Data(MANY TO MANY DATABASE RELATIONSHIP).")
+        print("8. Advanced SQL Queries.")
+        print("9. Return to Main Menu.")
 
         choice = input("Enter choice: ")
 
         if choice == "1":
             appointment_patient = AppointmentPatient()
-            appointment_patient.display_appointment_details()
+            appointment_patient.display_patients_with_appointments()
 
         elif choice == "2":
             appointment_patient = AppointmentPatient()
-            appointment_patient.display_all_patients_with_appointments()
+            appointment_patient.display_all_patients_with_or_without_appointments()
 
         elif choice == "3":
             appointment_patient = AppointmentPatient()
-            appointment_patient.display_all_patients_and_appointments()
+            appointment_patient.display_all_patients_and_appointments_including_unmatched()
 
         elif choice == "4":
             appointment_patient = AppointmentPatient()
@@ -449,12 +451,20 @@ def appointment_patient_menu():
             appointment_patient.display_patient_gp_gp_surgery()
 
         elif choice == "7":
+            appointment_patient = AppointmentPatient()
+            appointment_patient.display_prescription_medications()
+
+        elif choice == "8":
+            appointment_patient = AppointmentPatient()
+            appointment_patient.display_advanced_queries()
+
+        elif choice == "9":
             print("Returning to the main menu.")
             break
 
         else:
             print("\nInvalid choice. Please enter " \
-                    "a number between 1 and 7.")
+                    "a number between 1 and 9.")
                                     
             input("Press Enter to try again...")
 
