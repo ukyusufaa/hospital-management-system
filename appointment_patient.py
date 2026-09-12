@@ -301,17 +301,25 @@ class AppointmentPatient():
     def display_advanced_queries(self):
         try:
             cursor.execute("""
-
                 SELECT  prescription_medication.prescription_id,
-                    COUNT(prescription_medication.medication_id)
+                    COUNT(prescription_medication.medication_id),
+                    SUM(medication.cost),
+                    AVG(medication.cost)
 
                 FROM    prescription_medication
 
+                INNER JOIN   medication
+                    ON    prescription_medication.medication_id = medication.medication_id
+
+                WHERE   prescription_medication.prescription_id != 5
+
                 GROUP BY   prescription_medication.prescription_id
 
+                HAVING  COUNT(prescription_medication.medication_id) > 1
+                   AND  SUM(medication.cost) > 20
+                   AND  AVG(medication.cost) > 5
+                   
                 ORDER BY   prescription_medication.prescription_id
-
-
             """)
 
         except sqlite3.Error as e:
@@ -321,11 +329,46 @@ class AppointmentPatient():
         rows = cursor.fetchall()
 
         for row in rows:
-            (prescription_id,medication_count) = row
+            (prescription_id,medication_count,
+             cost,average) = row
 
             print(f"Prescription ID: {prescription_id}")
             print(f"Medication Count: {medication_count}")
+            print(f"Total: {cost}")
+            print(f"Average medication cost: {average}")
             print("-"*40)
+
+    def display_advanced_queries(self):
+        try:
+            cursor.execute("""
+                SELECT  prescription_medication.prescription_id,
+                        COUNT(prescription_medication.medication_id)
+                
+                FROM    prescription_medication
+
+                GROUP BY   prescription_medication.prescription_id
+
+                HAVING COUNT(prescription_medication.medication_id) > (
+                    SELECT COUNT(prescription_medication.medication_id)
+                    FROM   prescription_medication
+                    WHERE   prescription_id = 5
+                )
+                
+                ORDER BY   prescription_medication.prescription_id
+            """)
+
+        except sqlite3.Error as e:
+            print("Database Error", e)
+
+        rows = cursor.fetchall()
+
+        for row in rows:
+            prescription_id, medication_count = row
+            print("="*40)
+            print(f"Prescription ID: {prescription_id}")
+            print(f"Medication Count: {medication_count}")
+            print("-"*40)
+    
 
 
                 

@@ -20,7 +20,7 @@ def menu():
         print("4. Patient & Appointment Information")
         print("5. Prescription Management")
         print("6. Billing Management")
-        print("6. Exit")
+        print("7. Exit")
 
         choice = input("Enter a choice from Main Menu: ")
 
@@ -421,8 +421,9 @@ def appointment_patient_menu():
         print("5. Patient, Appointment, Consultant & Department Information.")
         print("6. Patient, GP & Medical Practice.")
         print("7. Prescription & Medication Data(MANY TO MANY DATABASE RELATIONSHIP).")
-        print("8. Advanced SQL Queries.")
-        print("9. Return to Main Menu.")
+        print("8. Prescription Medication Statistics(Advanced SQL Queries).")
+        print("9. Advanced Prescription Searches(Advanced SQL Subqueries).")
+        print("10. Return to Main Menu.")
 
         choice = input("Enter choice: ")
 
@@ -459,6 +460,10 @@ def appointment_patient_menu():
             appointment_patient.display_advanced_queries()
 
         elif choice == "9":
+            appointment_patient = AppointmentPatient()
+            appointment_patient.display_advanced_queries()
+
+        elif choice == "10":
             print("Returning to the main menu.")
             break
 
@@ -478,7 +483,7 @@ def prescription_management():
         print("2. Search Prescription")
         print("3. Delete Prescription")
         print("4. Display All Hospital Prescriptions")
-        print("5. Prescription Instructions Management")
+        print("5. Prescribe The Medication")
         print("6. Return to Main Menu")
 
         choice = input("Enter a choice: ")
