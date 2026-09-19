@@ -9,18 +9,20 @@ from prescription_medication import PrescriptionMedication
 from medication import Medication
 from bill import Bill
 from appointment_patient import AppointmentPatient
+from colors import(MAIN_MENU_HEADING,ADMIN_MENU,PATIENT_MENU,APPOINTMENT_MENU,
+    PRESCRIPTION_MENU,BILLING_MENU,SUB_MENU_HEADING,EXIT,RESET)
 
 def menu():
     while True:
-        print("=== Holly Hospital ===".center(50))
+        print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print("=== Welcome to the Main Menu ===".center(50))
-        print("1. Hospital Administration")
-        print("2. Patient Management")
-        print("3. Appointment Management")
+        print(f"1. {ADMIN_MENU}Hospital Administration{RESET}")
+        print(f"2. {PATIENT_MENU}Patient Management{RESET}")
+        print(f"3. {APPOINTMENT_MENU}Appointment Management{RESET}")
         print("4. Patient & Appointment Information")
-        print("5. Prescription Management")
-        print("6. Billing Management")
-        print("7. Exit")
+        print(f"5. {PRESCRIPTION_MENU}Prescription Management{RESET}")
+        print(f"6. {BILLING_MENU}Billing Management{RESET}")
+        print(f"7. {EXIT}Exit{RESET}")
 
         choice = input("Enter a choice from Main Menu: ")
 
@@ -56,13 +58,13 @@ def menu():
             
 def hospital_administration():
     while True:
-        print("--- Holly Hospital ---".center(50))
-        print("--- Hospital Administration Menu ---".center(50))
-        print("1. Patient Medical Practice Management")
-        print("2. Patient GP Management")
-        print("3. Department Management")
-        print("4. Consultant Management")
-        print("5. Medication Management")
+        print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
+        print(f"{SUB_MENU_HEADING}{'--- Hospital Administration Menu ---'.center(50)}{RESET}")
+        print(f"1. {ADMIN_MENU}Patient Medical Practice Management{RESET}")
+        print(f"2. {ADMIN_MENU}Patient GP Management{RESET}")
+        print(f"3. {ADMIN_MENU}Department Management{RESET}")
+        print(f"4. {ADMIN_MENU}Consultant Management{RESET}")
+        print(f"5. {ADMIN_MENU}Medication Management{RESET}")
         print("6. Return to Main Menu")
 
         choice = input("Enter a choice: ")
@@ -96,7 +98,7 @@ def hospital_administration():
 
 def gp_surgery_management():
     while True:
-        print("--- Holly Hospital ---".center(50)) 
+        print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print("--- Patient ---".center(50)) 
         print("--- Medical Practice Menu ---".center(50))
         print("1. Insert Medical Practice")
@@ -142,7 +144,7 @@ def gp_surgery_management():
 
 def gp_management():
     while True:
-        print("--- Holly Hospital ---".center(50)) 
+        print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}") 
         print("--- Patient ---".center(50))
         print("--- GP Menu ---".center(50))
         print("1. Insert GP")
@@ -187,7 +189,7 @@ def gp_management():
 
 def department_management():
     while True:
-        print("--- Holly Hospital ---".center(50))
+        print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print("--- Department Menu ---".center(50))
         print("1. Insert Department")
         print("2. Search Department")
@@ -232,7 +234,7 @@ def department_management():
             
 def consultant_management():
     while True:
-        print("--- Holly Hospital ---".center(50))
+        print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print("--- Consultant Menu ---".center(50))
         print("1. Insert Consultant")
         print("2. Search Consultant")
@@ -277,7 +279,7 @@ def consultant_management():
 
 def medication_management():
     while True:
-        print("--- Holly Hospital ---".center(50))
+        print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print("--- Medication Menu ---".center(50))
         print("1. Insert Medication")
         print("2. Search Medication")
@@ -322,7 +324,7 @@ def medication_management():
 
 def patient_management():
     while True:
-        print("--- Holly Hospital ---".center(50)) 
+        print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print("--- Patient Menu ---".center(50))
         print("1. Insert Patient Data")
         print("2. Search Patient Data")
@@ -368,7 +370,7 @@ def patient_management():
 
 def appointment_management():
     while True:
-        print("--- Holly Hospital ---".center(50))
+        print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print("--- Appointment Menu ---".center(50))
         print("1. Insert Appointment")
         print("2. Search Appointment")
@@ -413,6 +415,7 @@ def appointment_management():
 
 def appointment_patient_menu():
     while True:
+        print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print("--- Appointment Information ---".center(50))
         print("1. Patients with Appointments(INNER JOIN).")
         print("2. All Patients, including those without Appointments(LEFT JOIN).")
@@ -477,7 +480,7 @@ def appointment_patient_menu():
 
 def prescription_management():
     while True:
-        print("--- Holly Hospital ---".center(50))
+        print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print("--- Prescription Menu ---".center(50))
         print("1. Insert Prescription")
         print("2. Search Prescription")
@@ -521,7 +524,7 @@ def prescription_management():
 
 def prescription_instructions_management():
     while True:
-        print("--- Holly Hospital ---".center(50))
+        print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print("--- Prescription ---".center(50))
         print("--- Instructions Menu ---".center(50))
         print("1. Insert Prescription Instructions")
@@ -567,7 +570,7 @@ def prescription_instructions_management():
 
 def billing_management():
     while True:
-        print("--- Holly Hospital ---".center(50))
+        print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print("--- Billing Menu ---".center(50))
         print("1. Insert Billing")
         print("2. Search Billing")
