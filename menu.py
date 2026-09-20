@@ -9,8 +9,12 @@ from prescription_medication import PrescriptionMedication
 from medication import Medication
 from bill import Bill
 from appointment_patient import AppointmentPatient
-from colors import(MAIN_MENU_HEADING,ADMIN_MENU,PATIENT_MENU,APPOINTMENT_MENU,
-    PRESCRIPTION_MENU,BILLING_MENU,SUB_MENU_HEADING,EXIT,RESET)
+from colors import(MAIN_MENU_HEADING,ADMIN_MENU,PRACTICE_MENU,
+                   GP_MENU,DEPARTMENT_MENU,CONSULTANT_MENU,MEDICATION_MENU,
+                   PATIENT_MENU,APPOINTMENT_MENU,PRESCRIPTION_MENU,
+                   PRESCRIPTION_INSTRUCTIONS_MENU,BILLING_MENU,
+                   SUB_MENU_HEADING,SUB_SUB_MENU_HEADING,TREE,
+                   DISPLAY_INFO,RETURN_MENU,EXIT,RESET)
 
 def menu():
     while True:
@@ -60,12 +64,12 @@ def hospital_administration():
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print(f"{SUB_MENU_HEADING}{'--- Hospital Administration Menu ---'.center(50)}{RESET}")
-        print(f"1. {ADMIN_MENU}Patient Medical Practice Management{RESET}")
-        print(f"2. {ADMIN_MENU}Patient GP Management{RESET}")
-        print(f"3. {ADMIN_MENU}Department Management{RESET}")
-        print(f"4. {ADMIN_MENU}Consultant Management{RESET}")
-        print(f"5. {ADMIN_MENU}Medication Management{RESET}")
-        print("6. Return to Main Menu")
+        print(f"1. {ADMIN_MENU}Medical Practice Management Of Patient{RESET}")
+        print(f"2. {ADMIN_MENU}GP Management Of Patient{RESET}")
+        print(f"3. {ADMIN_MENU}Department Management Of Holly Hospital{RESET}")
+        print(f"4. {ADMIN_MENU}Consultant Management Of Holly Hosptial{RESET}")
+        print(f"5. {ADMIN_MENU}Medication Management Of Holly Hospital{RESET}")
+        print(f"6. {RETURN_MENU}Return To Main Menu{RESET}")
 
         choice = input("Enter a choice: ")
 
@@ -94,19 +98,21 @@ def hospital_administration():
                         
             input("Press Enter to try again...")
 
-    input("Press Enter to return to the Main Menu...")
 
 def gp_surgery_management():
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
-        print("--- Patient ---".center(50)) 
-        print("--- Medical Practice Menu ---".center(50))
-        print("1. Insert Medical Practice")
-        print("2. Search Medical Practice")
-        print("3. Update Medical Practice")
-        print("4. Delete Medical Practice")
-        print("5. Display All Patient Medical Practices")
-        print("6. Return to Hospital Patient Menu")
+        print(
+                f"{SUB_SUB_MENU_HEADING}"
+                f"{(TREE + ' Medical Practice Of Patient Menu').center(50)}"
+                f"{RESET}"
+            )
+        print(f"1. {PRACTICE_MENU}Insert Medical Practice{RESET}")
+        print(f"2. {PRACTICE_MENU}Search Medical Practice{RESET}")
+        print(f"3. {PRACTICE_MENU}Update Medical Practice{RESET}")
+        print(f"4. {PRACTICE_MENU}Delete Medical Practice{RESET}")
+        print(f"5. {PRACTICE_MENU}Display All Patient Medical Practices{RESET}")
+        print(f"6. {RETURN_MENU}Return To Hospital Administration Menu{RESET}")
 
         choice = input("Enter a choice: ")
 
@@ -140,19 +146,21 @@ def gp_surgery_management():
             
             input("Press Enter to try again...")
 
-    input("Press Enter to return to the Hospital Administration Menu...")
 
 def gp_management():
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}") 
-        print("--- Patient ---".center(50))
-        print("--- GP Menu ---".center(50))
-        print("1. Insert GP")
-        print("2. Search GP")
-        print("3. Update GP")
-        print("4. Delete GP")
-        print("5. Display All Patient GP's")
-        print("6. Return to Hospital Patient Menu ")
+        print(
+                f"{SUB_SUB_MENU_HEADING}"
+                f"{(TREE + ' GP Of Patient Menu').center(50)}"
+                f"{RESET}"
+            )
+        print(f"1. {GP_MENU}Insert GP{RESET}")
+        print(f"2. {GP_MENU}Search GP{RESET}")
+        print(f"3. {GP_MENU}Update GP{RESET}")
+        print(f"4. {GP_MENU}Delete GP{RESET}")
+        print(f"5. {GP_MENU}Display All Patient GP's{RESET}")
+        print(f"6. {RETURN_MENU}Return To Hospital Administration Menu{RESET}")
 
         choice = input("Enter a choice: ")
 
@@ -185,18 +193,21 @@ def gp_management():
             
             input("Press Enter to try again...")
 
-    input("Press Enter to return to the Hospital Administration Menu...")
 
 def department_management():
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
-        print("--- Department Menu ---".center(50))
-        print("1. Insert Department")
-        print("2. Search Department")
-        print("3. Update Department")
-        print("4. Delete Department")
-        print("5. Display All Hospital Departments")
-        print("6. Return to Main Menu")
+        print(
+                f"{SUB_SUB_MENU_HEADING}"
+                f"{(TREE + ' Department Of Holly Hospital Menu').center(50)}"
+                f"{RESET}"
+            )
+        print(f"1. {DEPARTMENT_MENU}Insert Department{RESET}")
+        print(f"2. {DEPARTMENT_MENU}Search Department{RESET}")
+        print(f"3. {DEPARTMENT_MENU}Update Department{RESET}")
+        print(f"4. {DEPARTMENT_MENU}Delete Department{RESET}")
+        print(f"5. {DEPARTMENT_MENU}Display All Hospital Departments{RESET}")
+        print(f"6. {RETURN_MENU}Return To Hospital Administration Menu{RESET}")
 
         choice = input("Enter a choice: ")
 
@@ -221,7 +232,7 @@ def department_management():
             department.display_all_departments()
 
         elif choice == "6":
-            print("Returning to Main Menu")
+            print("Returning to Hospital Administration Menu")
             break
 
         else:
@@ -230,18 +241,21 @@ def department_management():
                         
             input("Press Enter to try again...")
 
-    input("Press Enter to return to the Hospital Administration Menu...")
             
 def consultant_management():
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
-        print("--- Consultant Menu ---".center(50))
-        print("1. Insert Consultant")
-        print("2. Search Consultant")
-        print("3. Update Consultant")
-        print("4. Delete Consultant")
-        print("5. Display All Hospital Consultants")
-        print("6. Return to Main Menu")
+        print(
+                f"{SUB_SUB_MENU_HEADING}"
+                f"{(TREE + ' Consultant Of Holly Hospital Menu').center(50)}"
+                f"{RESET}"
+            )
+        print(f"1. {CONSULTANT_MENU}Insert Consultant{RESET}")
+        print(f"2. {CONSULTANT_MENU}Search Consultant{RESET}")
+        print(f"3. {CONSULTANT_MENU}Update Consultant{RESET}")
+        print(f"4. {CONSULTANT_MENU}Delete Consultant{RESET}")
+        print(f"5. {CONSULTANT_MENU}Display All Hospital Consultants{RESET}")
+        print(f"6. {RETURN_MENU}Return To Hospital Administration Menu{RESET}")
 
         choice = input("Enter a choice: ")
 
@@ -266,7 +280,7 @@ def consultant_management():
             consultant.display_all_consultants()
 
         elif choice == "6":
-            print("Returning to Main Menu")
+            print("Returning to Hospital Administration Menu")
             break 
 
         else:
@@ -275,18 +289,21 @@ def consultant_management():
             
             input("Press Enter to try again...")
 
-    input("Press Enter to return to the Hospital Administration Menu...")
 
 def medication_management():
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
-        print("--- Medication Menu ---".center(50))
-        print("1. Insert Medication")
-        print("2. Search Medication")
-        print("3. Update Medication")
-        print("4. Delete Medication")
-        print("5. Display All Hospital Medications")
-        print("6. Return to Main Menu")
+        print(
+            f"{SUB_SUB_MENU_HEADING}"
+            f"{(TREE + ' Medication Of Holly Hospital Menu').center(50)}"
+            f"{RESET}"
+            )
+        print(f"1. {MEDICATION_MENU}Insert Medication{RESET}")
+        print(f"2. {MEDICATION_MENU}Search Medication{RESET}")
+        print(f"3. {MEDICATION_MENU}Update Medication{RESET}")
+        print(f"4. {MEDICATION_MENU}Delete Medication{RESET}")
+        print(f"5. {MEDICATION_MENU}Display All Hospital Medications{RESET}")
+        print(f"6. {RETURN_MENU}Return to Hospital Administration Menu{RESET}")
 
         choice = input("Enter a choice: ")
 
@@ -311,7 +328,7 @@ def medication_management():
             medication.display_all_medications()
 
         elif choice == "6":
-            print("Returning to Main Menu")
+            print("Returning to Hospital Administration Menu")
             break
 
         else:
@@ -320,18 +337,17 @@ def medication_management():
                         
             input("Press Enter to try again...")
 
-    input("Press Enter to return to the Hospital Administration Menu...")
 
 def patient_management():
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
-        print("--- Patient Menu ---".center(50))
-        print("1. Insert Patient Data")
-        print("2. Search Patient Data")
-        print("3. Update Patient Data")
-        print("4. Delete Patient Data")
-        print("5. Display All Patients Data")
-        print("6. Return to Main Menu")
+        print(f"{SUB_MENU_HEADING}{'--- Patient Menu ---'.center(50)}{RESET}")
+        print(f"1. {PATIENT_MENU}Insert Patient Data{RESET}")
+        print(f"2. {PATIENT_MENU}Search Patient Data{RESET}")
+        print(f"3. {PATIENT_MENU}Update Patient Data{RESET}")
+        print(f"4. {PATIENT_MENU}Delete Patient Data{RESET}")
+        print(f"5. {PATIENT_MENU}Display All Patients Data{RESET}")
+        print(f"6. {RETURN_MENU}Return to Main Menu{RESET}")
 
         choice = input("Enter a choice: ")
 
@@ -366,18 +382,17 @@ def patient_management():
             
             input("Press Enter to try again...")
 
-    input("Press Enter to return to the Main Menu...")
 
 def appointment_management():
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
-        print("--- Appointment Menu ---".center(50))
-        print("1. Insert Appointment")
-        print("2. Search Appointment")
-        print("3. Update Appointment")
-        print("4. Delete Appointment")
-        print("5. Display All Hospital Appointments")
-        print("6. Return to Main Menu")
+        print(f"{SUB_MENU_HEADING}{'--- Appointment Menu ---'.center(50)}{RESET}")
+        print(f"1. {APPOINTMENT_MENU}Insert Appointment{RESET}")
+        print(f"2. {APPOINTMENT_MENU}Search Appointment{RESET}")
+        print(f"3. {APPOINTMENT_MENU}Update Appointment{RESET}")
+        print(f"4. {APPOINTMENT_MENU}Delete Appointment{RESET}")
+        print(f"5. {APPOINTMENT_MENU}Display All Hospital Appointments{RESET}")
+        print(f"6. {RETURN_MENU}Return to Main Menu{RESET}")
 
         choice = input("Enter a choice: ")
 
@@ -411,7 +426,6 @@ def appointment_management():
                         
             input("Press Enter to try again...")
 
-    input("Press Enter to return to the Main Menu...")
 
 def appointment_patient_menu():
     while True:
@@ -426,7 +440,7 @@ def appointment_patient_menu():
         print("7. Prescription & Medication Data(MANY TO MANY DATABASE RELATIONSHIP).")
         print("8. Prescription Medication Statistics(Advanced SQL Queries).")
         print("9. Advanced Prescription Searches(Advanced SQL Subqueries).")
-        print("10. Return to Main Menu.")
+        print(f"10. {RETURN_MENU}Return to Main Menu.{RESET}")
 
         choice = input("Enter choice: ")
 
@@ -476,18 +490,17 @@ def appointment_patient_menu():
                                     
             input("Press Enter to try again...")
 
-    input("Press Enter to return to the Main Menu...")
 
 def prescription_management():
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
-        print("--- Prescription Menu ---".center(50))
-        print("1. Insert Prescription")
-        print("2. Search Prescription")
-        print("3. Delete Prescription")
-        print("4. Display All Hospital Prescriptions")
-        print("5. Prescribe The Medication")
-        print("6. Return to Main Menu")
+        print(f"{SUB_MENU_HEADING}{'--- Prescription Menu ---'.center(50)}{RESET}")
+        print(f"1. {PRESCRIPTION_MENU}Insert Prescription{RESET}")
+        print(f"2. {PRESCRIPTION_MENU}Search Prescription{RESET}")
+        print(f"3. {PRESCRIPTION_MENU}Delete Prescription{RESET}")
+        print(f"4. {PRESCRIPTION_MENU}Display All Hospital Prescriptions{RESET}")
+        print(f"5. {PRESCRIPTION_MENU}Prescribe The Medication{RESET}")
+        print(f"6. {RETURN_MENU}Return to Main Menu{RESET}")
 
         choice = input("Enter a choice: ")
 
@@ -520,19 +533,24 @@ def prescription_management():
                         
             input("Press Enter to try again...")
 
-    input("Press Enter to return to the Main Menu...")
 
 def prescription_instructions_management():
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
-        print("--- Prescription ---".center(50))
-        print("--- Instructions Menu ---".center(50))
-        print("1. Insert Prescription Instructions")
-        print("2. Search Prescription Instructions")
-        print("3. Update Prescription Instructions")
-        print("4. Display All Hospital Prescription Instructions")
-        print("5. Delete Prescription Instructions")
-        print("6. Return to Hospital Prescription Menu")
+        print(
+                f"{SUB_SUB_MENU_HEADING}"
+                f"{(TREE + ' Prescribe The Medication Menu').center(50)}"
+                f"{RESET}"
+            )
+        print(f"1. {PRESCRIPTION_INSTRUCTIONS_MENU}Insert Prescription Instructions{RESET}")
+        print(f"2. {PRESCRIPTION_INSTRUCTIONS_MENU}Search Prescription Instructions{RESET}")
+        print(f"3. {PRESCRIPTION_INSTRUCTIONS_MENU}Update Prescription Instructions{RESET}")
+        print(
+                f"4. {PRESCRIPTION_INSTRUCTIONS_MENU}Display All "
+                f"Hospital Prescription Instructions{RESET}"
+                )
+        print(f"5. {PRESCRIPTION_INSTRUCTIONS_MENU}Delete Prescription Instructions{RESET}")
+        print(f"6. {RETURN_MENU}Return to Hospital Prescription Menu{RESET}")
 
         choice = input("Enter a choice: ")
 
@@ -566,17 +584,16 @@ def prescription_instructions_management():
                         
             input("Press Enter to try again...")
 
-    input("Press Enter to return to the Prescription Menu...")
 
 def billing_management():
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
-        print("--- Billing Menu ---".center(50))
-        print("1. Insert Billing")
-        print("2. Search Billing")
-        print("3. Update Billing")
-        print("4. Display All Hospital Billings")
-        print("5. Return to Main Menu")
+        print(f"{SUB_MENU_HEADING}{'--- Billing Menu ---'.center(50)}{RESET}")
+        print(f"1. {BILLING_MENU}Insert Billing{RESET}")
+        print(f"2. {BILLING_MENU}Search Billing{RESET}")
+        print(f"3. {BILLING_MENU}Update Billing{RESET}")
+        print(f"4. {BILLING_MENU}Display All Hospital Billings{RESET}")
+        print(f"5. {RETURN_MENU}Return to Main Menu{RESET}")
 
         choice = input("Enter a choice:")
 
@@ -606,7 +623,6 @@ def billing_management():
                         
             input("Press Enter to try again...")
 
-    input("Press Enter to return to the Main Menu...")
 
 
 
