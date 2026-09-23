@@ -1,24 +1,26 @@
 # Menu colours
-MAIN_MENU_HEADING = "\033[38;5;40m" # Emerald Green
-ADMIN_MENU = "\033[38;5;220m" # Gold
-PRACTICE_MENU = "\033[38;5;213m" # Pink
-GP_MENU = "\033[38;5;45m" # Teal
-DEPARTMENT_MENU = "\033[38;5;39m" # Sky Blue
-CONSULTANT_MENU = "\033[38;5;129m" # Purple
-MEDICATION_MENU = "\033[38;5;208m" # Orange
-PATIENT_MENU = "\033[94m" # Bright Blue
-APPOINTMENT_MENU = "\033[93m" # Bright Yellow
-PRESCRIPTION_MENU = "\033[95m" # Bright Purple
-PRESCRIPTION_INSTRUCTIONS_MENU = "\033[38;5;201m" # Hot Magneta
-BILLING_MENU = "\033[38;5;202m" # Magenta-Orange
-SUB_MENU_HEADING = "\033[38;5;33m" # Deep Blue
-SUB_SUB_MENU_HEADING = "\033[38;5;130m" # Brown
-TREE = "\u2514\u2500\u2500" # Sub Sub Menu Symbol
+MAIN_MENU_HEADING = "\033[38;2;0;190;80m" # Torch Green
+SUB_MENU_HEADING = "\033[38;2;0;94;184m" # Deep Blue
+SUB_SUB_MENU_HEADING = "\033[38;2;0;137;123m" # Clinical Teal
+ADMIN_MENU = "\033[38;2;0;168;107m" # Jade Green
+PRACTICE_MENU = "\033[38;2;0;169;165m" # Turquoise
+GP_MENU = "\033[38;2;46;;125;50m" # Hospital Green
+DEPARTMENT_MENU = "\033[38;2;25;118;210m" # Medical Blue
+CONSULTANT_MENU = "\033[38;2;0;104;92m" # Deep Teal
+MEDICATION_MENU = "\033[38;2;67;160;71m" # Medium Green
+PATIENT_MENU = "\033[38;2;21;101;192m" # Royal Blue
+APPOINTMENT_MENU = "\033[38;2;0;200;140m" # Clinical Mint Green
+PRESCRIPTION_MENU = "\033[38;2;56;142;60m" # Green
+PRESCRIPTION_INSTRUCTIONS_MENU = "\033[38;2;124;179;66m" # Lime Green
+BILLING_MENU = "\033[38;2;212;160;23m" # Gold
+RESET = "\033[0m" # Default
+TREE_SUB = "\u2514\u2500\u2500" # Sub Menu Symbol
+TREE_SUB_SUB = "    \u2514\u2500\u2500" # Sub Sub Menu Symbol
 DISPLAY_INFO = "\033[38;5;22m" # Dark Green
-RETURN_MENU = "\033[97m" # Bright White
-QUESTION = "\033[38;5;27m" # Strong Blue
-Error = "\033[91m" # Bright Red
-EXIT = "\033[96m" # Bright Cyan
+RETURN_MAIN_MENU = "\033[38;5;208m" # Orange
+RETURN_GROUP_MENU = "\033[38;5;213m" # Pink
+EXIT = "\033[38;2;190;35;45m" # Crimson Red
+ERROR = "\033[91m" # Bright Red
 
 # CRUD operation colours
 INSERT = "\033[92m" # Green
@@ -31,6 +33,6 @@ UPDATE = "\033[38;5;245m" # Purple
 ERROR = "\033[91m" # Red
 
 # Reset colour
-RESET = "\033[0m" # Default
+
 
 

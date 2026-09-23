@@ -8,7 +8,7 @@ from datetime import datetime
 # Import the shared database connection and cursor from database.py module.
 from database import conn, cursor
 
-from colors import DISPLAY_INFO,QUESTION,ERROR,RESET
+from colors import DISPLAY_INFO,APPOINTMENT_MENU,ERROR,RESET
 
 class Appointment():
 
@@ -40,7 +40,8 @@ class Appointment():
         # Validate the patient ID entered by the user.
         while True:
             try:
-                self.patient_id = int(input(f"{QUESTION}Enter the Patient's ID:{RESET}"))
+                self.patient_id = int(input(f"{APPOINTMENT_MENU}Enter " 
+                                            f"the Patient's ID:{RESET}"))
                 if not self.validate_login_id(self.patient_id):
                     print()
                     print(f"{ERROR}Please enter a valid patient ID.{RESET}")
@@ -49,10 +50,7 @@ class Appointment():
 
             except ValueError:
                 print()
-                print(
-                        f"{ERROR}Please enter the patient ID " 
-                        f"using numbers only.{RESET}"
-                    )
+                print(f"{ERROR}Please enter the patient ID using numbers only.{RESET}")
                 continue
         try:
         # Find the patient associated with the appointment
@@ -63,10 +61,7 @@ class Appointment():
 
         except sqlite3.Error as e:
             print()
-            print(
-                    f"{ERROR}Unable to find the patient record. " 
-                    f"Please try again.{RESET}", e
-                )
+            print(f"{ERROR}Unable to find the patient record. Please try again.{RESET}", e)
             return
 
         # Retrieve the patient record using fetchone()
@@ -74,26 +69,23 @@ class Appointment():
 
         if not patient_record:
             print()
-            print(
-                    f"{ERROR}We couldn't find a patient " 
-                    f"with that ID.{RESET}"
-                )
+            print(f"{ERROR}We couldn't find a patient with that ID.{RESET}")
             return
 
         while True:
             try:
         # Validate the consultant ID entered by the user.
-                self.consultant_id = int(input("Enter the Consultant's ID:"))
+                self.consultant_id = int(input(f"{APPOINTMENT_MENU}Enter " 
+                                               f"the Consultant's ID:{RESET}"))
                 if not self.validate_login_id(self.consultant_id):
                     print()
-                    print("Please enter a valid consultant ID.")
+                    print(f"{ERROR}Please enter a valid consultant ID.{RESET}")
                     continue
                 break
 
             except ValueError:
                 print()
-                print("Please enter the consultant ID." \
-                        "using numbers only.")
+                print(f"{ERROR}Please enter the consultant ID using numbers only.{RESET}")
                 continue
         try:
         # Find the consultant ID associated with the appointment.
@@ -104,35 +96,34 @@ class Appointment():
 
         except sqlite3.Error as e:
             print()
-            print("Unable to find the consultant record. " \
-                    "Please try again.", e)
+            print(f"{ERROR}Unable to find the consultant record. " 
+                    f"Please try again.{RESET}", e)
             return
         # Retrieve the consultant record using fetchone().          
         consultant_record = cursor.fetchone()
 
         if not consultant_record:
             print()
-            print("We couldn't find a consultant." \
-                    "with that ID.")
+            print(f"{ERROR}We couldn't find a consultant " \
+                    f"with that ID.{RESET}")
             return
 
         while True:
         # Validate the appointment date entered by the user.
-            self.appointment_date = (input("Enter the " \
-                "appointment date(DD/MM/YYYY):"))
+            self.appointment_date = (input(f"{APPOINTMENT_MENU}Enter the " 
+                f"appointment date(DD/MM/YYYY):{RESET}"))
             if self.appointment_date == "":
                 print()
-                print("Please enter an appointment date.")
+                print(f"{ERROR}Please enter an appointment date.{RESET}")
                 continue 
             if len(self.appointment_date) != 10:
                 print()
-                print("The appointment date must be in the " \
-                        "format DD/MM/YYYY.")
+                print(f"{ERROR}The appointment date must be in the "
+                      f"format DD/MM/YYYY.{RESET}")
                 continue
 
             if self.appointment_date[2] != "/" or self.appointment_date[5] != "/":
-                print("Please use between the day, " \
-                        "month and year.")
+                print(f"{ERROR}Please use / between the day, month and year.{RESET}")
                 continue
 
             not_number = False
@@ -145,8 +136,7 @@ class Appointment():
 
             if not_number:
                 print()
-                print("Please enter the date using the " \
-                        "format DD/MM/YYYY.")
+                print(f"{ERROR}Please enter the date using the format DD/MM/YYYY.{RESET}")
                 continue
 
             day = int(self.appointment_date[0:2])
@@ -155,49 +145,50 @@ class Appointment():
 
             if day < 1 or day > 31:
                 print()
-                print("Please enter a valid day.")
+                print(f"{ERROR}Please enter a valid day.{RESET}")
                 continue 
 
             if month < 1 or month > 12:
                 print()
-                print("Please enter a valid month.")
+                print(f"{ERROR}Please enter a valid month.{RESET}")
                 continue 
 
             if year < 1900:
                 print()
-                print("Please enter a valid year.")
+                print(f"{ERROR}Please enter a valid year.{RESET}")
                 continue
 
             days_in_month = calendar.monthrange(year, month)[1]
 
             if day > days_in_month:
                 print()
-                print("Please enter a valid date.")
+                print(f"{ERROR}Please enter a valid date.{RESET}")
                 continue 
 
             appointment_date = datetime.strptime(self.appointment_date,"%d/%m/%Y")
             if appointment_date.date() <= datetime.now().date():
                 print()
-                print("Please choose a date from tommorrow onwards.")
+                print(f"{ERROR}Please choose a date from tommorrow onwards.{RESET}")
                 continue
             break
 
         while True:
         # Validate the appointment time entered by the user.
-            self.appointment_time = input("Enter the appointment time (HH:MM):")
+            self.appointment_time = input(f"{APPOINTMENT_MENU}Enter the appointment "
+                                          f"time (HH:MM):{RESET}")
             if len(self.appointment_time) != 5:
                 print()
-                print("Please enter the time using the format HH:MM.")
+                print(f"{ERROR}Please enter the time using the format HH:MM.{RESET}")
                 continue
             if(not self.appointment_time[0:2].isdigit() 
             or not self.appointment_time[3:5].isdigit()):
                 print()
-                print("Please enter the time using the format " \
-                        "HH:MM, for example 08:15.")
+                print(f"{ERROR}Please enter the time using the format " 
+                        f"HH:MM, for example 08:15.{RESET}")
                 continue
             if self.appointment_time[2] != ":":
                 print()
-                print("Please use : between hours and minutes.")
+                print(f"{ERROR}Please use : between hours and minutes.{RESET}")
                 continue
 
             hour = int(self.appointment_time[0:2])
@@ -205,14 +196,13 @@ class Appointment():
 
             if hour < 8 or hour > 18:
                 print()
-                print("Appointments are available between " \
-                        "08:00 and 18:00.")
+                print(f"{ERROR}Appointments are available between 08:00 and 18:00.{RESET}")
                 continue
 
             if minutes not in (0, 15, 30, 45):
                 print()
-                print("Please choose an appointment time " \
-                        "ending in 00, 15, 30 or 45 minutes only.")
+                print(f"{ERROR}Please choose an appointment time " 
+                        f"ending in 00, 15, 30 or 45 minutes only.{RESET}")
                 continue
         
              # Check whether the consultant is already booked at this date and time.
@@ -228,8 +218,8 @@ class Appointment():
 
             except sqlite3.Error as e:
                     print()
-                    print("Unable to check appointment " \
-                        "availability. Please try again.", e)
+                    print(f"{ERROR}Unable to check appointment " 
+                            f"availability. Please try again.{RESET}", e)
                     return
         
             # Retrieve any matching appointment.
@@ -237,8 +227,7 @@ class Appointment():
 
             if matching_appointment1:
                 print()
-                print("The consultant is already booked "
-                        "at this date or time.")
+                print(f"{ERROR}The consultant is already booked at this date or time.{RESET}")
                 return
 
             # Check whether the patient is already booked
@@ -254,21 +243,21 @@ class Appointment():
 
             except sqlite3.Error as e:
                 print()
-                print("Unable to check appointment " \
-                        "availabilty. Please try again.")
+                print(f"{ERROR}Unable to check appointment " 
+                        f"availabilty. Please try again.{RESET}")
                 return
 
             matching_appointment2 = cursor.fetchone()
 
             if matching_appointment2:
                 print()
-                print("Cannot book this appointment. " \
-                    "The patient already has an " \
-                    "appointment at this time.")  
+                print(f"{ERROR}Cannot book this appointment. " 
+                        f"The patient already has an " 
+                        f"appointment at this time.{RESET}")  
                 return
             break    
 
-        print("The appointment slot is available.")
+        print(f"{DISPLAY_INFO}The appointment slot is available.{RESET}")
 
         try:
         # Insert the new appointment into the database.
@@ -289,11 +278,10 @@ class Appointment():
 
         except sqlite3.Error as e:
             print()
-            print("Unable to book the " \
-                    "appointment. Please try again.", e)
+            print(f"{ERROR}Unable to book the appointment. Please try again.{RESET}", e)
             return
         
-        print("Appointment booked successfully.")
+        print(f"{DISPLAY_INFO}Appointment booked successfully.{ERROR}")
 
         # Retrieve the ID automatically generated for the new appointment.
         appointment_id = cursor.lastrowid
@@ -310,8 +298,7 @@ class Appointment():
 
         except sqlite3.Error as e:
             print()
-            print("Unable to retrieve appointments." \
-                    "Please try again.", e)
+            print(f"{ERROR}Unable to retrieve appointments. Please try again.{RESET}", e)
             return
 
         # Retrieve all appointments records returned by the query.
@@ -319,8 +306,7 @@ class Appointment():
 
         if not appointment_records:
             print()
-            print("There are currently no appointments " \
-                    "to display.")
+            print(f"{ERROR}There are currently no appointments to display.{RESET}")
             return
         
         # Create and display an Appointment object for each database record.
@@ -339,19 +325,18 @@ class Appointment():
         # Validate the appointment ID entered by the user.
         while True:
             try:
-                appointment_id = int(input("Enter Appointment ID:"))
+                appointment_id = int(input(f"{APPOINTMENT_MENU}Enter Appointment ID:{RESET}"))
                 if not self.validate_login_id(appointment_id):
                     print()
-                    print("Please enter a valid appointment ID.")
+                    print(f"{ERROR}Please enter a valid appointment ID.{RESET}")
                     continue
                 
-                print("Appointment found.")
+                print(f"{DISPLAY_INFO}Appointment found.{RESET}")
                 break
         
             except ValueError:
                 print()
-                print("Please enter the appointment ID using"
-                        "numbers only.")
+                print(f"{ERROR}Please enter the appointment ID using numbers only.{RESET}")
                 continue
 
         try:
@@ -363,8 +348,7 @@ class Appointment():
 
         except sqlite3.Error as e:
             print()
-            print("Unable to search for the appointment. " \
-                    "Please try again.", e)
+            print(f"{ERROR}Unable to search for the appointment. Please try again.{RESET}", e)
             return
         
         # Retrieve the matching appointment record.
@@ -372,8 +356,7 @@ class Appointment():
 
         if not appointment_record:
             print()
-            print("We couldn't find an appointment " \
-                    "with that ID.")
+            print(f"{ERROR}We couldn't find an appointment with that ID.{RESET}")
             return
         
         self.patient_id = appointment_record[1]
@@ -389,17 +372,17 @@ class Appointment():
         # Validate the appointment ID entered by the user.
         while True:
             try:
-                appointment_id = int(input("Enter the appointment ID:"))
+                appointment_id = int(input(f"{APPOINTMENT_MENU}Enter " 
+                                           f"the appointment ID:{RESET}"))
                 if not self.validate_login_id(appointment_id):
                     print()
-                    print("Please enter a valid appointment ID.")
+                    print(f"{ERROR}Please enter a valid appointment ID.{RESET}")
                     continue
                 break
         
             except ValueError:
                 print()
-                print("Please enter the appointment ID " \
-                        "using numbers only.")
+                print(f"{ERROR}Please enter the appointment ID using numbers only.{RESET}")
                 continue
 
         try:
@@ -411,8 +394,7 @@ class Appointment():
 
         except sqlite3.Error as e:
             print()
-            print("Unable to retrieve the appointment. " \
-                    "Please try again.", e)
+            print(f"{ERROR}Unable to retrieve the appointment. Please try again.{RESET}", e)
             return
 
         # Retrieve the existing appointment record.
@@ -420,8 +402,7 @@ class Appointment():
 
         if not appointment_record:
             print()
-            print("We couldn't find an appointment " \
-                    "with that ID.")
+            print(f"{ERROR}We couldn't find an appointment with that ID.{RESET}")
             return
         
         self.patient_id = appointment_record[1]
@@ -434,76 +415,71 @@ class Appointment():
 
         while True:
          # Confirm whether the user wants to update the appointment.
-            update = input("Update "
-                    "this appointment? (Y/N): ").lower()
+            update = input(f"{APPOINTMENT_MENU}Update "
+                           f"this appointment? (Y/N): {RESET}").lower()
             
             if not self.validate_yes_no(update):
                 print()
-                print("Please enter Y/y for yes " \
-                        "or N/n for no.")
+                print(f"{ERROR}Please enter Y/y for yes or N/n for no.{RESET}")
                 continue
 
             if update == "n":
-                print("Appointment update cancelled.")
+                print(f"{DISPLAY_INFO}Appointment update cancelled.{RESET}")
                 return
             break 
 
         # Validate the new patient ID
         while True:
             try:
-                updated_patient_id = int(input("Enter the Patient's ID:"))
+                updated_patient_id = int(input(f"{APPOINTMENT_MENU}Enter " 
+                                               f"the Patient's ID:{RESET}"))
 
                 if not self.validate_login_id(updated_patient_id):
                     print()
-                    print("Please enter a valid patient ID.")
+                    print(f"{ERROR}Please enter a valid patient ID.{RESET}")
                     continue
                 break
 
             except ValueError:
                 print()
-                print("Please enter the patient ID " \
-                        "using numbers only.")
+                print(f"{ERROR}Please enter the patient ID using numbers only.{RESET}")
                 continue
 
         # Validate the new consultant ID.
         while True:
             try:
-                updated_consultant_id = int(input("Enter the " 
-                    "consultant's ID:"))
+                updated_consultant_id = int(input(f"{APPOINTMENT_MENU}Enter the " 
+                                                  f"consultant's ID:{RESET}"))
                     
                 if not self.validate_login_id(updated_consultant_id):
                     print()
-                    print("Please enter a valid " \
-                            "consultant ID.")
+                    print(f"{ERROR}Please enter a valid consultant ID.{RESET}")
                     continue
                 break
 
             except ValueError:
                 print()
-                print("Please enter the consultant ID " \
-                        "using numbers only.")
+                print(f"{ERROR}Please enter the consultant ID using numbers only.{RESET}")
                 continue
 
         while True:
         # Validate the appointment date entered by the user.
-            updated_appointment_date = (input("Enter the " \
-                "appointment date(DD/MM/YYYY):"))
+            updated_appointment_date = (input(f"{APPOINTMENT_MENU}Enter the " 
+                                              f"appointment date(DD/MM/YYYY):{RESET}"))
 
             if updated_appointment_date == "":
                 print()
-                print("Please enter an appointment date.")
+                print(f"{ERROR}Please enter an appointment date.{RESET}")
                 continue
 
             if len(updated_appointment_date) != 10:
                 print()
-                print("The appointment date must be in the " \
-                        "format DD/MM/YYYY.")
+                print(f"{ERROR}The appointment date must be in the format DD/MM/YYYY.{RESET}")
                 continue
 
             if updated_appointment_date[2] != "/" or updated_appointment_date[5] != "/":
                 print()
-                print("Please use between the day, " \
-                        "month and year.")
+                print(f"{ERROR}Please use / between the day, month and year.{RESET}")
                 continue
     
             not_number = False
@@ -517,8 +493,7 @@ class Appointment():
     
             if not_number:
                 print()
-                print("Please enter the date using the " \
-                        "format DD/MM/YYYY.")
+                print(f"{ERROR}Please enter the date using the format DD/MM/YYYY.{RESET}")
                 continue
     
             day = int(updated_appointment_date[0:2])
@@ -527,52 +502,53 @@ class Appointment():
     
             if day < 1 or day > 31:
                 print()
-                print("Please enter a valid day.")
+                print(f"{ERROR}Please enter a valid day.{RESET}")
                 continue 
     
             if month < 1 or month > 12:
                 print()
-                print("Please enter a valid month.")
+                print(f"{ERROR}Please enter a valid month.{RESET}")
                 continue 
     
             if year < 1900:
                 print()
-                print("Please enter a valid year.")
+                print(f"{ERROR}Please enter a valid year.{RESET}")
                 continue
     
             days_in_month = calendar.monthrange(year, month)[1]
     
             if day > days_in_month:
                 print()
-                print("Please enter a valid date.")
+                print(f"{ERROR}Please enter a valid date.{RESET}")
                 continue 
     
             appointment_date = datetime.strptime(updated_appointment_date,"%d/%m/%Y")
             if appointment_date.date() <= datetime.now().date():
                 print()
-                print("Please choose a date from tommorrow onwards.")
+                print(f"{ERROR}Please choose a date from tommorrow onwards.{RESET}")
                 continue
             break
 
         while True:
             # Validate the appointment time entered by the user.
-            updated_appointment_time = input("Enter the appointment time (HH:MM):")
+            updated_appointment_time = input(f"{APPOINTMENT_MENU}Enter the appointment " 
+                                             f"time (HH:MM):{RESET}")
 
             if len(updated_appointment_time) != 5:
                 print()
-                print("Please enter the time using the format HH:MM.")
+                print(f"{ERROR}Please enter the time using the format HH:MM.{RESET}")
                 continue
 
             if(not updated_appointment_time[0:2].isdigit() 
                 or not updated_appointment_time[3:5].isdigit()):
                 print()
-                print("Please enter the time using the format " \
-                        "HH:MM, for example 08:15.")
+                print(f"{ERROR}Please enter the time using the format " 
+                        f"HH:MM, for example 08:15.{RESET}")
                 continue
 
             if updated_appointment_time[2] != ":":
                 print()
-                print("Please use : between hours and minutes.")
+                print(f"{ERROR}Please use : between hours and minutes.{RESET}")
                 continue
     
             hour = int(updated_appointment_time[0:2])
@@ -580,13 +556,12 @@ class Appointment():
     
             if hour < 8 or hour > 18:
                 print()
-                print("Appointments are available between " \
-                        "08:00 and 18:00.")
+                print(f"{ERROR}Appointments are available between 08:00 and 18:00.{RESET}")
     
             if minutes not in (0, 15, 30, 45):
                 print()
-                print("Please choose an appointment time " \
-                        "ending in 00, 15, 30 or 45 minutes only.")
+                print(f"{ERROR}Please choose an appointment time " 
+                        f"ending in 00, 15, 30 or 45 minutes only.{RESET}")
                 continue
 
             # Check that the new consultant, date and time are available.
@@ -604,16 +579,15 @@ class Appointment():
 
             except sqlite3.Error as e:
                 print()
-                print("Unable to check appointment " \
-                    "availability. Please try again.", e)
+                print(f"{ERROR}Unable to check appointment " 
+                        f"availability. Please try again.{RESET}", e)
                 return
 
             matching_appointment1 = cursor.fetchone()
 
             if matching_appointment1:
                 print()
-                print("The consultant is already " \
-                        "booked at this time or date.")
+                print(f"{ERROR}The consultant is already booked at this time or date.{RESET}")
                 return
 
             # Check whether the patient is already booked
@@ -631,21 +605,21 @@ class Appointment():
 
             except sqlite3.Error as e:
                 print()
-                print("Unable to check appointment " \
-                        "availabilty. Please try again.",e)
+                print(f"{ERROR}Unable to check appointment " 
+                        f"availabilty. Please try again.{RESET}",e)
                 return
 
             matching_appointment2 = cursor.fetchone()
 
             if matching_appointment2:
                 print()
-                print("Cannot book this appointment. " \
-                        "The patient already has an " \
-                        "appointment at this time.")  
+                print(f"{ERROR}Cannot book this appointment. " 
+                        f"The patient already has an " 
+                        f"appointment at this time.{RESET}")  
                 return
             break 
              
-        print("The appointment slot is available.")  
+        print(f"{DISPLAY_INFO}The appointment slot is available.{RESET}")  
         try:
         # Update the appointment record in the database.
             cursor.execute("""
@@ -666,28 +640,27 @@ class Appointment():
 
         except sqlite3.Error as e:
             print()
-            print ("Unable to update the " \
-                    "appointment. Please try again.", e)
+            print (f"{ERROR}Unable to update the appointment. Please try again.{RESET}", e)
             return
 
-        print("Appointment updated successfully.")
+        print(f"{DISPLAY_INFO}Appointment updated successfully.{RESET}")
 
     def delete_appointment(self):
         # Validate the appointment ID entered by the user.
         while True:
             try:
-                appointment_id = int(input("Enter the appointment ID:"))
+                appointment_id = int(input(f"{APPOINTMENT_MENU}Enter " 
+                                           f"the appointment ID:{RESET}"))
 
                 if not self.validate_login_id(appointment_id):
                     print()
-                    print("Please enter a valid appointment ID.")
+                    print(f"{ERROR}Please enter a valid appointment ID.{RESET}")
                     continue
                 break
 
             except ValueError:
                 print()
-                print("Please enter the appointment ID " \
-                        "using numbers only.")
+                print(f"{ERROR}Please enter the appointment ID using numbers only.{RESET}")
         try:
         # Find the appointment that will be deleted.
             cursor.execute("""
@@ -697,8 +670,7 @@ class Appointment():
 
         except sqlite3.Error as e:
             print()
-            print("Unable to retrieve the " \
-                    "appointment. Please try again.", e)
+            print(f"{ERROR}Unable to retrieve the appointment. Please try again.{RESET}", e)
             return
 
         # Retrieve the appointment record before deletion
@@ -706,8 +678,7 @@ class Appointment():
 
         if not appointment_record:
             print()
-            print("We couldn't find " \
-            "an appointment with that ID.")
+            print(f"{ERROR}We couldn't find an appointment with that ID.{RESET}")
             return 
         
         self.patient_id = appointment_record[1]
@@ -720,18 +691,17 @@ class Appointment():
 
         while True:
         # Confirm that the user wants to delete the appointment.
-            delete = input("Delete "
-                "this appointment? (Y/N): ").lower()
+            delete = input(f"{APPOINTMENT_MENU}Delete " 
+                           f"this appointment? (Y/N): {RESET}").lower()
             
             if not self.validate_yes_no(delete):
                 print()
-                print("Enter Y/y for yes " \
-                        "or N/n for no.")
+                print(f"{ERROR}Enter Y/y for yes or N/n for no.{RESET}")
                 continue
 
             if delete == 'n':
                 print()
-                print("Appointment deletion cancelled.")
+                print(f"{DISPLAY_INFO}Appointment deletion cancelled.{RESET}")
                 return
             break
 
@@ -747,31 +717,13 @@ class Appointment():
 
         except sqlite3.Error as e:
             print()
-            print("Unable to delete the " \
-                    "appointment. Please try again.", e)
+            print(f"{ERROR}Unable to delete the appointment. Please try again.{RESET}", e)
             return
            
-        print("Appointment deleted successfully.")
+        print(f"{DISPLAY_INFO}Appointment deleted successfully.{RESET}")
         return
 
-    def appointment_prescription_join(self):
-        try:
-            cursor.execute("""
-                SELECT *
-                FROM appointment
-                INNER JOIN prescription
-                ON appointment.appointment_id =
-                prescription.appointment_id
-            """)
-
-        except sqlite3.Error as e:
-            print("Database Error", e)
-            return
-
-        rows = cursor.fetchall()
-
-        for row in rows:
-                print(row)
+      
 
 
         
