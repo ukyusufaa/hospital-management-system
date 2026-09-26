@@ -1,5 +1,6 @@
 import sqlite3
 from database import conn, cursor
+from colors import DISPLAY_INFO,MEDICATION_MENU,ERROR,RESET
 
 class Medication():
     def __init__(self,medication_name = None, cost = None):
@@ -7,9 +8,9 @@ class Medication():
         self.cost = cost
     
     def show_medication_details(self):
-        print("-" * 30)
-        print(f"Medication Name:{self.medication_name}")
-        print(f"Cost:{self.cost}")
+        print("=" * 30)
+        print(f"{DISPLAY_INFO}Medication Name:{self.medication_name}{RESET}")
+        print(f"{DISPLAY_INFO}Cost:{self.cost}{RESET}")
         print("-" * 30)
 
         # Validate IDs to ensure they are positive integers.
@@ -34,50 +35,47 @@ class Medication():
         # Collect and validate medication details before saving the record.
     def create_medication(self):
         while True:
-            self.medication_name = input("Enter medication " \
-                    "name and strength (for example: Paracetamol 500mg): ")
+            self.medication_name = input(f"{MEDICATION_MENU}Enter medication " 
+                    f"name and strength (for example: Paracetamol 500mg): {RESET}")
             
             if self.medication_name == "":
-                print("Medication Name is required. Please enter " \
-                        "a medication name and strength.")
+                print(f"{ERROR}Medication Name is required. Please enter " 
+                        f"a medication name and strength.{RESET}")
                 continue
 
             if not any(character.isalpha()
                        for character in self.medication_name):
-                print("Please enter the medication name.")
+                print(f"{ERROR}Please enter the medication name.{RESET}")
                 continue
 
             if not any(character.isdigit()
                        for character in self.medication_name):
-                print("Please enter a medication strength.")
+                print(f"{ERROR}Please enter a medication strength.{RESET}")
                 continue
 
             if not any(character == " "
                        for character in self.medication_name):
-                print("Please enter the medication name " \
-                        "and its strength separated by a space.")
+                print(f"{ERROR}Please enter the medication name " 
+                        f"and its strength separated by a space.{RESET}")
                 continue
             
             if not self.validate_medication_name(self.medication_name):
-                print("Please use letters, numbers and " \
-                        "spaces only.")
+                print(f"{ERROR}Please use letters, numbers and spaces only.{RESET}")
                 continue 
             break
 
         while True:
             try:
-                self.cost = float(input("Enter medication cost: "))
+                self.cost = float(input(f"{MEDICATION_MENU}Enter medication cost: {RESET}"))
 
                 if not self.validate_medication_cost(self.cost):
-                    print("Medication cost must be greater " \
-                            "than £0:00 and have no more than " \
-                            "2 decimal places.")
+                    print(f"{ERROR}Medication cost must be greater " 
+                            f"than £0:00 and have no more than 2 decimal places.{RESET}")
                     continue 
                 break
 
             except ValueError:
-                print("Please enter the medication cost as " \
-                        "a number (decimal).")
+                print(f"{ERROR}Please enter the medication cost as a number (decimal).{RESET}")
                 continue
 
         try:
@@ -92,14 +90,13 @@ class Medication():
             conn.commit()
 
         except sqlite3.Error as e:
-            print("Unable to save the medication. " \
-                    "Please try again.", e)
+            print(f"{ERROR}Unable to save the medication. Please try again.{RESET}", e)
             return
 
-        print("Medication created successfully.")
+        print(f"{DISPLAY_INFO}Medication created successfully.{RESET}")
 
         medication_id = cursor.lastrowid
-        print(f"Medication ID: {medication_id}")
+        print(f"{DISPLAY_INFO}Medication ID: {medication_id}{RESET}")
         self.show_medication_details()
 
 
@@ -110,8 +107,7 @@ class Medication():
         medication_rows = cursor.fetchall()
 
         if not medication_rows :
-            print("No medications are " \
-            "currently registered.")
+            print(f"{ERROR}No medications are currently registered.{RESET}")
             return 
         
         for medication_row in medication_rows:
@@ -120,26 +116,24 @@ class Medication():
                 medication_row[2]
                 )
             
-            print(f"Medication ID: {medication_row[0]}")
+            print(f"{DISPLAY_INFO}Medication ID: {medication_row[0]}{RESET}")
             medication.show_medication_details()
+            print()
         
 
         # Find a medication using its unique medication ID.
     def search_medication(self):
         while True:
             try:
-                medication_id = int(input(
-                    "Enter medication ID: "))
+                medication_id = int(input(f"{MEDICATION_MENU}Enter medication ID: {RESET}"))
                 
                 if not self.validate_login_id(medication_id):
-                    print("Please enter a valid " \
-                            "medication ID.")
+                    print(f"{ERROR}Please enter a valid medication ID.{RESET}")
                     continue 
                 break 
 
             except ValueError:
-                print("Please enter the medication ID " \
-                        "using numbers only.")
+                print(f"{ERROR}Please enter the medication ID using numbers only.{RESET}")
                 continue 
         try: 
             cursor.execute("""
@@ -148,21 +142,19 @@ class Medication():
             """,(medication_id,))
 
         except sqlite3.Error as e:
-            print("Unable to search for the " \
-                    "medication. Please try again.", e)
+            print(f"{ERROR}Unable to search for the medication. Please try again.{RESET}", e)
             return
 
         medication_row = cursor.fetchone()
 
         if not medication_row:
-            print("No medication was found " \
-                    "with that ID.")
+            print(f"{ERROR}No medication was found with that ID.{RESET}")
             return
         
         self.medication_name = medication_row[1]
         self.cost = medication_row[2]
         
-        print(f"Medication ID: {medication_row[0]}")
+        print(f"{DISPLAY_INFO}Medication ID: {medication_row[0]}{RESET}")
         self.show_medication_details()
     
 
@@ -170,16 +162,15 @@ class Medication():
     def update_medication(self):
         while True:
             try:
-                medication_id = int(input("Enter medication ID: "))
+                medication_id = int(input(f"{MEDICATION_MENU}Enter medication ID: {RESET}"))
 
                 if not self.validate_login_id(medication_id):
-                    print("Please enter a valid medication ID.")
+                    print(f"{ERROR}Please enter a valid medication ID.{RESET}")
                     continue 
                 break
 
             except ValueError:
-                print("Please enter the medication ID " \
-                "using numbers only.")
+                print(f"{ERROR}Please enter the medication ID using numbers only.{RESET}")
                 continue 
         try:
             cursor.execute("""
@@ -188,69 +179,64 @@ class Medication():
             """,(medication_id,))
 
         except sqlite3.Error as e:
-            print("Unable to retrieve the " \
-            "medication. Please try again.", e)
+            print(f"{ERROR}Unable to retrieve the medication. Please try again.{RESET}", e)
             return
 
         medication_row = cursor.fetchone()
 
         if not medication_row:
-            print("No medication was " \
-                    "found with that ID.")
+            print(f"{ERROR}No medication was found with that ID.{RESET}")
             return 
         
         self.medication_name = medication_row[1]
         self.cost = medication_row[2]
 
-        print(f"(Medication ID: {medication_row[0]}")
+        print(f"{DISPLAY_INFO}Medication ID: {medication_row[0]}{RESET}")
         self.show_medication_details()
+        print()
             
-        update = input("Update " 
-                    "this medication? (Y/N): ").lower()
+        update = input(f"{MEDICATION_MENU}Update this medication? (Y/N): {RESET}").lower()
         
         if update == "y":
             while True:
-                new_medication_name = input(
-                    "Enter new medication name and strength: ").strip()
+                new_medication_name = input(f"{MEDICATION_MENU}Enter new medication " 
+                                            f"name and strength: {RESET}").strip()
                 
                 if not any(character.isalpha()
                         for character in new_medication_name):
-                    print("Please enter the medication name.")
+                    print(f"{ERROR}Please enter the medication name.{RESET}")
                     continue
 
                 if not any(character.isdigit()
                        for character in new_medication_name):
-                    print("Please enter a medication strength.")
+                    print(f"{ERROR}Please enter a medication strength.{RESET}")
                     continue
 
                 if not any(character == " "
                        for character in new_medication_name):
-                    print("Please enter the medication name " \
-                            "and its strength separated by a space.")
+                    print(f"{ERROR}Please enter the medication name " 
+                            f"and its strength separated by a space.{RESET}")
                     continue
 
                 if not self.validate_medication_name(new_medication_name):
-                    print("Please use letters, " \
-                            "numbers and spaces only.")
+                    print(f"{ERROR}Please use letters, " 
+                            f"numbers and spaces only.{RESET}")
                     continue 
                 break
 
             while True:
                 try:
-                    new_cost = float(input(
-                            "Enter new medication " \
-                            "cost (£): "))
+                    new_cost = float(input(f"{MEDICATION_MENU}Enter new medication" 
+                                           f"cost (£): {RESET}"))
                     
                     if not self.validate_medication_cost(new_cost):
-                        print("Medication cost must be " \
-                                "greater than £0:00 and have " \
-                                "no more than 2 decimal places.")
+                        print(f"{ERROR}Medication cost must be greater than £0:00 and have " 
+                                f"no more than 2 decimal places.{RESET}")
                         continue 
                     break
 
                 except ValueError:
-                    print("Please enter the medication " \
-                            "cost as a number.")
+                    print(f"{ERROR}Please enter the medication cost as a number.{RESET}")
                     continue
                 
             self.medication_name = new_medication_name
@@ -267,30 +253,27 @@ class Medication():
                 conn.commit()
 
             except sqlite3.Error as e:
-                print("Unable to update " \
-                        "the medication. Please " \
-                        "try again.", e)
+                print(f"{ERROR}Unable to update the medication. Please try again.{RESET}", e)
                 return
                 
-            print("Medication updated successfully.")
+            print(f"{DISPLAY_INFO}Medication updated successfully.{RESET}")
         else:   
-            print("Medication update cancelled.")
+            print(f"{DISPLAY_INFO}Medication update cancelled.{RESET}")
             
 
         # Confirm and remove an existing medication from the database.
     def delete_medication(self):
         while True:
             try:
-                medication_id = int(input("Enter medication ID: "))
+                medication_id = int(input(f"{MEDICATION_MENU}Enter medication ID: {RESET}"))
 
                 if not self.validate_login_id(medication_id):
-                    print("Please enter a valid medication ID.")
+                    print(f"{ERROR}Please enter a valid medication ID.{RESET}")
                     continue 
                 break
 
             except ValueError:
-                print("Please enter the medication ID " \
-                        "using numbers only.")
+                print(f"{ERROR}Please enter the medication ID using numbers only.{RESET}")
                 continue 
         try:
             cursor.execute("""
@@ -299,25 +282,23 @@ class Medication():
             """,(medication_id,))
 
         except sqlite3.Error as e:
-            print("Unable to retrieve the " \
-            "medication. Please try again.", e)
+            print(f"{ERROR}Unable to retrieve the medication. Please try again.{RESET}", e)
             return
 
         medication_row = cursor.fetchone()
 
         if not medication_row:
-            print("No medication was found " \
-                "with that ID.")
+            print(f"{ERROR}No medication was found with that ID.{RESET}")
             return
         
         self.medication_name = medication_row[1]
         self.cost = medication_row[2]
 
-        print(f"Medication ID:{medication_row[0]}")
+        print(f"{DISPLAY_INFO}Medication ID:{medication_row[0]}{RESET}")
         self.show_medication_details()
+        print()
 
-        delete = input("Delete "
-            "this medication? (Y/N): ").lower()
+        delete = input(f"{MEDICATION_MENU}Delete this medication? (Y/N): {RESET}").lower()
 
         if delete == "y":
 
@@ -330,15 +311,13 @@ class Medication():
                 conn.commit()
 
             except sqlite3.Error as e:
-                print("Unable to delete " \
-                    "the medication. Please" \
-                    "try again.", e)
+                print(f"{ERROR}Unable to delete the medication. Please try again.{RESET}", e)
                 return 
                 
-            print("Medication deleted successfully.")
+            print(f"{DISPLAY_INFO}Medication deleted successfully.{RESET}")
             
         else:
-            print("Medication deletion cancelled.")
+            print(f"{DISPLAY_INFO}Medication deletion cancelled.{RESET}")
                 
 
 

@@ -1,6 +1,7 @@
 import sqlite3
-
 from database import conn, cursor
+from colors import DISPLAY_INFO,A_P_MENU,ERROR,RESET
+
 
 class AppointmentPatient():
     def display_patients_with_appointments(self):
@@ -24,7 +25,7 @@ class AppointmentPatient():
             """)
 
         except sqlite3.Error as e:
-            print("Database Error",e)
+            print(f"{ERROR}Database Error{RESET}",e)
             return 
 
         rows = cursor.fetchall()
@@ -33,10 +34,12 @@ class AppointmentPatient():
             (first_name, surname,
             appointment_date,appointment_time) = row
 
-            print(f"Patient: {first_name} {surname}")
-            print(f"Date: {appointment_date}")
-            print(f"Time: {appointment_time}")
+            print("=" *40)
+            print(f"{DISPLAY_INFO}Patient: {first_name} {surname}{RESET}")
+            print(f"{DISPLAY_INFO}Date: {appointment_date}{RESET}")
+            print(f"{DISPLAY_INFO}Time: {appointment_time}{RESET}")
             print("-"*40)
+            print()
 
     def display_all_patients_with_or_without_appointments(self):
         try:
@@ -59,7 +62,7 @@ class AppointmentPatient():
             """)
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print(f"{ERROR}Database Error{RESET}", e)
             return
 
         rows = cursor.fetchall()
@@ -68,10 +71,12 @@ class AppointmentPatient():
             (first_name,surname,
             appointmemt_date,appointment_time) = row
 
-            print(f"Patient: {first_name} {surname}")
-            print(f"Date: {appointmemt_date}")
-            print(f"Time: {appointment_time}")
+            print("=" *40)
+            print(f"{DISPLAY_INFO}Patient: {first_name} {surname}{RESET}")
+            print(f"{DISPLAY_INFO}Date: {appointmemt_date}{RESET}")
+            print(f"{DISPLAY_INFO}Time: {appointment_time}{RESET}")
             print("-"*40)
+            print()
 
     def display_all_patients_and_appointments_including_unmatched(self):
         try:
@@ -114,7 +119,7 @@ class AppointmentPatient():
             """)
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print(f"{ERROR}Database Error{RESET}", e)
             return
 
         rows = cursor.fetchall()
@@ -123,10 +128,12 @@ class AppointmentPatient():
             (first_name, surname, 
              appointment_date, appointment_time) = row
 
-            print(f"Patient: {first_name} {surname}")
-            print(f"Date: {appointment_date}")
-            print(f"Time: {appointment_time}")
+            print("=" * 40)
+            print(f"{DISPLAY_INFO}Patient: {first_name} {surname}{RESET}")
+            print(f"{DISPLAY_INFO}Date: {appointment_date}{RESET}")
+            print(f"{DISPLAY_INFO}Time: {appointment_time}{RESET}")
             print("-"*40)
+            print()
 
     def display_patient_appointment_consultant(self):
         try:
@@ -154,7 +161,7 @@ class AppointmentPatient():
             """)
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print(f"{ERROR}Database Error{RESET}", e)
             return
 
         rows = cursor.fetchall()
@@ -164,11 +171,13 @@ class AppointmentPatient():
              p_first_name, p_surname,
              c_first_name, c_surname) = row
 
-            print(f"Date: {appointment_date}")
-            print(f"Time: {appointment_time}")
-            print(f"Patient: {p_first_name} {p_surname}")
-            print(f"Consultant: {c_first_name} {c_surname}")
-            print("-"*40)
+            print("=" * 40)
+            print(f"{DISPLAY_INFO}Date: {appointment_date}{RESET}")
+            print(f"{DISPLAY_INFO}Time: {appointment_time}{RESET}")
+            print(f"{DISPLAY_INFO}Patient: {p_first_name} {p_surname}{RESET}")
+            print(f"{DISPLAY_INFO}Consultant: {c_first_name} {c_surname}{RESET}")
+            print("-" *40)
+            print()
 
     def display_patient_appointment_consultant_department(self):
         try:
@@ -200,7 +209,7 @@ class AppointmentPatient():
             """)
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print(f"{ERROR}Database Error{RESET}", e)
             return
 
         rows = cursor.fetchall()
@@ -211,12 +220,14 @@ class AppointmentPatient():
              c_first_name, c_surname,
              department_name) = row
 
-            print(f"Date: {appointment_date}")
-            print(f"Time: {appointment_time}")
-            print(f"Patient: {p_first_name} {p_surname}")
-            print(f"Consultant: {c_first_name} {c_surname}")
-            print(f"Department: {department_name}")
-            print("-"*40)
+            print("=" * 40)
+            print(f"{DISPLAY_INFO}Date: {appointment_date}{RESET}")
+            print(f"{DISPLAY_INFO}Time: {appointment_time}{RESET}")
+            print(f"{DISPLAY_INFO}Patient: {p_first_name} {p_surname}{RESET}")
+            print(f"{DISPLAY_INFO}Consultant: {c_first_name} {c_surname}{RESET}")
+            print(f"{DISPLAY_INFO}Department: {department_name}{RESET}")
+            print("-" *40)
+            print()
 
     def display_patient_gp_gp_surgery(self):
         try:
@@ -240,7 +251,7 @@ class AppointmentPatient():
         """)
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print(f"{ERROR}Database Error{RESET}", e)
             return
 
         rows = cursor.fetchall()
@@ -250,11 +261,13 @@ class AppointmentPatient():
              gp_first_name, gp_surname,
              gp_surgery, address) = row
 
-            print(f"Patient: {p_first_name} {p_surname}")
-            print(f"GP: {gp_first_name} {gp_surname}")
-            print(f"Medical Practice: {gp_surgery}")
-            print(f"Practice Address: {address}")
-            print("-"*40)
+            print("=" *40)
+            print(f"{DISPLAY_INFO}Patient: {p_first_name} {p_surname}{RESET}")
+            print(f"{DISPLAY_INFO}GP: {gp_first_name} {gp_surname}{RESET}")
+            print(f"{DISPLAY_INFO}Medical Practice: {gp_surgery}{RESET}")
+            print(f"{DISPLAY_INFO}Practice Address: {address}{RESET}")
+            print("-" *40)
+            print()
 
     def display_prescription_medications(self):
         try:
@@ -278,7 +291,7 @@ class AppointmentPatient():
             """)
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print(f"{ERROR}Database Error{RESET}", e)
             return 
 
         rows = cursor.fetchall()
@@ -290,13 +303,16 @@ class AppointmentPatient():
              medication_name) = row
 
             if prescription_id != last_prescription_id:
-                print("="*40)
-                print(f"Prescription ID: {prescription_id}")
-                print("-"*40)
+                print("=" *40)
+                print(f"{DISPLAY_INFO}Prescription ID: {prescription_id}{RESET}")
+                print("-" *40)
+                print()
                 last_prescription_id = prescription_id
-            print(f"Medication ID: {medication_id}")
-            print(f"Medication: {medication_name}")
-            print("-"*40)
+            print(f"{DISPLAY_INFO}Medication ID: {medication_id}{RESET}")
+            print("=" *40)
+            print(f"{DISPLAY_INFO}Medication: {medication_name}{RESET}")
+            print("-" *40)
+            print()
 
     def display_advanced_queries(self):
         try:
@@ -323,7 +339,7 @@ class AppointmentPatient():
             """)
 
         except sqlite3.Error as e:
-                print("Database Error", e)
+                print(f"{ERROR}Database Error{RESET}", e)
                 return
 
         rows = cursor.fetchall()
@@ -332,11 +348,13 @@ class AppointmentPatient():
             (prescription_id,medication_count,
              cost,average) = row
 
-            print(f"Prescription ID: {prescription_id}")
-            print(f"Medication Count: {medication_count}")
-            print(f"Total: {cost}")
-            print(f"Average medication cost: {average}")
-            print("-"*40)
+            print(f"{DISPLAY_INFO}Prescription ID: {prescription_id}{ERROR}")
+            print("=" *40)
+            print(f"{DISPLAY_INFO}Medication Count: {medication_count}{ERROR}")
+            print(f"{DISPLAY_INFO}Total: {cost}{ERROR}")
+            print(f"{DISPLAY_INFO}Average medication cost: {average}{ERROR}")
+            print("-" *40)
+            print()
 
     def display_advanced_queries(self):
         try:
@@ -358,16 +376,17 @@ class AppointmentPatient():
             """)
 
         except sqlite3.Error as e:
-            print("Database Error", e)
+            print(f"{ERROR}Database Error{RESET}", e)
 
         rows = cursor.fetchall()
 
         for row in rows:
             prescription_id, medication_count = row
-            print("="*40)
-            print(f"Prescription ID: {prescription_id}")
-            print(f"Medication Count: {medication_count}")
-            print("-"*40)
+            print("=" *40)
+            print(f"{DISPLAY_INFO}Prescription ID: {prescription_id}{RESET}")
+            print(f"{DISPLAY_INFO}Medication Count: {medication_count}{RESET}")
+            print("-" *40)
+            print()
     
 
 

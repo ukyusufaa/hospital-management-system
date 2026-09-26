@@ -1,38 +1,51 @@
-# Menu colours
+# HOSPITAL PROGRAM COLOURS
+
 MAIN_MENU_HEADING = "\033[38;2;0;190;80m" # Torch Green
+
 SUB_MENU_HEADING = "\033[38;2;0;94;184m" # Deep Blue
+
 SUB_SUB_MENU_HEADING = "\033[38;2;0;137;123m" # Clinical Teal
+
 ADMIN_MENU = "\033[38;2;0;168;107m" # Jade Green
+
 PRACTICE_MENU = "\033[38;2;0;169;165m" # Turquoise
+
 GP_MENU = "\033[38;2;46;;125;50m" # Hospital Green
+
 DEPARTMENT_MENU = "\033[38;2;25;118;210m" # Medical Blue
+
 CONSULTANT_MENU = "\033[38;2;0;104;92m" # Deep Teal
+
 MEDICATION_MENU = "\033[38;2;67;160;71m" # Medium Green
+
 PATIENT_MENU = "\033[38;2;21;101;192m" # Royal Blue
+
 APPOINTMENT_MENU = "\033[38;2;0;200;140m" # Clinical Mint Green
+
+A_P_MENU = APPOINTMENT_PATIENT_MENU = "\033[38;2;255;255;0m" # Bright Yellow
+
 PRESCRIPTION_MENU = "\033[38;2;56;142;60m" # Green
+
 PRESCRIPTION_INSTRUCTIONS_MENU = "\033[38;2;124;179;66m" # Lime Green
+
 BILLING_MENU = "\033[38;2;212;160;23m" # Gold
+
 RESET = "\033[0m" # Default
 TREE_SUB = "\u2514\u2500\u2500" # Sub Menu Symbol
+
 TREE_SUB_SUB = "    \u2514\u2500\u2500" # Sub Sub Menu Symbol
+
 DISPLAY_INFO = "\033[38;5;22m" # Dark Green
+
 RETURN_MAIN_MENU = "\033[38;5;208m" # Orange
+
 RETURN_GROUP_MENU = "\033[38;5;213m" # Pink
+
 EXIT = "\033[38;2;190;35;45m" # Crimson Red
+
 ERROR = "\033[91m" # Bright Red
 
-# CRUD operation colours
-INSERT = "\033[92m" # Green
-SEARCH = "\033[93m" # Yellow
-DISPLAY = "\033[38;5;213m" # Pink
-DELETE = "\033[38;5;208m" # Orange
-UPDATE = "\033[38;5;245m" # Purple
 
-# Error colour
-ERROR = "\033[91m" # Red
-
-# Reset colour
 
 
 

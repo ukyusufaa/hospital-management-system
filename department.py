@@ -1,5 +1,6 @@
 import sqlite3
 from database import conn, cursor
+from colors import DISPLAY_INFO,DEPARTMENT_MENU,ERROR,RESET
 
 class Department():
     def __init__(self, department_name = None):
@@ -7,7 +8,7 @@ class Department():
     
     def show_department_details(self):
         print("-" * 30)
-        print(f"Department Name:{self.department_name}")
+        print(f"{DISPLAY_INFO}Department Name:{self.department_name}{RESET}")
         print("-" * 30)
 
         # Validate department names using letters and spaces only.
@@ -25,16 +26,15 @@ class Department():
         # Collect and validate department details before saving the record.
     def create_department(self):
         while True:
-            self.department_name = input("Enter department name: ")
+            self.department_name = input(f"{DEPARTMENT_MENU}Enter department name: {RESET}")
 
             if self.department_name == "":
-                print("Department Name is required. " \
-                        "Please enter a department name.")
+                print(f"{ERROR}Department Name is required. " 
+                        f"Please enter a department name.{RESET}")
                 continue 
 
             if not self.validate_department_name(self.department_name):
-                print("Please use letters and " \
-                        "spaces only.")
+                print(f"{ERROR}Please use letters and spaces only.{RESET}")
                 continue 
             break 
 
@@ -49,14 +49,15 @@ class Department():
             conn.commit()
 
         except sqlite3.Error as e:
-            print("Unable to save the department. " \
-                    "Please try again.", e)
+            print(f"{ERROR}Unable to save the department. Please try again.{RESET}", e)
             return
         
-        print("Department created successfully")
+        print(f"{DISPLAY_INFO}Department created successfully.{RESET}")
+        print()
 
         department_id = cursor.lastrowid
-        print(f"Department ID: {department_id}")
+        print(f"{DISPLAY_INFO}Department ID: {department_id}{RESET}")
+        print()
 
         self.show_department_details()
         
@@ -67,38 +68,35 @@ class Department():
             cursor.execute("SELECT * FROM department")
 
         except sqlite3.Error as e:
-            print("Unable to retrieve departments." \
-                    "Please try again.", e)
+            print(f"{ERROR}Unable to retrieve departments. Please try again.{RESET}", e)
             return
 
         departments = cursor.fetchall()
 
         if not departments:
-            print("No departments are " \
-                    "currently registered")
+            print(f"{ERROR}No departments are currently registered.{ERROR}")
             return
         
         for department in departments:
             new_dept = Department(department[1])
 
-            print(f"Department ID:{department[0]}")
+            print(f"{DISPLAY_INFO}Department ID:{department[0]}{RESET}")
             new_dept.show_department_details()
+            print()
 
 
         # Find a department using its unique department ID.
     def search_department(self):
         while True:
             try:
-                department_id = int(input("Enter department ID:"))
+                department_id = int(input(f"{DEPARTMENT_MENU}Enter department ID: {RESET}"))
                 if not self.validate_id_input(department_id):
-                    print("Please enter a valid " \
-                            "department ID.")
+                    print(f"{ERROR}Please enter a valid department ID.{RESET}")
                     continue 
                 break
 
             except ValueError:
-                print("For Department ID " \
-                        "must contain numbers only.")
+                print(f"{ERROR}Department ID must contain numbers only.{RESET}")
                 return
 
         try:
@@ -108,21 +106,19 @@ class Department():
             """,(department_id,))
 
         except sqlite3.Error as e:
-            print("Unable to search " \
-            "for the department. " \
-            "Please try again.", e)
+            print(f"{ERROR}Unable to search for the department. Please try again.{RESET}", e)
             return
 
         department = cursor.fetchone()
 
         if not department:
-            print ("No department was found " \
-                    "with that ID.")
+            print (f"{ERROR}No department was found with that ID.{RESET}")
             return
         
         self.department_name = department[1]
             
-        print(f"Department ID:{department[0]}")
+        print(f"{DISPLAY_INFO}Department ID:{department[0]}{RESET}")
+        print()
         self.show_department_details()
     
 
@@ -130,16 +126,14 @@ class Department():
     def update_department(self):
         while True:
             try:
-                department_id = int(input("Enter department ID:"))
+                department_id = int(input(f"{DEPARTMENT_MENU}Enter department ID: {RESET}"))
                 if not self.validate_id_input(department_id):
-                    print("Please enter a valid " \
-                    "department ID.")
+                    print(f"{ERROR}Please enter a valid department ID.{RESET}")
                     continue 
                 break
 
             except ValueError:
-                print("Department ID must " \
-                "contain numbers only.")
+                print(f"{ERROR}Department ID must contain numbers only.{RESET}")
                 continue 
 
         try:
@@ -149,39 +143,35 @@ class Department():
             """,(department_id,))
 
         except sqlite3.Error as e:
-            print("Unable to retrieve the " \
-            "department. Please try again.", e)
+            print(f"{ERROR}Unable to retrieve the department. Please try again.{RESET}", e)
             return
 
         department = cursor.fetchone()
 
         if not department:
-            print("No department was found " \
-            "with that ID.")
+            print(f"{ERROR}No department was found with that ID.{RESET}")
             return
         
         self.department_name = department[1]
             
-        print(f"Department ID:{department[0]}")
-
+        print(f"{DISPLAY_INFO}Department ID:{department[0]}{RESET}")
+        print()
         self.show_department_details()
+        print()
 
-        update = input("Update " 
-                "this department? (Y/N): ").lower()
+        update = input(f"{DEPARTMENT_MENU}Update this department? (Y/N): {RESET}").lower()
         
         if update == "y":
             while True:
-                new_dept_name = input(
-                    "Enter new department name: ")
+                new_dept_name = input(f"{DEPARTMENT_MENU}Enter new department name: {RESET}")
                 
                 if new_dept_name == "":
-                    print("Department name is required. " \
-                    "Please enter a department name.")
+                    print(f"{ERROR}Department name is required. "
+                          f"Please enter a department name.{RESET}")
                     continue
 
                 if not self.validate_department_name(new_dept_name):
-                    print("Please use letters " \
-                    "and spaces only.")
+                    print(f"{ERROR}Please use letters and spaces only.{RESET}")
                     continue 
                 break 
 
@@ -197,30 +187,29 @@ class Department():
                 conn.commit()
 
             except sqlite3.Error as e:
-                print("Unable to update the " \
-                "department. Please try again.", e)
+                print(f"{ERROR}Unable to update the department. Please try again.{RESET}", e)
                 return
 
-            print("Department updated successfully.")
+            print(f"{DISPLAY_INFO}Department updated successfully.{RESET}")
+            print()
             return
         
-        print("Department update cancelled.")
+        print(f"{DISPLAY_INFO}Department update cancelled.{RESET}")
         
 
         # Confirm and remove an existing department from the database.
     def delete_department(self):
         while True:
             try:
-                department_id = int(input("Enter department ID: "))
+                department_id = int(input(f"{DEPARTMENT_MENU}Enter department ID: {RESET}"))
 
                 if not self.validate_id_input(department_id):
-                    print("Please enter a valid " \
-                    "department ID.")
+                    print(f"{ERROR}Please enter a valid department ID.{RESET}")
                     continue 
                 break 
 
             except ValueError:
-                print("Department ID use only numbers.")
+                print(f"{ERROR}Department ID use only numbers.{RESET}")
                 continue
 
         try:
@@ -230,24 +219,23 @@ class Department():
             """,(department_id,))
 
         except sqlite3.Error as e:
-            print("Unable to retrieve the " \
-            "department. Please try again.", e)
+            print(f"{ERROR}Unable to retrieve the department. Please try again.{RESET}", e)
             return
     
         department = cursor.fetchone()
 
         if not department:
-            print("No department was found " \
-            "with that ID.")
+            print(f"{ERROR}No department was found with that ID.{RESET}")
             return
             
         self.department_name = department[1]
                 
-        print(f"Department ID:{department[0]}")
+        print(f"{DISPLAY_INFO}Department ID:{department[0]}{RESET}")
+        print()
         self.show_department_details()
+        print()
     
-        delete = input("Delete " 
-            "this department? (Y/N): ").lower()
+        delete = input(f"{DEPARTMENT_MENU}Delete this department? (Y/N): {RESET}").lower()
         
         if delete == "y":
             try:
@@ -259,14 +247,14 @@ class Department():
                 conn.commit()
 
             except sqlite3.Error as e:
-                print("Unable to delete the " \
-                "department. Please try again.", e)
+                print(f"{ERROR}Unable to delete the department. Please try again.{RESET}", e)
                 return
     
-            print("Department deleted successfully.")
+            print(f"{DISPLAY_INFO}Department deleted successfully.{RESET}")
+            print()
             return
             
-        print("Department deletion cancelled.")
+        print(f"{DISPLAY_INFO}Department deletion cancelled.{RESET}")
         return
                     
 

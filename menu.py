@@ -1,9 +1,14 @@
+import pyfiglet
+import threading
+from datetime import datetime
+from clock import display_date_time
 from patient import Patient
 from gp import Gp
 from gp_surgery import GpSurgery
 from consultant import Consultant
 from department import Department
 from appointment import Appointment
+from appointment_patient import AppointmentPatient
 from prescription import Prescription
 from prescription_medication import PrescriptionMedication
 from medication import Medication
@@ -11,28 +16,52 @@ from bill import Bill
 from appointment_patient import AppointmentPatient
 from colors import(MAIN_MENU_HEADING,ADMIN_MENU,PRACTICE_MENU,
                    GP_MENU,DEPARTMENT_MENU,CONSULTANT_MENU,MEDICATION_MENU,
-                   PATIENT_MENU,APPOINTMENT_MENU,PRESCRIPTION_MENU,
+                   PATIENT_MENU,APPOINTMENT_MENU,A_P_MENU,PRESCRIPTION_MENU,
                    PRESCRIPTION_INSTRUCTIONS_MENU,BILLING_MENU,
                    SUB_MENU_HEADING,SUB_SUB_MENU_HEADING,TREE_SUB,TREE_SUB_SUB,
                    RETURN_GROUP_MENU,RETURN_MAIN_MENU,EXIT,RESET)
-
 def menu():
     while True:
-        print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
-        print("=== Welcome to the Main Menu ===".center(50))
+        # Create and centre the hospital name using PyFiglet.
+        # PyFiglet converts normal text into ASCII art and centres each line.
+        hospital_name = pyfiglet.figlet_format(
+            "HOLLY HOSPITAL",
+            font="digital"
+        )
+
+        hospital_name = "\n".join(
+            line.center(50)
+            for line in hospital_name.splitlines()
+        )
+
+        print(
+            f"{MAIN_MENU_HEADING}"
+            f"{hospital_name}"
+            f"{RESET}"
+        )
+
+        print()
+        print("Address: 100 London Rd, Northampton, NN1 1YZ, England, UK".center(50))
+        print("Phone: 01604 101010".center(50))
+        print("Email:holly-hospital@nhs.net".center(50))
+        print()
+        print("=== Welcome To The Main Menu of Holly Hospital ===".center(50))
+        print()
         print(f"1. {ADMIN_MENU}Hospital Administration{RESET}")
         print("=" *40)
         print(f"2. {PATIENT_MENU}Patient Management{RESET}")
         print("=" *40)
         print(f"3. {APPOINTMENT_MENU}Appointment Management{RESET}")
         print("=" *40)
-        print("4. Patient & Appointment Information")
+        print(f"4. {A_P_MENU}Patient & Appointment Information{RESET}")
         print("=" *40)
         print(f"5. {PRESCRIPTION_MENU}Prescription Management{RESET}")
         print("=" *40)
         print(f"6. {BILLING_MENU}Billing Management{RESET}")
         print("=" *40)
-        print(f"7. {EXIT}Exit{RESET}")
+        print(f"7. Date & Time")
+        print("=" *40)
+        print(f"8. {EXIT}Exit{RESET}")
         print("=" *40)
 
         choice = input("Enter a choice from Main Menu: ")
@@ -56,6 +85,10 @@ def menu():
             billing_management()
 
         elif choice == "7":
+              stop_event = threading.Event()
+              display_date_time(stop_event)
+
+        elif choice == "8":
             print("Exiting Holly Hospital Management System")
             break 
 
@@ -489,25 +522,34 @@ def appointment_management():
 def appointment_patient_menu():
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
-        print("--- Appointment Information ---".center(50))
+        print()
+        print(
+                f"{SUB_MENU_HEADING}"
+                f"{(TREE_SUB + 'Patient & Appointment Information').center(50)}"
+                f"{RESET}"
+            )
         print("*" *80)
-        print("1. Patients with Appointments(INNER JOIN).")
+        print(f"1. {A_P_MENU}Patients with Appointments(INNER JOIN).{RESET}")
         print("*" *80)
-        print("2. All Patients, including those without Appointments(LEFT JOIN).")
+        print(f"2. {A_P_MENU}All Patients, including those " 
+              f"without Appointments(LEFT JOIN).{RESET}")
         print("*" *80)
-        print("3. All Patients and Appointments Including Unmatched(FULL OUTER JOIN).")
+        print(f"3. {A_P_MENU}All Patients and Appointments Including "
+              f"Unmatched(FULL OUTER JOIN).{RESET}")
         print("*" *80)
-        print("4. Patient, Appointment & Consultant Information.")
+        print(f"4. {A_P_MENU}Patient, Appointment & Consultant Information.{RESET}")
         print("*" *80)
-        print("5. Patient, Appointment, Consultant & Department Information.")
+        print(f"5. {A_P_MENU}Patient, Appointment, Consultant & "
+              f"Department Information.{RESET}")
         print("*" *80)
-        print("6. Patient, GP & Medical Practice.")
+        print(f"6. {A_P_MENU}Patient, GP & Medical Practice.{RESET}")
         print("*" *80)
-        print("7. Prescription & Medication Data(MANY TO MANY DATABASE RELATIONSHIP).")
+        print(f"7. {A_P_MENU}Prescription & Medication Data "
+              f"(MANY TO MANY DATABASE RELATIONSHIP).{RESET}")
         print("*" *80)
-        print("8. Prescription Medication Statistics(Advanced SQL Queries).")
+        print(f"8. {A_P_MENU}Prescription Medication Statistics(Advanced SQL Queries).{RESET}")
         print("*" *80)
-        print("9. Advanced Prescription Searches(Advanced SQL Subqueries).")
+        print(f"9. {A_P_MENU}Advanced Prescription Searches(Advanced SQL Subqueries).{RESET}")
         print("*" *80)
         print(f"10. {RETURN_MAIN_MENU}Return to Main Menu.{RESET}")
         print("*" *80)
