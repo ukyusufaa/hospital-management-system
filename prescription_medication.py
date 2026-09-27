@@ -4,6 +4,8 @@ import sqlite3
 # Import the shared database connection and cursor from database.py module.
 from database import conn, cursor
 
+from colors import DISPLAY_INFO,PRESCRIPTION_INSTRUCTIONS_MENU,ERROR,RESET
+
 class PrescriptionMedication():
         # Store the prescription-medication relationship and associated instructions.
     def __init__(self,prescription_instructions = None, 
@@ -13,10 +15,10 @@ class PrescriptionMedication():
         self.medication_id = medication_id
 
     def show_prescription_medication_details(self):
-        print("-" * 30)
-        print(f"Regimen Instructions: {self.prescription_instructions}")
-        print(f"Prescription ID: {self.prescription_id}")
-        print(f"Medication ID: {self.medication_id}")
+        print("=" * 30)
+        print(f"{DISPLAY_INFO}Regimen Instructions: {self.prescription_instructions}{RESET}")
+        print(f"{DISPLAY_INFO}Prescription ID: {self.prescription_id}{RESET}")
+        print(f"{DISPLAY_INFO}Medication ID: {self.medication_id}{RESET}")
         print("-" * 30)
 
     def validate_login_id(self,number):
@@ -31,43 +33,43 @@ class PrescriptionMedication():
 
     def create_prescription_medication(self):
         while True:
-            self.prescription_instructions = input(
-                "Please enter the regimen instructions(0-100): ").strip()
+            self.prescription_instructions = input(f"{PRESCRIPTION_INSTRUCTIONS_MENU}Please " 
+                        f"enter the regimen instructions(0-100): ").strip()
             
             if not self.validate_character_length(self.prescription_instructions):
-                print("Please enter the regimen " \
-                        "instructions between 1 and 100 characters.")
+                print(f"{ERROR}Please enter the regimen " 
+                      f"instructions between 1 and 100 characters.{RESET}")
                 continue 
             break 
 
         while True:
             try:
-                self.prescription_id = int(input(
-                    "Please enter the prescription ID: "))
+                self.prescription_id = int(input(f"{PRESCRIPTION_INSTRUCTIONS_MENU}Please " 
+                                                 f"enter the prescription ID: {RESET}"))
                 
                 if not self.validate_login_id(self.prescription_id):
-                    print("Please enter a valid prescription ID.")
+                    print(f"{ERROR}Please enter a valid prescription ID.{RESET}")
                     continue 
                 break 
 
             except ValueError:
-                print("Please enter a valid prescription ID " \
-                        "using numbers only.")
+                print(f"{ERROR}Please enter a valid prescription ID " 
+                      f"using numbers only.{RESET}")
                 continue 
 
         while True:
                 try:
-                    self.medication_id = int(input(
-                        "Please enter the medication ID: "))
+                    self.medication_id = int(input(f"{PRESCRIPTION_INSTRUCTIONS_MENU}Please " 
+                                                   f"enter the medication ID: {RESET}"))
                     
                     if not self.validate_login_id(self.medication_id):
-                        print("Please enter a valid medication ID.")
+                        print(f"{ERROR}Please enter a valid medication ID.{RESET}")
                         continue 
                     break 
     
                 except ValueError:
-                    print("Please enter a valid medication ID " \
-                    "using numbers only.")
+                    print(f"{ERROR}Please enter a valid medication ID " 
+                          f"using numbers only.{RESET}")
                     continue
 
         # Check whether the prescription already contains the medication.
@@ -80,17 +82,15 @@ class PrescriptionMedication():
                  self.medication_id))
 
         except sqlite3.Error as e:
-            print("Unable to check the prescription " \
-                    "medication relationship. Please " \
-                    "try again.", e)
+            print(f"{ERROR}Unable to check the prescription medication relationship. " 
+                  f"Please try again.{RESET}", e)
             return
 
         # Check whether a relationship was found.
         relationship = cursor.fetchone()
 
         if relationship:
-            print("This medication is already " \
-                    "included on the prescription.")
+            print(f"{ERROR}This medication is already included on the prescription.{RESET}")
             return
 
         # Create the prescription-medication relationship.
@@ -109,12 +109,11 @@ class PrescriptionMedication():
             conn.commit()
 
         except sqlite3.Error as e:
-            print("Unable to add the " \
-                    "regimen. Please " \
-                    "try again.", e)
+            print(f"{ERROR}Unable to add the regimen. Please try again.{RESET}", e)
             return
 
-        print("Regimen added successfully.")
+        print(f"{DISPLAY_INFO}Regimen added successfully.{RESET}")
+        print()
 
         self.show_prescription_medication_details()
     
@@ -125,15 +124,13 @@ class PrescriptionMedication():
             cursor.execute("SELECT * FROM prescription_medication")
 
         except sqlite3.Error as e:
-            print("Unable to display regimens. " \
-                    "Please try again.", e)
+            print(f"{ERROR}Unable to display regimens. Please try again.{RESET}", e)
             return
 
         records = cursor.fetchall()
 
         if not records:
-            print("No regimens stored "
-                    "in the database.")
+            print(f"{ERROR}No regimens stored in the database.{RESET}")
             return
         
         for record in records:
@@ -144,37 +141,37 @@ class PrescriptionMedication():
             )
 
             prescription_medication.show_prescription_medication_details()
+            print()
             
 
     def search_prescription_medication(self):
         while True:
             try:
-                self.prescription_id = int(input(
-                    "Please enter prescription ID: "))
+                self.prescription_id = int(input(f"{PRESCRIPTION_INSTRUCTIONS_MENU}Please " 
+                                                 f"enter prescription ID: {RESET}"))
                 
                 if not self.validate_login_id(self.prescription_id):
-                    print("Please enter valid prescription ID.")
+                    print(f"{ERROR}Please enter valid prescription ID.{RESET}")
                     continue 
                 break 
 
             except ValueError:
-                print("Please enter a valid " \
-                        "prescription ID using numbers only.")
+                print(f"{ERROR}Please enter a valid prescription ID " 
+                      f"using numbers only.{RESET}")
                 continue
 
         while True:
             try:
-                self.medication_id = int(input(
-                    "Please enter medication ID: "))
+                self.medication_id = int(input(f"{PRESCRIPTION_INSTRUCTIONS_MENU}Please " 
+                                               f"enter medication ID: {RESET}"))
                 
                 if not self.validate_login_id(self.medication_id):
-                    print("Please enter valid medication ID.")
+                    print(f"{ERROR}Please enter valid medication ID.{RESET}")
                     continue 
                 break 
 
             except ValueError:
-                print("Please enter a valid " \
-                        "medication ID using numbers only.")
+                print(f"{ERROR}Please enter a valid medication ID using numbers only.{RESET}")
                 continue 
         try:
         # Find the prescription-medication record in the database.
@@ -186,15 +183,13 @@ class PrescriptionMedication():
                  self.medication_id))
 
         except sqlite3.Error as e:
-            print("Unable to search for " \
-                    "the regimen.", e)
+            print(f"{ERROR}Unable to search for the regimen.{RESET}", e)
             return 
 
         record = cursor.fetchone()
 
         if not record:
-            print("No regimen was found " \
-                    "for this prescription")
+            print(f"{ERROR}No regimen was found for this prescription.{RESET}")
             return
         
         self.prescription_instructions = record[0]
@@ -207,34 +202,32 @@ class PrescriptionMedication():
     def update_prescription_medication(self):
         while True:
             try:
-                self.prescription_id = int(input(
-                    "Please enter the prescription ID:"))
+                self.prescription_id = int(input(f"{PRESCRIPTION_INSTRUCTIONS_MENU}Please "
+                            f"enter the prescription ID: {RESET}"))
                 
                 if not self.validate_login_id(self.prescription_id):
-                    print("Please enter a valid " \
-                            "prescription ID.")
+                    print(f"{ERROR}Please enter a valid prescription ID.{RESET}")
                     continue 
                 break 
 
             except ValueError:
-                print("Please enter a valid " \
-                        "prescription ID using numbers only.")
+                print(f"{ERROR}Please enter a valid prescription ID " 
+                      f"using numbers only.{RESET}")
                 continue 
 
         while True:
                 try:
-                    self.medication_id = int(input(
-                        "Please enter the medication ID:"))
+                    self.medication_id = int(input(f"{PRESCRIPTION_INSTRUCTIONS_MENU}Please " 
+                                                   f"enter the medication ID: {RESET}"))
                     
                     if not self.validate_login_id(self.medication_id):
-                        print("Please enter a " \
-                                "valid medication ID.")
+                        print(f"{ERROR}Please enter a valid medication ID.{RESET}")
                         continue 
                     break 
     
                 except ValueError:
-                    print("Please enter a valid " \
-                            "medication ID using numbers only.")
+                    print(f"{ERROR}Please enter a valid " 
+                          f"medication ID using numbers only.{RESET}")
                     continue
         try:
         # Find the prescription-medication record in the database.
@@ -245,16 +238,13 @@ class PrescriptionMedication():
             """,(self.medication_id,self.prescription_id))
 
         except sqlite3.Error as e:
-            print("Unable to find " \
-            "the regimen. Please " \
-            "try again.", e)
+            print(f"{ERROR}Unable to find the regimen. Please try again.{RESET}", e)
             return 
 
         record = cursor.fetchone()
 
         if not record:
-            print("No regimen was found for " \
-                    "this prescription and medication.")
+            print(f"{ERROR}No regimen was found for this prescription and medication.{RESET}")
             return
         
         self.prescription_instructions = record[0]
@@ -262,30 +252,28 @@ class PrescriptionMedication():
         self.medication_id = record[2]
 
         self.show_prescription_medication_details()
+        print()
 
         while True:
-            update = input(
-                "Update the regimen instructions? (Y/N):").lower()
+            update = input(f"{PRESCRIPTION_INSTRUCTIONS_MENU}Update " 
+                           f"the regimen instructions? (Y/N): {RESET}").lower()
             
             if not self.validate_yes_no(update):
-                print("Please enter Y/y or N/n.")
+                print(f"{ERROR}Please enter Y/y or N/n.{RESET}")
                 continue
 
             if update == 'n':
-                print("Regimen update cancelled. " \
-                        "No changes were made.")
+                print(f"{ERROR}Regimen update cancelled. No changes were made.{RESET}")
                 return
             break 
                 
         while True:
-            updated_prescription_instructions = input(
-                        "Please enter the new regimen "
-                        "instructions (1 - 100 characters): ")
+            updated_prescription_instructions = input(f"{PRESCRIPTION_INSTRUCTIONS_MENU}Please " 
+                        f"enter the new regimen instructions (1 - 100 characters): {RESET}")
                 
             if not self.validate_character_length(updated_prescription_instructions):
-                print("Please enter regimen " \
-                        "instructions between 1 and " \
-                        "100 characters.")
+                print(f"{ERROR}Please enter regimen instructions between 1 and " 
+                      f"100 characters.{RESET}")
                 continue
             break 
 
@@ -305,43 +293,42 @@ class PrescriptionMedication():
             conn.commit()
 
         except sqlite3.Error as e:
-            print("Unable to update the " \
-                    "regimen instructions. " \
-                    "Please try again.", e)
+            print(f"{ERROR}Unable to update the regimen instructions. "
+                  f"Please try again.{RESET}", e)
             return 
                     
-        print("Regimen instructions updated successfully.")
+        print(f"{DISPLAY_INFO}Regimen instructions updated successfully.{RESET}")
             
 
     def delete_prescription_medication(self):
         while True:
             try:
-                self.prescription_id = int(input(
-                    "Please enter prescription ID: "))
+                self.prescription_id = int(input(f"{PRESCRIPTION_INSTRUCTIONS_MENU}Please " 
+                                                 f"enter prescription ID: {RESET}"))
                 
                 if not self.validate_login_id(self.prescription_id):
-                    print("Please enter valid prescription ID.")
+                    print(f"{ERROR}Please enter valid prescription ID.{RESET}")
                     continue 
                 break
 
             except ValueError:
-                print("Please enter a valid " \
-                        "prescription ID using numbers only.")
+                print(f"{ERROR}Please enter a valid prescription ID " 
+                      f"using numbers only.{RESET}")
                 continue 
 
         while True:
             try:
-                self.medication_id = int(input(
-                    "Please enter medication ID: "))
+                self.medication_id = int(input(f"{PRESCRIPTION_INSTRUCTIONS_MENU}Please "
+                                               f"enter medication ID: {RESET}"))
                 
                 if not self.validate_login_id(self.medication_id):
-                    print("Please enter valid medication ID.")
+                    print(f"{ERROR}Please enter valid medication ID.{RESET}")
                     continue 
                 break 
 
             except ValueError:
-                print("Please enter a valid " \
-                        "medication ID using numbers only.")
+                print(f"{ERROR}Please enter a valid " 
+                      f"medication ID using numbers only.{RESET}")
                 continue 
                 
         try:
@@ -354,15 +341,13 @@ class PrescriptionMedication():
                  self.medication_id))
         
         except sqlite3.Error as e:
-            print("Unable to search for " \
-            "the regimen.", e)
+            print(f"{ERROR}Unable to search for the regimen.{RESET}", e)
             return 
         
         record = cursor.fetchone()
 
         if not record:
-            print("No regimen was found " \
-                    "for this prescription")
+            print(f"{ERROR}No regimen was found for this prescription.{RESET}")
             return
         
         
@@ -371,17 +356,18 @@ class PrescriptionMedication():
         self.medication_id = record[2]
             
         self.show_prescription_medication_details()
+        print()
 
         while True:
-            delete = input("Delete " \
-                "this prescription medication? (Y/N):").lower()
+            delete = input(f"{PRESCRIPTION_INSTRUCTIONS_MENU}Delete "
+                           f"this prescription medication? (Y/N): {RESET}").lower()
 
             if not self.validate_yes_no(delete):
-                print("Please enter Y/y or N/n.")
+                print(f"{ERROR}Please enter Y/y or N/n.{RESET}")
                 continue 
 
             if delete == "n":
-                print("Deletion cancelled.")
+                print(f"{DISPLAY_INFO}Deletion cancelled.{RESET}")
 
         # Exit the method because the deletion was cancelled.
                 return
@@ -399,12 +385,10 @@ class PrescriptionMedication():
             conn.commit()
 
         except sqlite3.Error as e:
-            print("Unable to delete " \
-                    "the prescription. Please " \
-                    "try again.", e)
+            print(f"{ERROR}Unable to delete the prescription. Please try again.{RESET}", e)
             return
 
-        print("Prescription medication deleted successfully.")
+        print(f"{DISPLAY_INFO}Prescription medication deleted successfully.{RESET}")
          
 
                     

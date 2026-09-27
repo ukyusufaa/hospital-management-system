@@ -2,6 +2,7 @@ import sqlite3
 import calendar 
 from datetime import datetime
 from database import conn, cursor
+from colors import DISPLAY_INFO,PATIENT_MENU,ERROR,RESET
 
 
 class Patient():
@@ -15,12 +16,12 @@ class Patient():
         self.gp_id = gp_id
     
     def show_patient_details(self):
-        print("-" * 30)
-        print(f"First Name:{self.first_name}")
-        print(f"Last Name:{self.surname}")
-        print(f"Date of Birth:{self.dob}")
-        print(f"Address:{self.address}")
-        print(f"GP ID:{self.gp_id}")
+        print("=" * 30)
+        print(f"{DISPLAY_INFO}First Name:{self.first_name}{RESET}")
+        print(f"{DISPLAY_INFO}Last Name:{self.surname}{RESET}")
+        print(f"{DISPLAY_INFO}Date of Birth:{self.dob}{RESET}")
+        print(f"{DISPLAY_INFO}Address:{self.address}{RESET}")
+        print(f"{DISPLAY_INFO}GP ID:{self.gp_id}{RESET}")
         print("-" * 30)
 
         # Validate patient names using letters and spaces.
@@ -45,41 +46,40 @@ class Patient():
         # Collect and validate patient details before creating the record.
     def create_patient(self):
         while True:
-            self.first_name = input("Enter first name: ")
+            self.first_name = input(f"{PATIENT_MENU}Enter first name: {RESET}")
 
             if self.first_name == "":
-                print("First name is required.")
+                print(f"{ERROR}First name is required.{RESET}")
                 continue
 
             if not self.validation_name(self.first_name):
-                print("Please use letters and spaces only.")
+                print(f"{ERROR}Please use letters and spaces only.{RESET}")
                 continue 
             break 
 
         while True:
-            self.surname = input("Enter last name: ")
+            self.surname = input(f"{PATIENT_MENU}Enter last name: {RESET}")
 
             if self.surname == "":
-                print("Last name is required.")
+                print(f"{ERROR}Last name is required.{RESET}")
                 continue
 
             if not self.validation_name(self.surname):
-                print("Please use letters and spaces only.")
+                print(f"{ERROR}Please use letters and spaces only.{RESET}")
                 continue 
             break 
 
         while True:
             invalid_dob = False
 
-            self.dob = input("Enter date of birth (DD/MM/YYYY):")
+            self.dob = input(f"{PATIENT_MENU}Enter date of birth (DD/MM/YYYY): {RESET}")
 
             if len(self.dob) != 10:
-                print("Date of birth must be DD/MM/YYYYY.")
+                print(f"{ERROR}Date of birth must be DD/MM/YYYYY.{RESET}")
                 continue
 
             if self.dob[2] != "/" or self.dob[5] != "/":
-                print("Date of birth must use / as "
-                "a separator.")
+                print(f"{ERROR}Date of birth must use a separator.{RESET}")
                 continue
 
             for value in self.dob:
@@ -91,8 +91,7 @@ class Patient():
                     break 
 
             if invalid_dob:
-                print("Date of birth must use "
-                "the format (DD/MM/YYYY).")
+                print(f"{ERROR}Date of birth must use the format (DD/MM/YYYY).{RESET}")
                 continue
 
             day = int(self.dob[0:2])
@@ -100,34 +99,34 @@ class Patient():
             year = int(self.dob[6:10])
 
             if day < 1 or day > 31:
-                print("Please enter a valid day.")
+                print(f"{ERROR}Please enter a valid day.{RESET}")
                 continue 
 
             if month < 1 or month > 12:
-                print("Please enter a valid month.")
+                print(f"{ERROR}Please enter a valid month.{RESET}")
                 continue 
 
             if year < 1900:
-                print("Please enter a valid year.")
+                print(f"{ERROR}Please enter a valid year.{RESET}")
                 continue 
 
             days_in_month = calendar.monthrange(year, month)[1]
             
             if day > days_in_month:
-                print("Please enter a valid date.")
+                print(f"{ERROR}Please enter a valid date.{RESET}")
                 continue
             break
 
         while True:
-            self.address = input("Enter address: ")
+            self.address = input(f"{PATIENT_MENU}Enter address: {RESET}")
 
             if self.address == "":
-                print("Address is required.")
+                print(f"{ERROR}Address is required.{RESET}")
                 continue
             
             if not " " in self.address:
-                print("Please enter the address using " \
-                "spaces between address parts.")
+                print(f"{ERROR}Please enter the address using spaces between " 
+                      f"address parts.{RESET}")
                 continue
 
             if not all(
@@ -139,17 +138,15 @@ class Patient():
                     continue
 
             if not any(character.isdigit() for character in self.address):
-                print("Address must contain a house "
-                        "or building number.")
+                print(f"{ERROR}Address must contain a house or building number.{RESET}")
                 continue
             break
     
         while True:
-            gp = input(
-                "Does the patient have a GP? (Y/N): ").lower()
+            gp = input(f"{PATIENT_MENU}Does the patient have a GP? (Y/N):  {RESET}").lower()
             
             if not self.validate_yes_no(gp):
-                print("Enter Y/y or N/n.")
+                print(f"{ERROR}Enter Y/y or N/n.{RESET}")
                 continue
 
             if gp == "n":
@@ -157,16 +154,15 @@ class Patient():
                 break
 
             try:
-                self.gp_id = int(input("Enter GP ID:"))
+                self.gp_id = int(input(f"{PATIENT_MENU}Enter GP ID: {RESET}"))
 
                 if not self.validate_login_digits(self.gp_id):
-                    print("Please use a valid GP ID.")
+                    print(f"{ERROR}Please use a valid GP ID.{RESET}")
                     continue
                 
 
             except ValueError:
-                print("Please enter the GP ID " \
-                        "using numbers only.")
+                print(f"{ERROR}Please enter the GP ID using numbers only.{RESET}")
                 continue 
 
             try:
@@ -176,15 +172,13 @@ class Patient():
                 """,(self.gp_id,))
 
             except sqlite3.Error as e:
-                    print("Unable to verify the " \
-                            "GP record. Please try again.",e)
+                    print(f"{ERROR}Unable to verify the GP record. Please try again.{RESET}",e)
                     return
 
             gp_record = cursor.fetchone()
 
             if not gp_record:
-                print("No GP was found " \
-                        "with that ID.")
+                print(f"{ERROR}No GP was found with that ID.{RESET}")
                 return
             break
 
@@ -203,14 +197,14 @@ class Patient():
             conn.commit()
 
         except sqlite3.Error as e:
-            print("Unable to create " \
-            "the patient.", e)
+            print(f"{ERROR}Unable to create the patient.{RESET}", e)
             return
         
-        print("Patient created successfully.")
+        print(f"{DISPLAY_INFO}Patient created successfully.{RESET}")
+        print()
 
         patient_id = cursor.lastrowid
-        print(f"Patient ID: {patient_id}")
+        print(f"{DISPLAY_INFO}Patient ID: {patient_id}{RESET}")
         self.show_patient_details()
         
 
@@ -220,16 +214,13 @@ class Patient():
             cursor.execute("SELECT * FROM patient")
 
         except sqlite3.Error as e:
-            print("Unable to retrieve " \
-            "patient records. Please " \
-            "try again.", e)
+            print(f"{ERROR}Unable to retrieve patient records. Please try again.{RESET}", e)
             return
 
         patient_records = cursor.fetchall()
 
         if not patient_records:
-            print("No patients are " \
-            "currently registered.")
+            print(f"{ERROR}No patients are currently registered.{RESET}")
             return
         
         for patient_record in patient_records:
@@ -241,25 +232,24 @@ class Patient():
                 patient_record[5]
             )
 
-            print(f"Patient ID: {patient_record[0]}")
+            print(f"{DISPLAY_INFO}Patient ID: {patient_record[0]}{RESET}")
             patient.show_patient_details()
+            print()
         
 
         # Find a patient using their unique patient ID.
     def search_patient(self):
         while True:
             try:
-                patient_id = int(input("Enter patient ID:"))
+                patient_id = int(input(f"{PATIENT_MENU}Enter patient ID: {RESET}"))
 
                 if not self.validate_login_digits(patient_id):
-                    print("Please enter a valid " \
-                            "patient ID.")
+                    print(f"{ERROR}Please enter a valid patient ID.{RESET}")
                     continue
                 break
 
             except ValueError:
-                print("Please enter the patient ID " \
-                        "using numbers only.")
+                print(f"{ERROR}Please enter the patient ID using numbers only.{RESET}")
                 continue
         try:
             cursor.execute("""
@@ -268,16 +258,13 @@ class Patient():
             """,(patient_id,))
 
         except sqlite3.Error as e:
-            print("Unable to search the " \
-            "patient records. Please " \
-            "try again.", e)
+            print(f"{ERROR}Unable to search the patient records. Please try again.{RESET}", e)
             return
 
         patient_record = cursor.fetchone()
 
         if not patient_record:
-            print("No patient was found " \
-                    "with that ID.")
+            print(f"{ERROR}No patient was found with that ID.{RESET}")
             return
         
         self.first_name = patient_record[1]
@@ -286,7 +273,7 @@ class Patient():
         self.address = patient_record[4]
         self.gp = patient_record[5]
 
-        print(f"Patient ID: {patient_record[0]}")
+        print(f"{DISPLAY_INFO}Patient ID: {patient_record[0]}{RESET}")
         self.show_patient_details()
         
 
@@ -294,16 +281,15 @@ class Patient():
     def update_patient(self):
         while True:
             try:
-                patient_id = int(input("Enter patient ID: "))
+                patient_id = int(input(f"{PATIENT_MENU}Enter patient ID: {RESET}"))
 
                 if not self.validate_login_digits(patient_id):
-                    print("Please enter a valid patient ID.")
+                    print(f"{ERROR}Please enter a valid patient ID.{RESET}")
                     continue
                 break 
 
             except ValueError:
-                print("Please enter the patient ID " \
-                        "using numbers only.")
+                print(f"{ERROR}Please enter the patient ID using numbers only.{RESET}")
                 continue
         try:
             cursor.execute("""
@@ -312,16 +298,14 @@ class Patient():
             """,(patient_id,))
 
         except sqlite3.Error as e:
-            print("Unable to retrieve the " \
-                    "patient record for updating. " \
-                    "Please try again.", e)
+            print(f"{ERROR}Unable to retrieve the patient record for updating. "
+                  f"Please try again.{RESET}", e)
             return
 
         patient_record = cursor.fetchone()
 
         if not patient_record:
-            print("No patient was found " \
-                    "with that ID.")
+            print(f"{ERROR}No patient was found with that ID.{RESET}")
             return
         
         self.first_name = patient_record[1]
@@ -330,59 +314,58 @@ class Patient():
         self.address = patient_record[4]
         self.gp = patient_record[5]
 
-        print(f"Patient ID: {patient_record[0]}")
+        print(f"{DISPLAY_INFO}Patient ID: {patient_record[0]}{RESET}")
         self.show_patient_details()
+        print()
 
         while True:
-            update = input("Update " 
-                        "this patients details? (Y/N): ").lower()
+            update = input(f"{PATIENT_MENU}Update " 
+                           f"this patients details? (Y/N): {RESET}").lower()
             
             if not self.validate_yes_no(update):
-                print("Please enter Y/y " \
-                        "or N/n.")
+                print(f"{ERROR}Please enter Y/y or N/n.{RESET}")
                 continue
                 
             if update == "n":
-                print("Update aborted")
+                print(f"{DISPLAY_INFO}Update aborted.{RESET}")
                 return
             break 
             
         while True:
-            updated_first_name = input("Enter first name: ")
+            updated_first_name = input(f"{PATIENT_MENU}Enter first name: {RESET}")
     
             if updated_first_name == "":
-                print("First name is required.")
+                print(f"{ERROR}First name is required.{RESET}")
                 continue
     
             if not self.validation_name(updated_first_name):
-                print("Please use letters and spaces only.")
+                print(f"{ERROR}Please use letters and spaces only.{RESET}")
                 continue 
             break 
     
         while True:
-            updated_surname = input("Enter last name: ")
+            updated_surname = input(f"{PATIENT_MENU}Enter last name: {RESET}")
     
             if updated_surname == "":
-                print("Last name is required.")
+                print(f"{ERROR}Last name is required.{RESET}")
                 continue
     
             if not self.validation_name(updated_surname):
-                print("Please use letters and spaces only.")
+                print(f"{ERROR}Please use letters and spaces only.{RESET}")
                 continue 
             break 
     
         while True:
             invalid_dob = False
     
-            updated_dob = input("Enter date of birth (DD/MM/YYYY):")
+            updated_dob = input(f"{PATIENT_MENU}Enter date of birth (DD/MM/YYYY): {RESET}")
     
             if len(updated_dob) != 10:
-                print("Date of birth must be DD/MM/YYYYY.")
+                print(f"{ERROR}Date of birth must be DD/MM/YYYYY.{RESET}")
                 continue
     
             if updated_dob[2] != "/" or updated_dob[5] != "/":
-                print("Date of birth must use / as "
-                        "a separator.")
+                print(f"{ERROR}Date of birth must use / as a separator.{RESET}")
                 continue
     
             for value in updated_dob:
@@ -394,8 +377,7 @@ class Patient():
                 break 
     
             if invalid_dob:
-                print("Date of birth must use "
-                        "the format (DD/MM/YYYY).")
+                print(f"{ERROR}Date of birth must use the format (DD/MM/YYYY).{RESET}")
                 continue
     
             day = int(self.dob[0:2])
@@ -403,34 +385,34 @@ class Patient():
             year = int(self.dob[6:10])
     
             if day < 1 or day > 31:
-                print("Please enter a valid day.")
+                print(f"{ERROR}Please enter a valid day.{RESET}")
                 continue 
     
             if month < 1 or month > 12:
-                print("Please enter a valid month.")
+                print(f"{ERROR}Please enter a valid month.{RESET}")
                 continue 
     
             if year < 1900:
-                print("Please enter a valid year.")
+                print(f"{ERROR}Please enter a valid year.{RESET}")
                 continue 
     
             days_in_month = calendar.monthrange(year, month)[1]
                 
             if day > days_in_month:
-                print("Please enter a valid date.")
+                print(f"{ERROR}Please enter a valid date.{RESET}")
                 continue
             break
     
         while True:
-            updated_address = input("Enter address: ")
+            updated_address = input(f"{PATIENT_MENU}Enter address: {RESET}")
     
             if updated_address == "":
-                print("Address is required.")
+                print(f"{ERROR}Address is required.{RESET}")
                 continue
                 
             if not " " in self.address:
-                print("Please enter the address using " \
-                        "spaces between address parts.")
+                print(f"{ERROR}Please enter the address using " 
+                      f"spaces between address parts.{RESET}")
                 continue
     
             if not all(
@@ -438,21 +420,19 @@ class Patient():
                 or character.isdigit()
                 or character in [".", ",", "'", "-", "/", "&", " "]
                 for character in self.address):
-                    print("Please enter a valid address.")
+                    print(f"{ERROR}Please enter a valid address.{RESET}")
                     continue
     
             if not any(character.isdigit() for character in self.address):
-                print("Address must contain a house "
-                        "or building number.")
+                print(f"{ERROR}Address must contain a house or building number.{RESET}")
                 continue
             break
 
         while True:
-            gp = input(
-                "Does the patient have a GP? (Y/N): ").lower()
+            gp = input(f"{PATIENT_MENU}Does the patient have a GP? (Y/N): {RESET}").lower()
                     
             if not self.validate_yes_no(gp):
-                print("Enter Y/y or N/n.")
+                print(f"{ERROR}Enter Y/y or N/n.{RESET}")
                 continue
         
             if gp == "n":
@@ -460,15 +440,14 @@ class Patient():
                 break
             
             try:
-                updated_gp_id = int(input("Enter GP ID:"))
+                updated_gp_id = int(input(f"{PATIENT_MENU}Enter GP ID: {RESET}"))
         
                 if not self.validate_login_digits(updated_gp_id):
-                    print("Please use a valid GP ID.")
+                    print(f"{ERROR}Please use a valid GP ID.{RESET}")
                     continue
         
             except ValueError:
-                print("Please enter the GP ID " \
-                        "using numbers only.")
+                print(f"{ERROR}Please enter the GP ID using numbers only.{RESET}")
                 continue 
         
             try:
@@ -478,15 +457,13 @@ class Patient():
                 """,(updated_gp_id,))
         
             except sqlite3.Error as e:
-                print("Unable to verify the " \
-                        "GP record. Please try again.",e)
+                print(f"{ERROR}Unable to verify the GP record. Please try again.{RESET}",e)
                 return
         
             gp_record = cursor.fetchone()
         
             if not gp_record:
-                print("No GP was found " \
-                        "with that ID.")
+                print(f"{ERROR}No GP was found with that ID.{RESET}")
                 continue 
             break
         
@@ -515,27 +492,24 @@ class Patient():
             conn.commit()
 
         except sqlite3.Error as e:
-            print("Unable to update the " \
-                    "patient record. Please try again.",e)
+            print(f"{ERROR}Unable to update the patient record. Please try again.{RESET}",e)
             return
 
-        print("Patient updated successfully.")
+        print(f"{DISPLAY_INFO}Patient updated successfully.{RESET}")
         
 
         # Confirm and remove an existing patient from the database.
     def delete_patient(self):
         while True:
             try:
-                patient_id = int(input("Enter patient ID: "))
+                patient_id = int(input(f"{PATIENT_MENU}Enter patient ID: {RESET}"))
 
                 if not self.validate_login_digits(patient_id):
-                    print("Please enter a " \
-                            "valid patient ID.")
+                    print(f"{ERROR}Please enter a valid patient ID.{RESET}")
                     continue
 
             except ValueError:
-                print("Please enter the patient " \
-                        "ID using numbers only.")
+                print(f"{ERROR}Please enter the patient ID using numbers only.{RESET}")
                 continue
 
             try:
@@ -545,16 +519,14 @@ class Patient():
             """,(patient_id,))
 
             except sqlite3.Error as e:
-                print("Unable to retrieve " \
-                    "the patient record. Please " \
-                    "try again.", e)
+                print(f"{ERROR}Unable to retrieve the patient record. "
+                      f"Please try again.{RESET}", e)
                 return
 
             patient_record = cursor.fetchone()
 
             if not patient_record:
-                print("No patient was " \
-                    "found with that ID.")
+                print(f"{ERROR}No patient was found with that ID.{RESET}")
                 continue 
             break
         
@@ -564,19 +536,19 @@ class Patient():
         self.address = patient_record[4]
         self.gp = patient_record[5]
 
-        print(f"Patient ID: {patient_record[0]}")
+        print(f"{DISPLAY_INFO}Patient ID: {patient_record[0]}{RESET}")
         self.show_patient_details()
+        print()
             
         while True:
-            delete = input("Delete " 
-                        "this patient? (Y/N): ").lower()
+            delete = input(f"{PATIENT_MENU}Delete this patient? (Y/N): {RESET}").lower()
             
             if not self.validate_yes_no(delete):
-                print("Please enter Y/y or N/n.")
+                print(f"{ERROR}Please enter Y/y or N/n.{RESET}")
                 continue
 
             if delete == "n":
-                print("Patient deletion cancelled.")
+                print(f"{DISPLAY_INFO}Patient deletion cancelled.{RESET}")
                 return
             break
                 
@@ -589,12 +561,10 @@ class Patient():
             conn.commit()
 
         except sqlite3.Error as e:
-            print("Unable to delete " \
-                    "the patient record." \
-                    "Please try again.", e)
+            print(f"{ERROR}Unable to delete the patient record. Please try again.{RESET}", e)
             return
                     
-        print("Patient deleted successfully.")
+        print(f"{DISPLAY_INFO}Patient deleted successfully.{RESET}")
 
 
         
