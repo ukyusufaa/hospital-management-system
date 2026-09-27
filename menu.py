@@ -19,7 +19,7 @@ from colors import(MAIN_MENU_HEADING,ADMIN_MENU,PRACTICE_MENU,
                    PATIENT_MENU,APPOINTMENT_MENU,A_P_MENU,PRESCRIPTION_MENU,
                    PRESCRIPTION_INSTRUCTIONS_MENU,BILLING_MENU,
                    SUB_MENU_HEADING,SUB_SUB_MENU_HEADING,TREE_SUB,TREE_SUB_SUB,
-                   RETURN_GROUP_MENU,RETURN_MAIN_MENU,EXIT,RESET)
+                   RETURN_GROUP_MENU,RETURN_MAIN_MENU,EXIT,ERROR,RESET)
 def menu():
     while True:
         # Create and centre the hospital name using PyFiglet.
@@ -93,8 +93,7 @@ def menu():
             break 
 
         else:
-            print("\nInvalid choice. Please enter " \
-            "a number between 1 and 6.")
+            print(f"{ERROR}Invalid choice. Please enter a number between 1 and 6.{RESET}")
 
             input("Press Enter to try again...")
 
@@ -143,8 +142,7 @@ def hospital_administration():
             break
         
         else:
-            print("\nInvalid choice. Please enter " \
-            "a number between 1 and 6.")
+            print(f"{ERROR}Invalid choice. Please enter a number between 1 and 6.{RESET}")
                         
             input("Press Enter to try again...")
 
@@ -195,8 +193,7 @@ def gp_surgery_management():
             break 
 
         else:
-            print("\nInvalid choice. Please enter " \
-            "a number between 1 and 6.")
+            print(f"{ERROR}Invalid choice. Please enter a number between 1 and 6.{RESET}")
             
             input("Press Enter to try again...")
 
@@ -246,8 +243,7 @@ def gp_management():
             print("Returning to Hospital Administration Menu")
             break 
         else:
-            print("\nInvalid choice. Please enter " \
-            "a number between 1 and 6.")
+            print(f"{ERROR}Invalid choice. Please enter a number between 1 and 6.{RESET}")
             
             input("Press Enter to try again...")
 
@@ -298,8 +294,7 @@ def department_management():
             break
 
         else:
-            print("\nInvalid choice. Please enter " \
-            "a number between 1 and 6.")
+            print(f"{ERROR}Invalid choice. Please enter a number between 1 and 6.{RESET}")
                         
             input("Press Enter to try again...")
 
@@ -350,8 +345,7 @@ def consultant_management():
             break 
 
         else:
-            print("\nInvalid choice. Please enter " \
-            "a number between 1 and 6.")
+            print(f"{ERROR}Invalid choice. Please enter a number between 1 and 6.{RESET}")
             
             input("Press Enter to try again...")
 
@@ -402,8 +396,7 @@ def medication_management():
             break
 
         else:
-            print("\nInvalid choice. Please enter " \
-            "a number between 1 and 6.")
+            print(f"{ERROR}Invalid choice. Please enter a number between 1 and 6.{RESET}")
                         
             input("Press Enter to try again...")
 
@@ -458,8 +451,7 @@ def patient_management():
             break
 
         else:
-            print("\nInvalid choice. Please enter " \
-            "a number between 1 and 6.")
+            print(f"{ERROR}Invalid choice. Please enter a number between 1 and 6.{RESET}")
             
             input("Press Enter to try again...")
 
@@ -513,8 +505,7 @@ def appointment_management():
             break
 
         else:
-            print("\nInvalid choice. Please enter " \
-            "a number between 1 and 6.")
+            print(f"{ERROR}Invalid choice. Please enter a number between 1 and 6.{RESET}")
                         
             input("Press Enter to try again...")
 
@@ -597,8 +588,7 @@ def appointment_patient_menu():
             break
 
         else:
-            print("\nInvalid choice. Please enter " \
-                    "a number between 1 and 9.")
+            print(f"{ERROR}Invalid choice. Please enter a number between 1 and 9.{RESET}")
                                     
             input("Press Enter to try again...")
 
@@ -651,8 +641,7 @@ def prescription_management():
             break
 
         else:
-            print("\nInvalid choice. Please enter " \
-            "a number between 1 and 6.")
+            print(f"{ERROR}Invalid choice. Please enter a number between 1 and 6.{RESET}")
                         
             input("Press Enter to try again...")
 
@@ -706,8 +695,7 @@ def prescription_instructions_management():
             break 
 
         else:
-            print("\nInvalid choice. Please enter " \
-            "a number between 1 and 5.")
+            print(f"{ERROR}Invalid choice. Please enter a number between 1 and 5.{RESET}")
                         
             input("Press Enter to try again...")
 
@@ -755,8 +743,7 @@ def billing_management():
             break 
 
         else:
-            print("\nInvalid choice. Please enter " \
-            "a number between 1 and 5.")
+            print(f"{ERROR}Invalid choice. Please enter a number between 1 and 5.{RESET}")
                         
             input("Press Enter to try again...")
 

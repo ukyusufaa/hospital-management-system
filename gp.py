@@ -84,7 +84,7 @@ class Gp:
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to retrieve the medical practice. " 
-                  f"Please try again.{RESET}", e)
+                  f"Please try again.{e}{RESET}")
             return
 
         surgery_record = cursor.fetchone()
@@ -106,7 +106,7 @@ class Gp:
             conn.commit()
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to save the GP. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to save the GP. Please try again.{e}{RESET}")
             return
             
         print(f"{DISPLAY_INFO}GP created successfully.{RESET}")
@@ -122,7 +122,7 @@ class Gp:
             cursor.execute("SELECT * FROM gp")
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to retrieve GPs. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to retrieve GPs. Please try again.{e}{RESET}")
             return
         
         gp_records = cursor.fetchall()
@@ -164,7 +164,7 @@ class Gp:
             """,(gp_id,))
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to search for the GP. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to search for the GP. Please try again.{e}{RESET}")
             return
         
         gp_record = cursor.fetchone()
@@ -202,7 +202,7 @@ class Gp:
             """,(gp_id,))
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to retrieve the GP. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to retrieve the GP. Please try again.{e}{RESET}")
                 
         gp_record = cursor.fetchone()
 
@@ -286,7 +286,7 @@ class Gp:
             conn.commit()
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to update the GP. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to update the GP. Please try again.{e}{RESET}")
             return
     
         print(f"{DISPLAY_INFO}GP updated successfully.{RESET}")
@@ -313,7 +313,7 @@ class Gp:
             """,(gp_id,))
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to retrieve the GP. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to retrieve the GP. Please try again.{e}{RESET}")
             return
         
         gp_record = cursor.fetchone()
@@ -350,7 +350,7 @@ class Gp:
             conn.commit()
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to delete the GP. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to delete the GP. Please try again.{e}{RESET}")
                     
         print(f"{DISPLAY_INFO}GP sucesssfully deleted.{RESET}")
                     

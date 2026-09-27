@@ -134,7 +134,7 @@ class Patient():
                 or character.isdigit()
                 or character in [".", ",", "'", "-", "/", "&", " "]
                 for character in self.address):
-                    print("Please enter a valid address.")
+                    print(f"{ERROR}Please enter a valid address.{RESET}")
                     continue
 
             if not any(character.isdigit() for character in self.address):
@@ -172,7 +172,7 @@ class Patient():
                 """,(self.gp_id,))
 
             except sqlite3.Error as e:
-                    print(f"{ERROR}Unable to verify the GP record. Please try again.{RESET}",e)
+                    print(f"{ERROR}Unable to verify the GP record. Please try again.{e}{RESET}")
                     return
 
             gp_record = cursor.fetchone()
@@ -197,7 +197,7 @@ class Patient():
             conn.commit()
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to create the patient.{RESET}", e)
+            print(f"{ERROR}Unable to create the patient.{e}{RESET}")
             return
         
         print(f"{DISPLAY_INFO}Patient created successfully.{RESET}")
@@ -214,7 +214,7 @@ class Patient():
             cursor.execute("SELECT * FROM patient")
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to retrieve patient records. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to retrieve patient records. Please try again.{e}{RESET}")
             return
 
         patient_records = cursor.fetchall()
@@ -258,7 +258,7 @@ class Patient():
             """,(patient_id,))
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to search the patient records. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to search the patient records. Please try again.{e}{RESET}")
             return
 
         patient_record = cursor.fetchone()
@@ -299,7 +299,7 @@ class Patient():
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to retrieve the patient record for updating. "
-                  f"Please try again.{RESET}", e)
+                  f"Please try again.{e}{RESET}")
             return
 
         patient_record = cursor.fetchone()
@@ -457,7 +457,7 @@ class Patient():
                 """,(updated_gp_id,))
         
             except sqlite3.Error as e:
-                print(f"{ERROR}Unable to verify the GP record. Please try again.{RESET}",e)
+                print(f"{ERROR}Unable to verify the GP record. Please try again.{e}{RESET}")
                 return
         
             gp_record = cursor.fetchone()
@@ -492,7 +492,7 @@ class Patient():
             conn.commit()
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to update the patient record. Please try again.{RESET}",e)
+            print(f"{ERROR}Unable to update the patient record. Please try again.{e}{RESET}")
             return
 
         print(f"{DISPLAY_INFO}Patient updated successfully.{RESET}")
@@ -520,7 +520,7 @@ class Patient():
 
             except sqlite3.Error as e:
                 print(f"{ERROR}Unable to retrieve the patient record. "
-                      f"Please try again.{RESET}", e)
+                      f"Please try again.{e}{RESET}")
                 return
 
             patient_record = cursor.fetchone()
@@ -561,7 +561,7 @@ class Patient():
             conn.commit()
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to delete the patient record. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to delete the patient record. Please try again.{e}{RESET}")
             return
                     
         print(f"{DISPLAY_INFO}Patient deleted successfully.{RESET}")

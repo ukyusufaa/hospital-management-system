@@ -86,7 +86,7 @@ class Consultant():
             conn.commit()
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to save the consultant. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to save the consultant. Please try again.{e}{RESET}")
             return
 
         print(f"{DISPLAY_INFO}Consultant created successfully.{RESET}")
@@ -105,7 +105,7 @@ class Consultant():
             cursor.execute("SELECT * FROM consultant")
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to retrieve consultants. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to retrieve consultants. Please try again.{e}{RESET}")
             return
         
         consultant_rows = cursor.fetchall()
@@ -146,7 +146,7 @@ class Consultant():
             """,(consultant_id,))
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to search for the consultant. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to search for the consultant. Please try again.{e}{RESET}")
             return
 
         consultant_row = cursor.fetchone()
@@ -185,7 +185,7 @@ class Consultant():
             """,(consultant_id,))
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to retrieve the consultant. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to retrieve the consultant. Please try again.{e}{RESET}")
             return
         
         consultant_row = cursor.fetchone()
@@ -198,7 +198,7 @@ class Consultant():
         self.surname = consultant_row[2]
         self.department_id = consultant_row[3]
 
-        print(f"{ERROR}Consultant ID: {consultant_row[0]}{RESET}")
+        print(f"{DISPLAY_INFO}Consultant ID: {consultant_row[0]}{RESET}")
         print()
 
         self.show_details_consultant()
@@ -222,12 +222,12 @@ class Consultant():
                                        f"first name: {RESET}")
 
             if updated_first_name == "":
-                print(f"{CONSULTANT_MENU}First name is required. "
+                print(f"{ERROR}First name is required. "
                       f"Please enter a first name.{RESET}")
                 continue
 
             if not self.validate_name(updated_first_name):
-                print(f"{CONSULTANT_MENU}Please use letters and spaces only.{RESET}")
+                print(f"{ERROR}Please use letters and spaces only.{RESET}")
                 continue
             break
 
@@ -274,11 +274,11 @@ class Consultant():
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to update the consultant. " 
-                    f"Please try again.{RESET}", e)
+                    f"Please try again.{e}{RESET}")
             return
         
         print()       
-        print("Consultant updated successfully.")
+        print(f"{DISPLAY_INFO}Consultant updated successfully.{RESET}")
             
 
         # Find a consultant, confirm deletion, and remove the record from the database.
@@ -303,7 +303,7 @@ class Consultant():
             """,(consultant_id,))
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to retieve the consultant. Please try again{RESET}", e)
+            print(f"{ERROR}Unable to retieve the consultant. Please try again{e}{RESET}")
             return
         
         consultant_row = cursor.fetchone()
@@ -341,7 +341,7 @@ class Consultant():
             conn.commit()
             
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to delete the consultant. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to delete the consultant. Please try again.{e}{RESET}")
             return
                     
         print(f"{DISPLAY_INFO}Consultant deleted successfully.{RESET}")

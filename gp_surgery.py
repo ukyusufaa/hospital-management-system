@@ -109,7 +109,7 @@ class GpSurgery:
             cursor.execute("SELECT * FROM gp_surgery")
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to retrieve medical practices. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to retrieve medical practices. Please try again.{e}{RESET}")
             return
 
         surgery_rows = cursor.fetchall()
@@ -133,7 +133,7 @@ class GpSurgery:
     def search_gpsurgery(self):
         while True:
             try:
-                surgery_id = int(input("Enter medical practice ID:"))
+                surgery_id = int(input(f"{PRACTICE_MENU}Enter medical practice ID: {RESET}"))
                 if not self.validate_id_input(surgery_id):
                     print(f"{ERROR}Please enter a valid medical practice ID.{RESET}")
                     continue 
@@ -149,7 +149,7 @@ class GpSurgery:
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to search for the medical practice. " 
-                  f"Please try again. {RESET}", e)
+                  f"Please try again. {e}{RESET}")
             return
 
         surgery = cursor.fetchone()
@@ -188,7 +188,7 @@ class GpSurgery:
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to retrieve the medical practice. "
-                  f"Please try again.{RESET}", e)
+                  f"Please try again.{e}{RESET}")
             return
 
         surgery = cursor.fetchone()
@@ -218,7 +218,7 @@ class GpSurgery:
             break
 
         while True:
-            new_surgery_name = input(f"{DISPLAY_INFO}Enter new medical practice name: {RESET}")
+            new_surgery_name = input(f"{PRACTICE_MENU}Enter new medical practice name: {RESET}")
 
             if new_surgery_name == "":
                 print(f"{ERROR}Medical practice name cannot be blank.{RESET}")
@@ -282,7 +282,7 @@ class GpSurgery:
             conn.commit()
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to update the medical practice. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to update the medical practice. Please try again.{e}{RESET}")
             return
             
         print(f"{DISPLAY_INFO}Medical practice updated sucessfully.{ERROR}")
@@ -317,7 +317,7 @@ class GpSurgery:
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to retrieve the medical " 
-                  f"practice. Please try again.{RESET}", e)
+                  f"practice. Please try again.{e}{RESET}")
             return
 
         surgery = cursor.fetchone()
@@ -352,7 +352,7 @@ class GpSurgery:
 
                 except sqlite3.Error as e:
                     print(f"{ERROR}Unable to delete the " 
-                            f"medical practice. Please try again.{RESET}", e)
+                            f"medical practice. Please try again.{e}{RESET}")
                     return
 
                 print(f"{DISPLAY_INFO}Medical practice deleted successfully.{RESET}")

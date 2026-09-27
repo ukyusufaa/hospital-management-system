@@ -7,7 +7,7 @@ class Department():
         self.department_name = department_name
     
     def show_department_details(self):
-        print("-" * 30)
+        print("=" * 30)
         print(f"{DISPLAY_INFO}Department Name:{self.department_name}{RESET}")
         print("-" * 30)
 
@@ -49,7 +49,7 @@ class Department():
             conn.commit()
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to save the department. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to save the department. Please try again.{e}{RESET}")
             return
         
         print(f"{DISPLAY_INFO}Department created successfully.{RESET}")
@@ -68,13 +68,13 @@ class Department():
             cursor.execute("SELECT * FROM department")
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to retrieve departments. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to retrieve departments. Please try again.{e}{RESET}")
             return
 
         departments = cursor.fetchall()
 
         if not departments:
-            print(f"{ERROR}No departments are currently registered.{ERROR}")
+            print(f"{ERROR}No departments are currently registered.{RESET}")
             return
         
         for department in departments:
@@ -106,7 +106,7 @@ class Department():
             """,(department_id,))
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to search for the department. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to search for the department. Please try again.{e}{RESET}")
             return
 
         department = cursor.fetchone()
@@ -143,7 +143,7 @@ class Department():
             """,(department_id,))
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to retrieve the department. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to retrieve the department. Please try again.{e}{RESET}")
             return
 
         department = cursor.fetchone()
@@ -187,7 +187,7 @@ class Department():
                 conn.commit()
 
             except sqlite3.Error as e:
-                print(f"{ERROR}Unable to update the department. Please try again.{RESET}", e)
+                print(f"{ERROR}Unable to update the department. Please try again.{e}{RESET}")
                 return
 
             print(f"{DISPLAY_INFO}Department updated successfully.{RESET}")
@@ -219,7 +219,7 @@ class Department():
             """,(department_id,))
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to retrieve the department. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to retrieve the department. Please try again.{e}{RESET}")
             return
     
         department = cursor.fetchone()
@@ -247,7 +247,7 @@ class Department():
                 conn.commit()
 
             except sqlite3.Error as e:
-                print(f"{ERROR}Unable to delete the department. Please try again.{RESET}", e)
+                print(f"{ERROR}Unable to delete the department. Please try again.{e}{RESET}")
                 return
     
             print(f"{DISPLAY_INFO}Department deleted successfully.{RESET}")

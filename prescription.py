@@ -50,7 +50,7 @@ class Prescription():
             """,(self.appointment_id,))
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to search for the prescription. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to search for the prescription. Please try again.{e}{RESET}")
             return
 
         # Retrieve the prescription, if one exists.
@@ -73,7 +73,7 @@ class Prescription():
             conn.commit()
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to create the prescription.{RESET}", e)
+            print(f"{ERROR}Unable to create the prescription.{e}{RESET}")
             return 
 
         # Retrieve the ID automatically generated for the new prescription.
@@ -93,7 +93,7 @@ class Prescription():
             cursor.execute("SELECT * FROM prescription")
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to display the prescriptions. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to display the prescriptions. Please try again.{e}{RESET}")
             return 
 
         # Retrieve all queried rows.
@@ -134,7 +134,7 @@ class Prescription():
             """,(self.appointment_id,))
     
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to search for the prescription. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to search for the prescription. Please try again.{e}{RESET}")
             return 
 
         # Retrieve the matching prescription, if one exists.
@@ -175,7 +175,7 @@ class Prescription():
             """,(self.appointment_id,))
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to find the prescription. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to find the prescription. Please try again.{e}{RESET}")
             return
         
         prescription_record = cursor.fetchone()

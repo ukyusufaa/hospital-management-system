@@ -83,7 +83,7 @@ class PrescriptionMedication():
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to check the prescription medication relationship. " 
-                  f"Please try again.{RESET}", e)
+                  f"Please try again.{e}{RESET}")
             return
 
         # Check whether a relationship was found.
@@ -109,7 +109,7 @@ class PrescriptionMedication():
             conn.commit()
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to add the regimen. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to add the regimen. Please try again.{e}{RESET}")
             return
 
         print(f"{DISPLAY_INFO}Regimen added successfully.{RESET}")
@@ -124,7 +124,7 @@ class PrescriptionMedication():
             cursor.execute("SELECT * FROM prescription_medication")
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to display regimens. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to display regimens. Please try again.{e}{RESET}")
             return
 
         records = cursor.fetchall()
@@ -183,7 +183,7 @@ class PrescriptionMedication():
                  self.medication_id))
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to search for the regimen.{RESET}", e)
+            print(f"{ERROR}Unable to search for the regimen.{e}{RESET}")
             return 
 
         record = cursor.fetchone()
@@ -238,7 +238,7 @@ class PrescriptionMedication():
             """,(self.medication_id,self.prescription_id))
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to find the regimen. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to find the regimen. Please try again.{e}{RESET}")
             return 
 
         record = cursor.fetchone()
@@ -294,7 +294,7 @@ class PrescriptionMedication():
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to update the regimen instructions. "
-                  f"Please try again.{RESET}", e)
+                  f"Please try again.{e}{RESET}")
             return 
                     
         print(f"{DISPLAY_INFO}Regimen instructions updated successfully.{RESET}")
@@ -341,7 +341,7 @@ class PrescriptionMedication():
                  self.medication_id))
         
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to search for the regimen.{RESET}", e)
+            print(f"{ERROR}Unable to search for the regimen.{e}{RESET}")
             return 
         
         record = cursor.fetchone()
@@ -385,7 +385,7 @@ class PrescriptionMedication():
             conn.commit()
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to delete the prescription. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to delete the prescription. Please try again.{e}{RESET}")
             return
 
         print(f"{DISPLAY_INFO}Prescription medication deleted successfully.{RESET}")

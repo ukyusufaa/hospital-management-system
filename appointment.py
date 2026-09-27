@@ -61,7 +61,7 @@ class Appointment():
 
         except sqlite3.Error as e:
             print()
-            print(f"{ERROR}Unable to find the patient record. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to find the patient record. Please try again {e}{RESET}")
             return
 
         # Retrieve the patient record using fetchone()
@@ -97,7 +97,7 @@ class Appointment():
         except sqlite3.Error as e:
             print()
             print(f"{ERROR}Unable to find the consultant record. " 
-                    f"Please try again.{RESET}", e)
+                    f"Please try again. {e}{RESET}")
             return
         # Retrieve the consultant record using fetchone().          
         consultant_record = cursor.fetchone()
@@ -278,10 +278,10 @@ class Appointment():
 
         except sqlite3.Error as e:
             print()
-            print(f"{ERROR}Unable to book the appointment. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to book the appointment. Please try again.{e}{RESET}")
             return
         
-        print(f"{DISPLAY_INFO}Appointment booked successfully.{ERROR}")
+        print(f"{DISPLAY_INFO}Appointment booked successfully.{RESET}")
 
         # Retrieve the ID automatically generated for the new appointment.
         appointment_id = cursor.lastrowid
@@ -298,7 +298,7 @@ class Appointment():
 
         except sqlite3.Error as e:
             print()
-            print(f"{ERROR}Unable to retrieve appointments. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to retrieve appointments. Please try again.{e}{RESET}")
             return
 
         # Retrieve all appointments records returned by the query.
@@ -348,7 +348,7 @@ class Appointment():
 
         except sqlite3.Error as e:
             print()
-            print(f"{ERROR}Unable to search for the appointment. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to search for the appointment. Please try again.{e}{RESET}")
             return
         
         # Retrieve the matching appointment record.
@@ -394,7 +394,7 @@ class Appointment():
 
         except sqlite3.Error as e:
             print()
-            print(f"{ERROR}Unable to retrieve the appointment. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to retrieve the appointment. Please try again.{e}{RESET}")
             return
 
         # Retrieve the existing appointment record.
@@ -640,7 +640,7 @@ class Appointment():
 
         except sqlite3.Error as e:
             print()
-            print (f"{ERROR}Unable to update the appointment. Please try again.{RESET}", e)
+            print (f"{ERROR}Unable to update the appointment. Please try again.{e}{RESET}")
             return
 
         print(f"{DISPLAY_INFO}Appointment updated successfully.{RESET}")
@@ -670,7 +670,7 @@ class Appointment():
 
         except sqlite3.Error as e:
             print()
-            print(f"{ERROR}Unable to retrieve the appointment. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to retrieve the appointment. Please try again.{e}{RESET}")
             return
 
         # Retrieve the appointment record before deletion
@@ -717,7 +717,7 @@ class Appointment():
 
         except sqlite3.Error as e:
             print()
-            print(f"{ERROR}Unable to delete the appointment. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to delete the appointment. Please try again.{e}{RESET}")
             return
            
         print(f"{DISPLAY_INFO}Appointment deleted successfully.{RESET}")

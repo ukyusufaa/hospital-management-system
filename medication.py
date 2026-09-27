@@ -90,7 +90,7 @@ class Medication():
             conn.commit()
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to save the medication. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to save the medication. Please try again.{e}{RESET}")
             return
 
         print(f"{DISPLAY_INFO}Medication created successfully.{RESET}")
@@ -142,7 +142,7 @@ class Medication():
             """,(medication_id,))
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to search for the medication. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to search for the medication. Please try again.{e}{RESET}")
             return
 
         medication_row = cursor.fetchone()
@@ -179,7 +179,7 @@ class Medication():
             """,(medication_id,))
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to retrieve the medication. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to retrieve the medication. Please try again.{e}{RESET}")
             return
 
         medication_row = cursor.fetchone()
@@ -253,7 +253,7 @@ class Medication():
                 conn.commit()
 
             except sqlite3.Error as e:
-                print(f"{ERROR}Unable to update the medication. Please try again.{RESET}", e)
+                print(f"{ERROR}Unable to update the medication. Please try again.{e}{RESET}")
                 return
                 
             print(f"{DISPLAY_INFO}Medication updated successfully.{RESET}")
@@ -282,7 +282,7 @@ class Medication():
             """,(medication_id,))
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to retrieve the medication. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to retrieve the medication. Please try again.{e}{RESET}")
             return
 
         medication_row = cursor.fetchone()
@@ -311,7 +311,7 @@ class Medication():
                 conn.commit()
 
             except sqlite3.Error as e:
-                print(f"{ERROR}Unable to delete the medication. Please try again.{RESET}", e)
+                print(f"{ERROR}Unable to delete the medication. Please try again.{e}{RESET}")
                 return 
                 
             print(f"{DISPLAY_INFO}Medication deleted successfully.{RESET}")

@@ -25,7 +25,7 @@ class AppointmentPatient():
             """)
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Database Error{RESET}",e)
+            print(f"{ERROR}Database Error{e}{RESET}")
             return 
 
         rows = cursor.fetchall()
@@ -62,7 +62,7 @@ class AppointmentPatient():
             """)
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Database Error{RESET}", e)
+            print(f"{ERROR}Database Error{e}{RESET}")
             return
 
         rows = cursor.fetchall()
@@ -119,7 +119,7 @@ class AppointmentPatient():
             """)
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Database Error{RESET}", e)
+            print(f"{ERROR}Database Error{e}{RESET}")
             return
 
         rows = cursor.fetchall()
@@ -161,7 +161,7 @@ class AppointmentPatient():
             """)
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Database Error{RESET}", e)
+            print(f"{ERROR}Database Error{e}{RESET}")
             return
 
         rows = cursor.fetchall()
@@ -209,7 +209,7 @@ class AppointmentPatient():
             """)
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Database Error{RESET}", e)
+            print(f"{ERROR}Database Error{e}{RESET}")
             return
 
         rows = cursor.fetchall()
@@ -251,7 +251,7 @@ class AppointmentPatient():
         """)
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Database Error{RESET}", e)
+            print(f"{ERROR}Database Error{e}{RESET}")
             return
 
         rows = cursor.fetchall()
@@ -291,7 +291,7 @@ class AppointmentPatient():
             """)
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Database Error{RESET}", e)
+            print(f"{ERROR}Database Error{e}{RESET}")
             return 
 
         rows = cursor.fetchall()
@@ -339,7 +339,7 @@ class AppointmentPatient():
             """)
 
         except sqlite3.Error as e:
-                print(f"{ERROR}Database Error{RESET}", e)
+                print(f"{ERROR}Database Error{e}{RESET}")
                 return
 
         rows = cursor.fetchall()
@@ -348,11 +348,11 @@ class AppointmentPatient():
             (prescription_id,medication_count,
              cost,average) = row
 
-            print(f"{DISPLAY_INFO}Prescription ID: {prescription_id}{ERROR}")
+            print(f"{DISPLAY_INFO}Prescription ID: {prescription_id}{RESET}")
             print("=" *40)
-            print(f"{DISPLAY_INFO}Medication Count: {medication_count}{ERROR}")
-            print(f"{DISPLAY_INFO}Total: {cost}{ERROR}")
-            print(f"{DISPLAY_INFO}Average medication cost: {average}{ERROR}")
+            print(f"{DISPLAY_INFO}Medication Count: {medication_count}{RESET}")
+            print(f"{DISPLAY_INFO}Total: {cost}{RESET}")
+            print(f"{DISPLAY_INFO}Average medication cost: {average}{RESET}")
             print("-" *40)
             print()
 
@@ -376,7 +376,7 @@ class AppointmentPatient():
             """)
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Database Error{RESET}", e)
+            print(f"{ERROR}Database Error{e}{RESET}")
 
         rows = cursor.fetchall()
 

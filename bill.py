@@ -46,7 +46,7 @@ class Bill():
             """, (self.appointment_id,))
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to find the appointment.{RESET}")
+            print(f"{ERROR}Unable to find the appointment.{e}{RESET}")
             return
 
         appointment_record = cursor.fetchone()
@@ -67,7 +67,7 @@ class Bill():
             """,(self.appointment_id,))
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to find the prescription. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to find the prescription. Please try again.{e}{RESET}")
             return 
 
         # Get the one prescription details from the database.
@@ -84,7 +84,7 @@ class Bill():
         # We create the object attribute here using self and store the ID from the database row.
         
         self.prescription_id = prescription_record[0]
-        print(f"{DISPLAY_INFO}Prescription ID: {RESET}", self.prescription_id)
+        print(f"{DISPLAY_INFO}Prescription ID: {self.prescription_id}{RESET}")
         print()
 
         # Find all the medications listed on this one prescription.
@@ -98,7 +98,7 @@ class Bill():
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to retrieve the prescription medications. Please " 
-                    f"try again.{RESET}", e)
+                    f"try again.{e}{RESET}")
             return
 
         # A prescription can contain multiple medications, so fetchall() is used.
@@ -135,7 +135,7 @@ class Bill():
 
             except sqlite3.Error as e:
                 print(f"{ERROR}Unable to retrieve the " 
-                        f"medications. Please try again.{RESET}", e)
+                        f"medications. Please try again.{e}{RESET}")
                 return
 
             # Retrieve all matching medication records.
@@ -147,7 +147,7 @@ class Bill():
         
             # From the medication table show all the medications and their details. 
             # Show medication_id, name, cost of each medication.
-            print(f"{DISPLAY_INFO}Medication{RESET}",medication_rows)
+            print(f"{DISPLAY_INFO}Medication{medication_rows}{RESET}")
 
             # Retrieve row(medication) and its cost at index 2 from the many medication rows.
             # Add each medication cost to the bill total.
@@ -173,7 +173,7 @@ class Bill():
             conn.commit()
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to create the bill. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to create the bill. Please try again.{e}{RESET}")
             return
 
         print(f"{DISPLAY_INFO}Bill created successfully.{RESET}")
@@ -192,7 +192,7 @@ class Bill():
             cursor.execute("SELECT * FROM bill")
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to retrieve bills. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to retrieve bills. Please try again.{e}{RESET}")
             return
 
         bill_rows = cursor.fetchall()
@@ -214,7 +214,7 @@ class Bill():
     def search_bill(self):
         while True:
             try:
-                self.appointment_id = int(input(f"{DISPLAY_INFO}Please enter the " 
+                self.appointment_id = int(input(f"{BILLING_MENU}Please enter the " 
                                                 f"Appointment ID: {RESET}"))
 
                 if not self.validate_login_id(self.appointment_id):
@@ -234,7 +234,7 @@ class Bill():
             """,(self.appointment_id,))
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to search for the bill. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to search for the bill. Please try again.{e}{RESET}")
             return
 
         bill_row = cursor.fetchone()
@@ -258,8 +258,8 @@ class Bill():
     def bill_update(self):
         while True:
             try:
-                self.appointment_id = int(input(f"{DISPLAY_INFO}Please enter " 
-                                                f"the appointment ID:"))
+                self.appointment_id = int(input(f"{BILLING_MENU}Please enter " 
+                                                f"the appointment ID: {RESET}"))
                 if not self.validate_login_id(self.appointment_id):
                     print(f"{ERROR}Please enter a valid appointment ID.{RESET}")
                     continue
@@ -277,7 +277,7 @@ class Bill():
             """,(self.appointment_id,))
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to retrieve the bill. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to retrieve the bill. Please try again.{e}{RESET}")
             return
 
         bill_row = cursor.fetchone()
@@ -322,7 +322,7 @@ class Bill():
             conn.commit()
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to update the bill. Please try again.{RESET}", e)
+            print(f"{ERROR}Unable to update the bill. Please try again.{e}{RESET}")
             return
 
         print(f"{DISPLAY_INFO}Bill payment status updated successfully.{RESET}")
