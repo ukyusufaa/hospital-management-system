@@ -1,10 +1,10 @@
 import sqlite3
-from database import conn, cursor
 from colors import DISPLAY_INFO,CONSULTANT_MENU,ERROR,RESET
 
 class Consultant():
-    def __init__(self,first_name = None,surname = None,
+    def __init__(self,database,first_name = None,surname = None,
                  department_id = None):
+        self.database = database
         self.first_name = first_name
         self.surname = surname
         self.department_id = department_id
@@ -75,7 +75,7 @@ class Consultant():
         
         try:
             # Insert the validated consultant details into the database.
-            cursor.execute("""
+            self.database.cursor.execute("""
                 INSERT INTO consultant(
                     first_name,
                     surname,
@@ -83,7 +83,7 @@ class Consultant():
                 VALUES(?,?,?)
             """,(self.first_name,self.surname,self.department_id))
 
-            conn.commit()
+            self.database.connection.commit()
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to save the consultant. Please try again.{e}{RESET}")
@@ -92,7 +92,7 @@ class Consultant():
         print(f"{DISPLAY_INFO}Consultant created successfully.{RESET}")
         print()
 
-        consultant_id = cursor.lastrowid
+        consultant_id = self.database.cursor.lastrowid
         print(f"{DISPLAY_INFO}Consultant ID: {consultant_id}{RESET}")
         print()
 
@@ -102,13 +102,13 @@ class Consultant():
     def display_all_consultants(self):
         # Retrieve all consultants from the database.
         try:
-            cursor.execute("SELECT * FROM consultant")
+            self.database.cursor.execute("SELECT * FROM consultant")
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to retrieve consultants. Please try again.{e}{RESET}")
             return
         
-        consultant_rows = cursor.fetchall()
+        consultant_rows = self.database.cursor.fetchall()
 
         if not consultant_rows:
             print(f"{ERROR}No consultants are currently registered.{RESET}")
@@ -140,7 +140,7 @@ class Consultant():
                 print(f"{ERROR}Consultant ID must contain numbers only.{RESET}")
                 continue 
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM consultant
                 WHERE consultant_id = ?
             """,(consultant_id,))
@@ -149,7 +149,7 @@ class Consultant():
             print(f"{ERROR}Unable to search for the consultant. Please try again.{e}{RESET}")
             return
 
-        consultant_row = cursor.fetchone()
+        consultant_row = self.database.cursor.fetchone()
         if not consultant_row:
             print(f"{ERROR}No consultant was found with that ID.{RESET}")
             return
@@ -179,7 +179,7 @@ class Consultant():
                 print(f"{ERROR}Consultant ID must contain numbers only.{RESET}")
                 continue 
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM consultant
                 WHERE consultant_id = ?
             """,(consultant_id,))
@@ -188,7 +188,7 @@ class Consultant():
             print(f"{ERROR}Unable to retrieve the consultant. Please try again.{e}{RESET}")
             return
         
-        consultant_row = cursor.fetchone()
+        consultant_row = self.database.cursor.fetchone()
 
         if not consultant_row:
             print(f"{ERROR}No consultant was found with that ID.{RESET}")
@@ -262,7 +262,7 @@ class Consultant():
         self.department_id = updated_department_id
 
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 UPDATE consultant
                 SET first_name = ?,
                     surname = ?,
@@ -270,7 +270,7 @@ class Consultant():
                 WHERE consultant_id = ?
             """,(self.first_name,self.surname,self.department_id, consultant_id))
 
-            conn.commit()
+            self.database.connection.commit()
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to update the consultant. " 
@@ -297,7 +297,7 @@ class Consultant():
                         f"numbers only.{RESET}")
                 continue 
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM consultant
                 WHERE consultant_id = ?
             """,(consultant_id,))
@@ -306,7 +306,7 @@ class Consultant():
             print(f"{ERROR}Unable to retieve the consultant. Please try again{e}{RESET}")
             return
         
-        consultant_row = cursor.fetchone()
+        consultant_row = self.database.cursor.fetchone()
         if not consultant_row:
             print(f"{ERROR}No consultant was found with that ID.{RESET}")
             return
@@ -333,12 +333,12 @@ class Consultant():
             break
 
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 DELETE FROM consultant
                 WHERE consultant_id = ?
             """,(consultant_id,))
 
-            conn.commit()
+            self.database.connection.commit()
             
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to delete the consultant. Please try again.{e}{RESET}")

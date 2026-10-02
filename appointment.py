@@ -5,16 +5,13 @@ import calendar
 # Import datetime for appointment date validation.
 from datetime import datetime
 
-# Import the shared database connection and cursor from database.py module.
-from database import conn, cursor
-
 from colors import DISPLAY_INFO,APPOINTMENT_MENU,ERROR,RESET
 
 class Appointment():
 
-    def __init__(self, patient_id = None, appointment_date = None, 
+    def __init__(self, database,patient_id = None, appointment_date = None, 
                  appointment_time = None, consultant_id = None):
-        
+        self.database = database
         self.patient_id = patient_id
         self.appointment_date = appointment_date
         self.appointment_time = appointment_time
@@ -54,7 +51,7 @@ class Appointment():
                 continue
         try:
         # Find the patient associated with the appointment
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM patient
                 WHERE patient_id = ?
             """,(self.patient_id,))
@@ -65,7 +62,7 @@ class Appointment():
             return
 
         # Retrieve the patient record using fetchone()
-        patient_record = cursor.fetchone()
+        patient_record = self.database.cursor.fetchone()
 
         if not patient_record:
             print()
@@ -89,7 +86,7 @@ class Appointment():
                 continue
         try:
         # Find the consultant ID associated with the appointment.
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM consultant
                 WHERE consultant_id = ?
             """,(self.consultant_id,))
@@ -100,7 +97,7 @@ class Appointment():
                     f"Please try again. {e}{RESET}")
             return
         # Retrieve the consultant record using fetchone().          
-        consultant_record = cursor.fetchone()
+        consultant_record = self.database.cursor.fetchone()
 
         if not consultant_record:
             print()
@@ -207,7 +204,7 @@ class Appointment():
         
              # Check whether the consultant is already booked at this date and time.
             try:
-                cursor.execute("""
+                self.database.cursor.execute("""
                     SELECT * FROM appointment
                     WHERE consultant_id = ? 
                     AND appointment_date = ? 
@@ -223,7 +220,7 @@ class Appointment():
                     return
         
             # Retrieve any matching appointment.
-            matching_appointment1 = cursor.fetchone()
+            matching_appointment1 = self.database.cursor.fetchone()
 
             if matching_appointment1:
                 print()
@@ -232,7 +229,7 @@ class Appointment():
 
             # Check whether the patient is already booked
             try:
-                cursor.execute("""
+                self.database.cursor.execute("""
                     SELECT * FROM appointment
                     WHERE patient_id = ?
                     AND appointment_date = ?
@@ -247,7 +244,7 @@ class Appointment():
                         f"availabilty. Please try again.{RESET}")
                 return
 
-            matching_appointment2 = cursor.fetchone()
+            matching_appointment2 = self.database.cursor.fetchone()
 
             if matching_appointment2:
                 print()
@@ -261,7 +258,7 @@ class Appointment():
 
         try:
         # Insert the new appointment into the database.
-            cursor.execute("""
+            self.database.cursor.execute("""
                 INSERT INTO appointment(
                     patient_id,
                     consultant_id,
@@ -274,7 +271,7 @@ class Appointment():
                     self.appointment_date,
                     self.appointment_time))
         # Save the new appointment into the database
-            conn.commit()
+            self.database.connection.commit()
 
         except sqlite3.Error as e:
             print()
@@ -284,7 +281,7 @@ class Appointment():
         print(f"{DISPLAY_INFO}Appointment booked successfully.{RESET}")
 
         # Retrieve the ID automatically generated for the new appointment.
-        appointment_id = cursor.lastrowid
+        appointment_id = self.database.cursor.lastrowid
         
         print(f"{DISPLAY_INFO}Appointment ID:{appointment_id}{RESET}")
 
@@ -294,7 +291,7 @@ class Appointment():
     def display_all_appointments(self):
         try:
         # Retrieve all appointments from the database.
-            cursor.execute("SELECT * FROM appointment")
+            self.database.cursor.execute("SELECT * FROM appointment")
 
         except sqlite3.Error as e:
             print()
@@ -302,7 +299,7 @@ class Appointment():
             return
 
         # Retrieve all appointments records returned by the query.
-        appointment_records = cursor.fetchall()
+        appointment_records = self.database.cursor.fetchall()
 
         if not appointment_records:
             print()
@@ -341,7 +338,7 @@ class Appointment():
 
         try:
         # Search for the appointment ID using its primary key.
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM appointment
                 WHERE appointment_id = ?
             """,(appointment_id,))
@@ -352,7 +349,7 @@ class Appointment():
             return
         
         # Retrieve the matching appointment record.
-        appointment_record = cursor.fetchone()
+        appointment_record = self.database.cursor.fetchone()
 
         if not appointment_record:
             print()
@@ -387,7 +384,7 @@ class Appointment():
 
         try:
         # Find the appointment that will be updated.
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM appointment
                 WHERE appointment_id = ?
             """,(appointment_id,))
@@ -398,7 +395,7 @@ class Appointment():
             return
 
         # Retrieve the existing appointment record.
-        appointment_record = cursor.fetchone()
+        appointment_record = self.database.cursor.fetchone()
 
         if not appointment_record:
             print()
@@ -566,7 +563,7 @@ class Appointment():
 
             # Check that the new consultant, date and time are available.
             try:
-                cursor.execute("""
+                self.database.cursor.execute("""
                     SELECT * FROM appointment
                     WHERE consultant_id = ?
                     AND appointment_date = ?
@@ -583,7 +580,7 @@ class Appointment():
                         f"availability. Please try again.{RESET}", e)
                 return
 
-            matching_appointment1 = cursor.fetchone()
+            matching_appointment1 = self.database.cursor.fetchone()
 
             if matching_appointment1:
                 print()
@@ -592,7 +589,7 @@ class Appointment():
 
             # Check whether the patient is already booked
             try:
-                cursor.execute("""
+                self.database.cursor.execute("""
                     SELECT * FROM appointment
                     WHERE patient_id = ?
                     AND appointment_date = ?
@@ -609,7 +606,7 @@ class Appointment():
                         f"availabilty. Please try again.{RESET}",e)
                 return
 
-            matching_appointment2 = cursor.fetchone()
+            matching_appointment2 = self.database.cursor.fetchone()
 
             if matching_appointment2:
                 print()
@@ -622,7 +619,7 @@ class Appointment():
         print(f"{DISPLAY_INFO}The appointment slot is available.{RESET}")  
         try:
         # Update the appointment record in the database.
-            cursor.execute("""
+            self.database.cursor.execute("""
                 UPDATE appointment
                 SET patient_id = ?,
                     appointment_date = ?,
@@ -636,7 +633,7 @@ class Appointment():
                     appointment_id))
                         
         # Save the updated appointment to the database
-            conn.commit()
+            self.database.connection.commit()
 
         except sqlite3.Error as e:
             print()
@@ -663,7 +660,7 @@ class Appointment():
                 print(f"{ERROR}Please enter the appointment ID using numbers only.{RESET}")
         try:
         # Find the appointment that will be deleted.
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM appointment
                 WHERE appointment_id = ?
             """,(appointment_id,))
@@ -674,7 +671,7 @@ class Appointment():
             return
 
         # Retrieve the appointment record before deletion
-        appointment_record = cursor.fetchone()
+        appointment_record = self.database.cursor.fetchone()
 
         if not appointment_record:
             print()
@@ -707,13 +704,13 @@ class Appointment():
 
         # Delete the appointment from the database         
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 DELETE FROM appointment
                 WHERE appointment_id = ?
             """,(appointment_id,))
 
         # Save the deletion to the database.
-            conn.commit()
+            self.database.connection.commit()
 
         except sqlite3.Error as e:
             print()

@@ -1,9 +1,9 @@
 import sqlite3
-from database import conn, cursor
 from colors import DISPLAY_INFO,MEDICATION_MENU,ERROR,RESET
 
 class Medication():
-    def __init__(self,medication_name = None, cost = None):
+    def __init__(self, database,medication_name = None, cost = None):
+        self.database = database
         self.medication_name = medication_name
         self.cost = cost
     
@@ -80,14 +80,14 @@ class Medication():
 
         try:
             # Insert the validated medication details into the database.
-            cursor.execute("""
+            self.database.cursor.execute("""
                 INSERT INTO medication(
                     medication_name,
                     cost)
                 VALUES(?,?)
             """,(self.medication_name, self.cost))
 
-            conn.commit()
+            self.database.connection.commit()
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to save the medication. Please try again.{e}{RESET}")
@@ -95,16 +95,16 @@ class Medication():
 
         print(f"{DISPLAY_INFO}Medication created successfully.{RESET}")
 
-        medication_id = cursor.lastrowid
+        medication_id = self.database.cursor.lastrowid
         print(f"{DISPLAY_INFO}Medication ID: {medication_id}{RESET}")
         self.show_medication_details()
 
 
         # Retrieve and display all medications stored in the database.
     def display_all_medications(self):
-        cursor.execute("SELECT * FROM medication")
+        self.database.cursor.execute("SELECT * FROM medication")
 
-        medication_rows = cursor.fetchall()
+        medication_rows = self.database.cursor.fetchall()
 
         if not medication_rows :
             print(f"{ERROR}No medications are currently registered.{RESET}")
@@ -136,7 +136,7 @@ class Medication():
                 print(f"{ERROR}Please enter the medication ID using numbers only.{RESET}")
                 continue 
         try: 
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM medication
                 WHERE medication_id = ?
             """,(medication_id,))
@@ -145,7 +145,7 @@ class Medication():
             print(f"{ERROR}Unable to search for the medication. Please try again.{e}{RESET}")
             return
 
-        medication_row = cursor.fetchone()
+        medication_row = self.database.cursor.fetchone()
 
         if not medication_row:
             print(f"{ERROR}No medication was found with that ID.{RESET}")
@@ -173,7 +173,7 @@ class Medication():
                 print(f"{ERROR}Please enter the medication ID using numbers only.{RESET}")
                 continue 
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
             SELECT * FROM medication
             WHERE medication_id = ?
             """,(medication_id,))
@@ -182,7 +182,7 @@ class Medication():
             print(f"{ERROR}Unable to retrieve the medication. Please try again.{e}{RESET}")
             return
 
-        medication_row = cursor.fetchone()
+        medication_row = self.database.cursor.fetchone()
 
         if not medication_row:
             print(f"{ERROR}No medication was found with that ID.{RESET}")
@@ -243,14 +243,14 @@ class Medication():
             self.cost = new_cost
 
             try:
-                cursor.execute("""
+                self.database.cursor.execute("""
                     UPDATE medication
                     SET medication_name = ?,
                         cost = ?
                     WHERE medication_id = ?
                 """,(self.medication_name, self.cost, medication_id))
 
-                conn.commit()
+                self.database.connection.commit()
 
             except sqlite3.Error as e:
                 print(f"{ERROR}Unable to update the medication. Please try again.{e}{RESET}")
@@ -276,7 +276,7 @@ class Medication():
                 print(f"{ERROR}Please enter the medication ID using numbers only.{RESET}")
                 continue 
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM medication
                 WHERE medication_id = ?
             """,(medication_id,))
@@ -285,7 +285,7 @@ class Medication():
             print(f"{ERROR}Unable to retrieve the medication. Please try again.{e}{RESET}")
             return
 
-        medication_row = cursor.fetchone()
+        medication_row = self.database.cursor.fetchone()
 
         if not medication_row:
             print(f"{ERROR}No medication was found with that ID.{RESET}")
@@ -303,12 +303,12 @@ class Medication():
         if delete == "y":
 
             try:
-                cursor.execute("""
+                self.database.cursor.execute("""
                     DELETE FROM medication
                     WHERE medication_id = ?
                 """,(medication_id,))
 
-                conn.commit()
+                self.datbaase.connection.commit()
 
             except sqlite3.Error as e:
                 print(f"{ERROR}Unable to delete the medication. Please try again.{e}{RESET}")

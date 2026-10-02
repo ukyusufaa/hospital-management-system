@@ -1,9 +1,9 @@
 import sqlite3
-from database import conn, cursor
 from colors import DISPLAY_INFO,DEPARTMENT_MENU,ERROR,RESET
 
 class Department():
-    def __init__(self, department_name = None):
+    def __init__(self,database,department_name = None):
+        self.database = database
         self.department_name = department_name
     
     def show_department_details(self):
@@ -40,13 +40,13 @@ class Department():
 
         try:
             # Insert the validated department into the database.
-            cursor.execute("""
+            self.database.cursor.execute("""
                 INSERT INTO department(
                        department_name)
                 VALUES(?)             
             """,(self.department_name,))
 
-            conn.commit()
+            self.database.connection.commit()
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to save the department. Please try again.{e}{RESET}")
@@ -55,7 +55,7 @@ class Department():
         print(f"{DISPLAY_INFO}Department created successfully.{RESET}")
         print()
 
-        department_id = cursor.lastrowid
+        department_id = self.database.cursor.lastrowid
         print(f"{DISPLAY_INFO}Department ID: {department_id}{RESET}")
         print()
 
@@ -65,13 +65,13 @@ class Department():
         # Retrieve and display all departments stored in the database.
     def display_all_departments(self):
         try:
-            cursor.execute("SELECT * FROM department")
+            self.datbase.cursor.execute("SELECT * FROM department")
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to retrieve departments. Please try again.{e}{RESET}")
             return
 
-        departments = cursor.fetchall()
+        departments = self.database.cursor.fetchall()
 
         if not departments:
             print(f"{ERROR}No departments are currently registered.{RESET}")
@@ -100,7 +100,7 @@ class Department():
                 return
 
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM department
                 WHERE department_id = ?
             """,(department_id,))
@@ -109,7 +109,7 @@ class Department():
             print(f"{ERROR}Unable to search for the department. Please try again.{e}{RESET}")
             return
 
-        department = cursor.fetchone()
+        department = self.database.cursor.fetchone()
 
         if not department:
             print (f"{ERROR}No department was found with that ID.{RESET}")
@@ -137,7 +137,7 @@ class Department():
                 continue 
 
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM department
                 WHERE department_id = ?
             """,(department_id,))
@@ -146,7 +146,7 @@ class Department():
             print(f"{ERROR}Unable to retrieve the department. Please try again.{e}{RESET}")
             return
 
-        department = cursor.fetchone()
+        department = self.database.cursor.fetchone()
 
         if not department:
             print(f"{ERROR}No department was found with that ID.{RESET}")
@@ -178,13 +178,13 @@ class Department():
             self.department_name = new_dept_name
 
             try:
-                cursor.execute("""
+                self.database.cursor.execute("""
                     UPDATE department
                     SET department_name = ?
                     WHERE department_id = ?
                 """,(self.department_name,department_id))
 
-                conn.commit()
+                self.database.connection.commit()
 
             except sqlite3.Error as e:
                 print(f"{ERROR}Unable to update the department. Please try again.{e}{RESET}")
@@ -213,7 +213,7 @@ class Department():
                 continue
 
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM department
                 WHERE department_id = ?
             """,(department_id,))
@@ -222,7 +222,7 @@ class Department():
             print(f"{ERROR}Unable to retrieve the department. Please try again.{e}{RESET}")
             return
     
-        department = cursor.fetchone()
+        department = self.database.cursor.fetchone()
 
         if not department:
             print(f"{ERROR}No department was found with that ID.{RESET}")
@@ -239,12 +239,12 @@ class Department():
         
         if delete == "y":
             try:
-                cursor.execute("""
+                self.database.cursor.execute("""
                     DELETE FROM department
                     WHERE department_id = ?
                 """,(department_id,))
 
-                conn.commit()
+                self.database.connection.commit()
 
             except sqlite3.Error as e:
                 print(f"{ERROR}Unable to delete the department. Please try again.{e}{RESET}")

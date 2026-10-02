@@ -1,14 +1,11 @@
 # Import SQLite to work with the database
 import sqlite3
-
-# Import the shared database connection and cursor from database.py module.
-from database import conn, cursor
-
 from colors import DISPLAY_INFO,PRESCRIPTION_MENU,ERROR,RESET
 
 class Prescription():
         # Store the appointment associated with the prescription.
-    def __init__(self,appointment_id = None):
+    def __init__(self,database,appointment_id = None):
+        self.database = database
         self.appointment_id = appointment_id
 
         # Display the prescription details associated with the appointment.
@@ -44,7 +41,7 @@ class Prescription():
 
         # Check whether a prescription already exists.
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
             SELECT * FROM prescription
                 WHERE appointment_id = ?
             """,(self.appointment_id,))
@@ -54,7 +51,7 @@ class Prescription():
             return
 
         # Retrieve the prescription, if one exists.
-        prescription_record = cursor.fetchone()
+        prescription_record = self.database.cursor.fetchone()
 
         # Prevent duplicate prescriptions from being created for the same appointment.
         if prescription_record:
@@ -63,21 +60,21 @@ class Prescription():
         
         # Create the prescription.
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 INSERT INTO prescription(
                 appointment_id)
                 VALUES(?)
             """,(self.appointment_id,))
 
         # Save the new prescription to the database.
-            conn.commit()
+            self.database.connection.commit()
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to create the prescription.{e}{RESET}")
             return 
 
         # Retrieve the ID automatically generated for the new prescription.
-        prescription_id = cursor.lastrowid
+        prescription_id = self.database.cursor.lastrowid
 
         print(f"{DISPLAY_INFO}Prescription created successfully.{RESET}")
         print()
@@ -90,14 +87,14 @@ class Prescription():
     def display_all_prescriptions(self):
         # Retrieve all prescriptions from the database.
         try:
-            cursor.execute("SELECT * FROM prescription")
+            self.database.cursor.execute("SELECT * FROM prescription")
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to display the prescriptions. Please try again.{e}{RESET}")
             return 
 
         # Retrieve all queried rows.
-        prescription_records = cursor.fetchall()
+        prescription_records = self.database.cursor.fetchall()
 
         if not prescription_records:
             print(f"{ERROR}No prescriptions are currently available.{RESET}")
@@ -128,7 +125,7 @@ class Prescription():
 
         # Search for the prescription linked to the appointment.
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM prescription
                 WHERE appointment_id = ?
             """,(self.appointment_id,))
@@ -138,7 +135,7 @@ class Prescription():
             return 
 
         # Retrieve the matching prescription, if one exists.
-        prescription_record = cursor.fetchone()
+        prescription_record = self.database.cursor.fetchone()
 
         if not prescription_record:
         # Handle the case where no prescription exists for the appointment.
@@ -169,7 +166,7 @@ class Prescription():
 
          # Locate the prescription before attempting deletion.
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM prescription
                 WHERE appointment_id = ?
             """,(self.appointment_id,))
@@ -178,7 +175,7 @@ class Prescription():
             print(f"{ERROR}Unable to find the prescription. Please try again.{e}{RESET}")
             return
         
-        prescription_record = cursor.fetchone()
+        prescription_record = self.database.cursor.fetchone()
 
         # Stop the deletion if no prescription exists for the appointment.
         if not prescription_record:
@@ -208,13 +205,13 @@ class Prescription():
 
         # Delete the prescription associated with the specified appointment.
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 DELETE FROM prescription
                 WHERE appointment_id = ?
             """,(self.appointment_id,))
 
         # Save the deletion to the database.
-            conn.commit()
+            self.database.connection.commit()
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to delete the prescription.{RESET}", e)

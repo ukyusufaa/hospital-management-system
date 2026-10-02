@@ -1,14 +1,12 @@
 import sqlite3
 import calendar 
-from datetime import datetime
-from database import conn, cursor
 from colors import DISPLAY_INFO,PATIENT_MENU,ERROR,RESET
 
-
 class Patient():
-    def __init__(self, first_name = None, surname = None, 
+    def __init__(self, database, first_name = None, surname = None, 
                  dob = None, address = None, 
                  gp_id = None):
+        self.database = database
         self.first_name = first_name
         self.surname = surname
         self.dob = dob
@@ -26,6 +24,8 @@ class Patient():
 
         # Validate patient names using letters and spaces.
     def validation_name(self,name):
+        if not name.strip():
+            return False
         for letter in name:
             if not letter.isalpha() and not letter == " ":
                 return False
@@ -75,7 +75,7 @@ class Patient():
             self.dob = input(f"{PATIENT_MENU}Enter date of birth (DD/MM/YYYY): {RESET}")
 
             if len(self.dob) != 10:
-                print(f"{ERROR}Date of birth must be DD/MM/YYYYY.{RESET}")
+                print(f"{ERROR}Date of birth must be DD/MM/YYYY.{RESET}")
                 continue
 
             if self.dob[2] != "/" or self.dob[5] != "/":
@@ -133,13 +133,15 @@ class Patient():
                 character.isalpha()
                 or character.isdigit()
                 or character in [".", ",", "'", "-", "/", "&", " "]
-                for character in self.address):
+                    for character in self.address):
                     print(f"{ERROR}Please enter a valid address.{RESET}")
                     continue
 
-            if not any(character.isdigit() for character in self.address):
-                print(f"{ERROR}Address must contain a house or building number.{RESET}")
-                continue
+            if not any(
+                character.isdigit() 
+                    for character in self.address):
+                    print(f"{ERROR}Address must contain a house or building number.{RESET}")
+                    continue
             break
     
         while True:
@@ -160,13 +162,12 @@ class Patient():
                     print(f"{ERROR}Please use a valid GP ID.{RESET}")
                     continue
                 
-
             except ValueError:
                 print(f"{ERROR}Please enter the GP ID using numbers only.{RESET}")
                 continue 
 
             try:
-                cursor.execute("""
+                self.database.cursor.execute("""
                 SELECT * FROM gp
                     WHERE gp_id = ?
                 """,(self.gp_id,))
@@ -175,7 +176,7 @@ class Patient():
                     print(f"{ERROR}Unable to verify the GP record. Please try again.{e}{RESET}")
                     return
 
-            gp_record = cursor.fetchone()
+            gp_record = self.database.cursor.fetchone()
 
             if not gp_record:
                 print(f"{ERROR}No GP was found with that ID.{RESET}")
@@ -184,7 +185,7 @@ class Patient():
 
         try:
         # Insert the validated patient details into the database.
-            cursor.execute("""
+            self.database.cursor.execute("""
             INSERT INTO patient(
                 first_name,
                 surname,
@@ -194,7 +195,7 @@ class Patient():
             VALUES(?,?,?,?,?)
             """,(self.first_name,self.surname,self.dob,self.address,self.gp_id))
 
-            conn.commit()
+            self.database.connection.commit()
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to create the patient.{e}{RESET}")
@@ -203,7 +204,7 @@ class Patient():
         print(f"{DISPLAY_INFO}Patient created successfully.{RESET}")
         print()
 
-        patient_id = cursor.lastrowid
+        patient_id = self.database.cursor.lastrowid
         print(f"{DISPLAY_INFO}Patient ID: {patient_id}{RESET}")
         self.show_patient_details()
         
@@ -211,13 +212,13 @@ class Patient():
         # Retrieve and display all registered patients.
     def display_all_patients(self):
         try:
-            cursor.execute("SELECT * FROM patient")
+            self.database.cursor.execute("SELECT * FROM patient")
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to retrieve patient records. Please try again.{e}{RESET}")
             return
 
-        patient_records = cursor.fetchall()
+        patient_records = self.database.cursor.fetchall()
 
         if not patient_records:
             print(f"{ERROR}No patients are currently registered.{RESET}")
@@ -252,7 +253,7 @@ class Patient():
                 print(f"{ERROR}Please enter the patient ID using numbers only.{RESET}")
                 continue
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM patient
                 WHERE patient_id = ?
             """,(patient_id,))
@@ -261,7 +262,7 @@ class Patient():
             print(f"{ERROR}Unable to search the patient records. Please try again.{e}{RESET}")
             return
 
-        patient_record = cursor.fetchone()
+        patient_record = self.database.cursor.fetchone()
 
         if not patient_record:
             print(f"{ERROR}No patient was found with that ID.{RESET}")
@@ -271,7 +272,7 @@ class Patient():
         self.surname = patient_record[2]
         self.dob = patient_record[3]
         self.address = patient_record[4]
-        self.gp = patient_record[5]
+        self.gp_id = patient_record[5]
 
         print(f"{DISPLAY_INFO}Patient ID: {patient_record[0]}{RESET}")
         self.show_patient_details()
@@ -292,7 +293,7 @@ class Patient():
                 print(f"{ERROR}Please enter the patient ID using numbers only.{RESET}")
                 continue
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM patient
                 WHERE patient_id = ?
             """,(patient_id,))
@@ -302,7 +303,7 @@ class Patient():
                   f"Please try again.{e}{RESET}")
             return
 
-        patient_record = cursor.fetchone()
+        patient_record = self.database.cursor.fetchone()
 
         if not patient_record:
             print(f"{ERROR}No patient was found with that ID.{RESET}")
@@ -320,7 +321,7 @@ class Patient():
 
         while True:
             update = input(f"{PATIENT_MENU}Update " 
-                           f"this patients details? (Y/N): {RESET}").lower()
+                           f"the patient details? (Y/N): {RESET}").lower()
             
             if not self.validate_yes_no(update):
                 print(f"{ERROR}Please enter Y/y or N/n.{RESET}")
@@ -451,7 +452,7 @@ class Patient():
                 continue 
         
             try:
-                cursor.execute("""
+                self.database.cursor.execute("""
                     SELECT * FROM gp
                     WHERE gp_id = ?
                 """,(updated_gp_id,))
@@ -460,7 +461,7 @@ class Patient():
                 print(f"{ERROR}Unable to verify the GP record. Please try again.{e}{RESET}")
                 return
         
-            gp_record = cursor.fetchone()
+            gp_record = self.database.cursor.fetchone()
         
             if not gp_record:
                 print(f"{ERROR}No GP was found with that ID.{RESET}")
@@ -474,14 +475,14 @@ class Patient():
         self.gp_id = updated_gp_id
 
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 UPDATE patient
                 SET first_name = ?,
                     surname = ?,
                     dob = ?,
                     address = ?,
                     gp_id = ?
-                WHERE patient_id =?
+                WHERE patient_id = ?
             """,(self.first_name,
                 self.surname,
                 self.dob,
@@ -489,7 +490,7 @@ class Patient():
                 self.gp_id,
                 patient_id))
                 
-            conn.commit()
+            self.database.connection.commit()
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to update the patient record. Please try again.{e}{RESET}")
@@ -513,7 +514,7 @@ class Patient():
                 continue
 
             try:
-                cursor.execute("""
+                self.database.cursor.execute("""
                     SELECT * FROM patient
                     WHERE patient_id = ?
             """,(patient_id,))
@@ -523,7 +524,7 @@ class Patient():
                       f"Please try again.{e}{RESET}")
                 return
 
-            patient_record = cursor.fetchone()
+            patient_record = self.database.cursor.fetchone()
 
             if not patient_record:
                 print(f"{ERROR}No patient was found with that ID.{RESET}")
@@ -534,7 +535,7 @@ class Patient():
         self.surname = patient_record[2]
         self.dob = patient_record[3]
         self.address = patient_record[4]
-        self.gp = patient_record[5]
+        self.gp_id = patient_record[5]
 
         print(f"{DISPLAY_INFO}Patient ID: {patient_record[0]}{RESET}")
         self.show_patient_details()
@@ -553,12 +554,12 @@ class Patient():
             break
                 
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 DELETE FROM patient
                 WHERE patient_id = ?
             """,(patient_id,))
 
-            conn.commit()
+            self.database.connection.commit()
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to delete the patient record. Please try again.{e}{RESET}")

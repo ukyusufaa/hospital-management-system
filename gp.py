@@ -1,11 +1,11 @@
 import sqlite3
-from database import conn, cursor
 from colors import DISPLAY_INFO,GP_MENU,ERROR,RESET
 
 class Gp:
 
-    def __init__(self, first_name = None, surname = None, 
+    def __init__(self, database,first_name = None, surname = None, 
                  surgery_id = None):
+        self.database = database
         self.first_name = first_name
         self.surname = surname
         self.surgery_id = surgery_id
@@ -77,7 +77,7 @@ class Gp:
 
         try:
             # Confirm that the selected medical practice exists before creating the GP.
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM gp_surgery
                 WHERE surgery_id = ?
             """,(self.surgery_id,))
@@ -87,7 +87,7 @@ class Gp:
                   f"Please try again.{e}{RESET}")
             return
 
-        surgery_record = cursor.fetchone()
+        surgery_record = self.database.cursor.fetchone()
 
         if not surgery_record:
             print(f"{ERROR}No medical practice was found with that ID.{RESET}")
@@ -95,7 +95,7 @@ class Gp:
         
         try:
         # Insert the validated GP details into the database.
-            cursor.execute("""
+            self.database.cursor.execute("""
                 INSERT INTO gp 
                     (first_name, 
                     surname, 
@@ -103,7 +103,7 @@ class Gp:
                 VALUES (?,?,?)
             """, (self.first_name, self.surname, self.surgery_id))
 
-            conn.commit()
+            self.database.connection.commit()
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to save the GP. Please try again.{e}{RESET}")
@@ -111,7 +111,7 @@ class Gp:
             
         print(f"{DISPLAY_INFO}GP created successfully.{RESET}")
 
-        gp_id = cursor.lastrowid
+        gp_id = self.database.cursor.lastrowid
         print(f"{DISPLAY_INFO}GP ID:{gp_id}{RESET}")
         self.show_details_gp()
         return
@@ -119,13 +119,13 @@ class Gp:
         # Retrieve and display all GPs stored in the database.
     def display_all_gps(self):
         try:
-            cursor.execute("SELECT * FROM gp")
+            self.database.cursor.execute("SELECT * FROM gp")
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to retrieve GPs. Please try again.{e}{RESET}")
             return
         
-        gp_records = cursor.fetchall()
+        gp_records = self.database.cursor.fetchall()
 
         if not gp_records:
             print(f"{ERROR}No GPs are currently registered.{RESET}")
@@ -158,7 +158,7 @@ class Gp:
                     print(f"{ERROR}Please enter the GP ID using numbers only.{RESET}")
                     continue
         try:     
-            cursor.execute("""
+            self.database.cursor.execute("""
             SELECT * FROM gp
             WHERE gp_id = ?
             """,(gp_id,))
@@ -167,7 +167,7 @@ class Gp:
             print(f"{ERROR}Unable to search for the GP. Please try again.{e}{RESET}")
             return
         
-        gp_record = cursor.fetchone()
+        gp_record = self.database.cursor.fetchone()
 
         if not gp_record:
             print(f"{ERROR}No GP was found with that ID.{RESET}")
@@ -196,7 +196,7 @@ class Gp:
                 print(f"{ERROR}Please enter the GP ID using only numbers.{RESET}")
                 continue
         try:              
-            cursor.execute("""
+            self.database.cursor.execute("""
             SELECT * FROM gp
             WHERE gp_id = ?
             """,(gp_id,))
@@ -204,7 +204,7 @@ class Gp:
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to retrieve the GP. Please try again.{e}{RESET}")
                 
-        gp_record = cursor.fetchone()
+        gp_record = self.database.cursor.fetchone()
 
         if not gp_record:
             print(f"{ERROR}No GP was found with that ID.{RESET}")
@@ -272,7 +272,7 @@ class Gp:
         self.surgery_id = updated_surgery_id
 
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 UPDATE gp
                 SET first_name = ?,
                     surname = ?,
@@ -283,7 +283,7 @@ class Gp:
                     self.surgery_id,
                     gp_id))
 
-            conn.commit()
+            self.database.connection.commit()
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to update the GP. Please try again.{e}{RESET}")
@@ -307,7 +307,7 @@ class Gp:
                     print(f"{ERROR}Please enter the GP ID using numbers only.{RESET}")
                     continue
         try:    
-            cursor.execute("""
+            self.database.cursor.execute("""
             SELECT * FROM gp
             WHERE gp_id = ?
             """,(gp_id,))
@@ -316,7 +316,7 @@ class Gp:
             print(f"{ERROR}Unable to retrieve the GP. Please try again.{e}{RESET}")
             return
         
-        gp_record = cursor.fetchone()
+        gp_record = self.database.cursor.fetchone()
 
         if not gp_record:
             print(f"{ERROR}No GP was found with that ID.{RESET}")
@@ -342,12 +342,12 @@ class Gp:
             break 
                 
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 DELETE FROM gp
                 WHERE gp_id = ?
             """,(gp_id,))
 
-            conn.commit()
+            self.database.connection.commit()
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to delete the GP. Please try again.{e}{RESET}")

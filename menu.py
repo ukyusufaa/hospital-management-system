@@ -1,6 +1,6 @@
 import pyfiglet
 import threading
-from datetime import datetime
+from database import database
 from clock import display_date_time
 from patient import Patient
 from gp import Gp
@@ -20,7 +20,7 @@ from colors import(MAIN_MENU_HEADING,ADMIN_MENU,PRACTICE_MENU,
                    PRESCRIPTION_INSTRUCTIONS_MENU,BILLING_MENU,
                    SUB_MENU_HEADING,SUB_SUB_MENU_HEADING,TREE_SUB,TREE_SUB_SUB,
                    RETURN_GROUP_MENU,RETURN_MAIN_MENU,EXIT,ERROR,RESET)
-def menu():
+def menu(database):
     while True:
         # Create and centre the hospital name using PyFiglet.
         # PyFiglet converts normal text into ASCII art and centres each line.
@@ -67,22 +67,22 @@ def menu():
         choice = input("Enter a choice from Main Menu: ")
 
         if choice == "1":
-            hospital_administration()
+            hospital_administration(database)
 
         elif choice == "2":
-            patient_management()
+            patient_management(database)
 
         elif choice == "3":
-            appointment_management()
+            appointment_management(database)
 
         elif choice == "4":
-            appointment_patient_menu()
+            appointment_patient_menu(database)
 
         elif choice == "5":
-            prescription_management()
+            prescription_management(database)
 
         elif choice == "6":
-            billing_management()
+            billing_management(database)
 
         elif choice == "7":
               stop_event = threading.Event()
@@ -99,7 +99,7 @@ def menu():
 
     input("Press Enter to exit Holly Hospital System...")
             
-def hospital_administration():
+def hospital_administration(database):
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print(
@@ -123,19 +123,19 @@ def hospital_administration():
         choice = input("Enter a choice: ")
 
         if choice == "1":
-            gp_surgery_management()
+            gp_surgery_management(database)
 
         elif choice == "2":
-            gp_management()
+            gp_management(database)
 
         elif choice == "3":
-            department_management()
+            department_management(database)
 
         elif choice == "4":
-            consultant_management()
+            consultant_management(database)
 
         elif choice == "5":
-            medication_management()
+            medication_management(database)
 
         elif choice == "6":
             print("Returning to Main Menu")
@@ -147,7 +147,7 @@ def hospital_administration():
             input("Press Enter to try again...")
 
 
-def gp_surgery_management():
+def gp_surgery_management(database):
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print(f"{SUB_MENU_HEADING}{TREE_SUB} Hospital Administration Menu{RESET}")
@@ -169,23 +169,23 @@ def gp_surgery_management():
         choice = input("Enter a choice: ")
 
         if choice == "1":
-            gpsurgery = GpSurgery()
+            gpsurgery = GpSurgery(database)
             gpsurgery.create_gpsurgery()
 
         elif choice == "2":
-            gpsurgery = GpSurgery()
+            gpsurgery = GpSurgery(database)
             gpsurgery.search_gpsurgery()
 
         elif choice == "3":
-            gpsurgery = GpSurgery()
+            gpsurgery = GpSurgery(database)
             gpsurgery.update_gpsurgery()
 
         elif choice == "4":
-            gpsurgery = GpSurgery()
+            gpsurgery = GpSurgery(database)
             gpsurgery.delete_gpsurgery()
 
         elif choice == "5":
-            gpsurgery = GpSurgery()
+            gpsurgery = GpSurgery(database)
             gpsurgery.display_all_gpsurgery()
 
         elif choice == "6":
@@ -220,23 +220,23 @@ def gp_management():
         choice = input("Enter a choice: ")
 
         if choice == "1":
-            gp = Gp()
+            gp = Gp(database)
             gp.create_gp()
 
         elif choice == "2":
-            gp = Gp()
+            gp = Gp(database)
             gp.search_gp()
 
         elif choice == "3":
-            gp = Gp()
+            gp = Gp(database)
             gp.update_gp()
 
         elif choice == "4":
-            gp = Gp()
+            gp = Gp(database)
             gp.delete_gp()
 
         elif choice == "5":
-            gp = Gp()
+            gp = Gp(database)
             gp.display_all_gps()
 
         elif choice == "6":
@@ -248,7 +248,7 @@ def gp_management():
             input("Press Enter to try again...")
 
 
-def department_management():
+def department_management(database):
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print(f"{SUB_MENU_HEADING}{TREE_SUB} Hospital Administration Menu{RESET}")
@@ -270,23 +270,23 @@ def department_management():
         choice = input("Enter a choice: ")
 
         if choice == "1":
-            department = Department()
+            department = Department(database)
             department.create_department()
 
         elif choice == "2":
-            department = Department()
+            department = Department(database)
             department.search_department()
 
         elif choice == "3":
-            department = Department()
+            department = Department(database)
             department.update_department()
 
         elif choice == "4":
-            department = Department()
+            department = Department(database)
             department.delete_department()
 
         elif choice == "5":
-            department = Department()
+            department = Department(database)
             department.display_all_departments()
 
         elif choice == "6":
@@ -299,7 +299,7 @@ def department_management():
             input("Press Enter to try again...")
 
             
-def consultant_management():
+def consultant_management(database):
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print(f"{SUB_MENU_HEADING}{TREE_SUB} Hospital Administration Menu{RESET}")
@@ -321,23 +321,23 @@ def consultant_management():
         choice = input("Enter a choice: ")
 
         if choice == "1":
-            consultant = Consultant()
+            consultant = Consultant(database)
             consultant.create_consultant()
 
         elif choice == "2":
-            consultant = Consultant()
+            consultant = Consultant(database)
             consultant.search_consultant()
 
         elif choice == "3":
-            consultant = Consultant()
+            consultant = Consultant(database)
             consultant.update_consultant()
 
         elif choice == "4":
-            consultant = Consultant()
+            consultant = Consultant(database)
             consultant.delete_consultant()
 
         elif choice == "5":
-            consultant = Consultant()
+            consultant = Consultant(database)
             consultant.display_all_consultants()
 
         elif choice == "6":
@@ -350,7 +350,7 @@ def consultant_management():
             input("Press Enter to try again...")
 
 
-def medication_management():
+def medication_management(database):
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print(f"{SUB_MENU_HEADING}{TREE_SUB} Hospital Administration Menu{RESET}")
@@ -372,23 +372,23 @@ def medication_management():
         choice = input("Enter a choice: ")
 
         if choice == "1":
-            medication = Medication()
+            medication = Medication(database)
             medication.create_medication()
 
         elif choice == "2":
-            medication = Medication ()
+            medication = Medication (database)
             medication.search_medication()
 
         elif choice == "3":
-            medication = Medication()
+            medication = Medication(database)
             medication.update_medication()
 
         elif choice == "4":
-            medication = Medication()
+            medication = Medication(database)
             medication.delete_medication()
 
         elif choice == "5":
-            medication = Medication()
+            medication = Medication(database)
             medication.display_all_medications()
 
         elif choice == "6":
@@ -401,7 +401,7 @@ def medication_management():
             input("Press Enter to try again...")
 
 
-def patient_management():
+def patient_management(database):
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print(
@@ -427,23 +427,23 @@ def patient_management():
 
 
         if choice == "1":
-            patient = Patient()
+            patient = Patient(database)
             patient.create_patient()
 
         elif choice == "2":
-            patient = Patient()
+            patient = Patient(database)
             patient.search_patient()
 
         elif choice == "3":
-            patient = Patient()
+            patient = Patient(database)
             patient.update_patient()
 
         elif choice == "4":
-            patient = Patient()
+            patient = Patient(database)
             patient.delete_patient()
 
         elif choice == "5":
-            patient = Patient()
+            patient = Patient(database)
             patient.display_all_patients()
 
         elif choice == "6":
@@ -456,7 +456,7 @@ def patient_management():
             input("Press Enter to try again...")
 
 
-def appointment_management():
+def appointment_management(database):
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print(
@@ -481,23 +481,23 @@ def appointment_management():
         choice = input("Enter a choice: ")
 
         if choice == "1":
-            appointment = Appointment()
+            appointment = Appointment(database)
             appointment.create_appointment()
 
         elif choice == "2":
-            appointment = Appointment ()
+            appointment = Appointment(database)
             appointment.search_appointment()
 
         elif choice == "3":
-            appointment = Appointment()
+            appointment = Appointment(database)
             appointment.update_appointment()
 
         elif choice == "4":
-            appointment = Appointment()
+            appointment = Appointment(database)
             appointment.delete_appointment()
 
         elif choice == "5":
-            appointment = Appointment()
+            appointment = Appointment(database)
             appointment.display_all_appointments()
 
         elif choice == "6":
@@ -510,7 +510,7 @@ def appointment_management():
             input("Press Enter to try again...")
 
 
-def appointment_patient_menu():
+def appointment_patient_menu(database):
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print()
@@ -548,39 +548,39 @@ def appointment_patient_menu():
         choice = input("Enter choice: ")
 
         if choice == "1":
-            appointment_patient = AppointmentPatient()
+            appointment_patient = AppointmentPatient(database)
             appointment_patient.display_patients_with_appointments()
 
         elif choice == "2":
-            appointment_patient = AppointmentPatient()
+            appointment_patient = AppointmentPatient(database)
             appointment_patient.display_all_patients_with_or_without_appointments()
 
         elif choice == "3":
-            appointment_patient = AppointmentPatient()
+            appointment_patient = AppointmentPatient(database)
             appointment_patient.display_all_patients_and_appointments_including_unmatched()
 
         elif choice == "4":
-            appointment_patient = AppointmentPatient()
+            appointment_patient = AppointmentPatient(database)
             appointment_patient.display_patient_appointment_consultant()
 
         elif choice == "5":
-            appointment_patient = AppointmentPatient()
+            appointment_patient = AppointmentPatient(database)
             appointment_patient.display_patient_appointment_consultant_department()
 
         elif choice == "6":
-            appointment_patient = AppointmentPatient()
+            appointment_patient = AppointmentPatient(database)
             appointment_patient.display_patient_gp_gp_surgery()
 
         elif choice == "7":
-            appointment_patient = AppointmentPatient()
+            appointment_patient = AppointmentPatient(database)
             appointment_patient.display_prescription_medications()
 
         elif choice == "8":
-            appointment_patient = AppointmentPatient()
+            appointment_patient = AppointmentPatient(database)
             appointment_patient.display_advanced_queries()
 
         elif choice == "9":
-            appointment_patient = AppointmentPatient()
+            appointment_patient = AppointmentPatient(database)
             appointment_patient.display_advanced_queries()
 
         elif choice == "10":
@@ -593,7 +593,7 @@ def appointment_patient_menu():
             input("Press Enter to try again...")
 
 
-def prescription_management():
+def prescription_management(database):
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print(
@@ -618,23 +618,23 @@ def prescription_management():
         choice = input("Enter a choice: ")
 
         if choice == "1":
-            prescription = Prescription()
+            prescription = Prescription(database)
             prescription.create_prescription()
 
         elif choice == "2":
-            prescription = Prescription()
+            prescription = Prescription(database)
             prescription.search_prescription()
 
         elif choice == "3":
-            prescription = Prescription()
+            prescription = Prescription(database)
             prescription.delete_prescription()
 
         elif choice == "4":
-            prescription = Prescription()
+            prescription = Prescription(database)
             prescription.display_all_prescriptions()
 
         elif choice == "5":
-            prescription_instructions_management()
+            prescription_instructions_management(database)
 
         elif choice == "6":
             print("Returning to Main Menu")
@@ -646,7 +646,7 @@ def prescription_management():
             input("Press Enter to try again...")
 
 
-def prescription_instructions_management():
+def prescription_instructions_management(database):
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print(f"{SUB_MENU_HEADING}{TREE_SUB} Hospital Administration Menu{RESET}")
@@ -671,23 +671,23 @@ def prescription_instructions_management():
         choice = input("Enter a choice: ")
 
         if choice == "1":
-            instructions = PrescriptionMedication()
+            instructions = PrescriptionMedication(database)
             instructions.create_prescription_medication()
 
         elif choice == "2":
-            instructions = PrescriptionMedication()
+            instructions = PrescriptionMedication(database)
             instructions.search_prescription_medication()
 
         elif choice == "3":
-            instructions = PrescriptionMedication()
+            instructions = PrescriptionMedication(database)
             instructions.update_prescription_medication()
 
         elif choice == "4":
-            instructions = PrescriptionMedication()
+            instructions = PrescriptionMedication(database)
             instructions.display_all_prescription_medications()
 
         elif choice == "5":
-            instructions = PrescriptionMedication()
+            instructions = PrescriptionMedication(database)
             instructions.delete_prescription_medication()
 
         elif choice == "6":
@@ -700,7 +700,7 @@ def prescription_instructions_management():
             input("Press Enter to try again...")
 
 
-def billing_management():
+def billing_management(database):
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}")
         print(
@@ -723,19 +723,19 @@ def billing_management():
         choice = input("Enter a choice:")
 
         if choice == "1":
-            bill = Bill()
+            bill = Bill(database)
             bill.create_bill()
 
         elif choice == "2":
-            bill = Bill()
+            bill = Bill(database)
             bill.search_bill()
 
         elif choice == "3":
-            bill = Bill()
+            bill = Bill(database)
             bill.bill_update()
 
         elif choice == "4":
-            bill = Bill()
+            bill = Bill(database)
             bill.display_all_bills()
 
         elif choice == "5":

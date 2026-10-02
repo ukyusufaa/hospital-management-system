@@ -1,12 +1,14 @@
 import sqlite3
-from database import conn, cursor
 from colors import DISPLAY_INFO,A_P_MENU,ERROR,RESET
 
 
 class AppointmentPatient():
+    def __init__(self, database):
+            self.database = database
+
     def display_patients_with_appointments(self):
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
 
                 SELECT  patient.first_name,
                         patient.surname,
@@ -28,7 +30,7 @@ class AppointmentPatient():
             print(f"{ERROR}Database Error{e}{RESET}")
             return 
 
-        rows = cursor.fetchall()
+        rows = self.database.cursor.fetchall()
 
         for row in rows:
             (first_name, surname,
@@ -43,7 +45,7 @@ class AppointmentPatient():
 
     def display_all_patients_with_or_without_appointments(self):
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
 
                 SELECT  patient.first_name,
                         patient.surname,
@@ -65,7 +67,7 @@ class AppointmentPatient():
             print(f"{ERROR}Database Error{e}{RESET}")
             return
 
-        rows = cursor.fetchall()
+        rows = self.database.cursor.fetchall()
 
         for row in rows:
             (first_name,surname,
@@ -80,7 +82,7 @@ class AppointmentPatient():
 
     def display_all_patients_and_appointments_including_unmatched(self):
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
 
                 SELECT  *
 
@@ -122,7 +124,7 @@ class AppointmentPatient():
             print(f"{ERROR}Database Error{e}{RESET}")
             return
 
-        rows = cursor.fetchall()
+        rows = self.database.cursor.fetchall()
 
         for row in rows:
             (first_name, surname, 
@@ -137,7 +139,7 @@ class AppointmentPatient():
 
     def display_patient_appointment_consultant(self):
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
 
                 SELECT  appointment.appointment_date,
                         appointment.appointment_time,
@@ -164,7 +166,7 @@ class AppointmentPatient():
             print(f"{ERROR}Database Error{e}{RESET}")
             return
 
-        rows = cursor.fetchall()
+        rows = self.database.cursor.fetchall()
 
         for row in rows:
             (appointment_date, appointment_time,
@@ -181,7 +183,7 @@ class AppointmentPatient():
 
     def display_patient_appointment_consultant_department(self):
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
 
                 SELECT  appointment.appointment_date,
                         appointment.appointment_time,
@@ -212,7 +214,7 @@ class AppointmentPatient():
             print(f"{ERROR}Database Error{e}{RESET}")
             return
 
-        rows = cursor.fetchall()
+        rows = self.database.cursor.fetchall()
 
         for row in rows:
             (appointment_date, appointment_time,
@@ -231,7 +233,7 @@ class AppointmentPatient():
 
     def display_patient_gp_gp_surgery(self):
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
 
             SELECT  patient.first_name,
                     patient.surname,
@@ -254,7 +256,7 @@ class AppointmentPatient():
             print(f"{ERROR}Database Error{e}{RESET}")
             return
 
-        rows = cursor.fetchall()
+        rows = self.database.cursor.fetchall()
 
         for row in rows:
             (p_first_name, p_surname,
@@ -271,7 +273,7 @@ class AppointmentPatient():
 
     def display_prescription_medications(self):
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
 
                 SELECT  prescription_medication.prescription_id,
                         prescription_medication.medication_id,
@@ -294,7 +296,7 @@ class AppointmentPatient():
             print(f"{ERROR}Database Error{e}{RESET}")
             return 
 
-        rows = cursor.fetchall()
+        rows = self.database.cursor.fetchall()
 
         last_prescription_id = None
 
@@ -316,7 +318,7 @@ class AppointmentPatient():
 
     def display_advanced_queries(self):
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT  prescription_medication.prescription_id,
                     COUNT(prescription_medication.medication_id),
                     SUM(medication.cost),
@@ -342,7 +344,7 @@ class AppointmentPatient():
                 print(f"{ERROR}Database Error{e}{RESET}")
                 return
 
-        rows = cursor.fetchall()
+        rows = self.database.cursor.fetchall()
 
         for row in rows:
             (prescription_id,medication_count,
@@ -358,7 +360,7 @@ class AppointmentPatient():
 
     def display_advanced_queries(self):
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT  prescription_medication.prescription_id,
                         COUNT(prescription_medication.medication_id)
                 
@@ -378,7 +380,7 @@ class AppointmentPatient():
         except sqlite3.Error as e:
             print(f"{ERROR}Database Error{e}{RESET}")
 
-        rows = cursor.fetchall()
+        rows = self.database.cursor.fetchall()
 
         for row in rows:
             prescription_id, medication_count = row

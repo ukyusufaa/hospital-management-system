@@ -1,15 +1,11 @@
-# Import SQLite to work with the database
 import sqlite3
-
-# Import the shared database connection and cursor from database.py module.
-from database import conn, cursor
-
 from colors import DISPLAY_INFO,PRESCRIPTION_INSTRUCTIONS_MENU,ERROR,RESET
 
 class PrescriptionMedication():
         # Store the prescription-medication relationship and associated instructions.
-    def __init__(self,prescription_instructions = None, 
+    def __init__(self,database,prescription_instructions = None, 
                  prescription_id = None, medication_id = None):
+        self.database = database
         self.prescription_instructions = prescription_instructions
         self.prescription_id = prescription_id
         self.medication_id = medication_id
@@ -74,7 +70,7 @@ class PrescriptionMedication():
 
         # Check whether the prescription already contains the medication.
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM prescription_medication
                 WHERE prescription_id = ?
                 AND medication_id = ?
@@ -87,7 +83,7 @@ class PrescriptionMedication():
             return
 
         # Check whether a relationship was found.
-        relationship = cursor.fetchone()
+        relationship = self.database.cursor.fetchone()
 
         if relationship:
             print(f"{ERROR}This medication is already included on the prescription.{RESET}")
@@ -95,7 +91,7 @@ class PrescriptionMedication():
 
         # Create the prescription-medication relationship.
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 INSERT INTO prescription_medication(
                     prescription_instructions,
                     prescription_id,
@@ -106,7 +102,7 @@ class PrescriptionMedication():
                 self.medication_id))
 
         # Save the new prescription-medication record to the database.
-            conn.commit()
+            self.database.connection.commit()
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to add the regimen. Please try again.{e}{RESET}")
@@ -121,13 +117,13 @@ class PrescriptionMedication():
     def display_all_prescription_medications(self):
         try:
         # Get all prescription-medication records from the database.
-            cursor.execute("SELECT * FROM prescription_medication")
+            self.database.cursor.execute("SELECT * FROM prescription_medication")
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to display regimens. Please try again.{e}{RESET}")
             return
 
-        records = cursor.fetchall()
+        records = self.database.cursor.fetchall()
 
         if not records:
             print(f"{ERROR}No regimens stored in the database.{RESET}")
@@ -175,7 +171,7 @@ class PrescriptionMedication():
                 continue 
         try:
         # Find the prescription-medication record in the database.
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM prescription_medication
                 WHERE prescription_id = ?
                 AND medication_id = ?
@@ -186,7 +182,7 @@ class PrescriptionMedication():
             print(f"{ERROR}Unable to search for the regimen.{e}{RESET}")
             return 
 
-        record = cursor.fetchone()
+        record = self.database.cursor.fetchone()
 
         if not record:
             print(f"{ERROR}No regimen was found for this prescription.{RESET}")
@@ -231,7 +227,7 @@ class PrescriptionMedication():
                     continue
         try:
         # Find the prescription-medication record in the database.
-            cursor.execute("""
+            self.database.cursor.execute("""
             SELECT * FROM prescription_medication
             WHERE medication_id = ?
             AND prescription_id = ?
@@ -241,7 +237,7 @@ class PrescriptionMedication():
             print(f"{ERROR}Unable to find the regimen. Please try again.{e}{RESET}")
             return 
 
-        record = cursor.fetchone()
+        record = self.database.cursor.fetchone()
 
         if not record:
             print(f"{ERROR}No regimen was found for this prescription and medication.{RESET}")
@@ -281,7 +277,7 @@ class PrescriptionMedication():
 
         try:
         # Update the regimen instructions for the selected prescription-medication record.
-            cursor.execute("""
+            self.database.cursor.execute("""
                 UPDATE prescription_medication
                 SET prescription_instructions = ?
                 WHERE prescription_id = ?
@@ -290,7 +286,7 @@ class PrescriptionMedication():
                 self.medication_id))
 
         # Save the updated regimen instructions to the database.
-            conn.commit()
+            self.datbase.connection.commit()
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to update the regimen instructions. "
@@ -333,7 +329,7 @@ class PrescriptionMedication():
                 
         try:
         # Find the regimen associated with the specified medication.
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM prescription_medication
                 WHERE prescription_id = ?
                 AND medication_id = ?
@@ -344,7 +340,7 @@ class PrescriptionMedication():
             print(f"{ERROR}Unable to search for the regimen.{e}{RESET}")
             return 
         
-        record = cursor.fetchone()
+        record = self.database.cursor.fetchone()
 
         if not record:
             print(f"{ERROR}No regimen was found for this prescription.{RESET}")
@@ -375,14 +371,14 @@ class PrescriptionMedication():
             break 
             
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 DELETE FROM prescription_medication
                 WHERE prescription_id = ?
                 AND medication_id = ?
             """,(self.prescription_id,
                 self.medication_id))
 
-            conn.commit()
+            self.database.connection.commit()
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to delete the prescription. Please try again.{e}{RESET}")

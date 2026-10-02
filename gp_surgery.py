@@ -1,9 +1,9 @@
 import sqlite3
-from database import conn, cursor
 from colors import DISPLAY_INFO,PRACTICE_MENU,ERROR,RESET
 
 class GpSurgery:
-    def __init__(self,surgery_name = None, address = None):
+    def __init__(self, database,surgery_name = None, address = None):
+        self.database = database
         self.surgery_name = surgery_name
         self.address = address 
     
@@ -81,14 +81,14 @@ class GpSurgery:
 
         try:
         # Insert the validated medical practice details into the database.
-            cursor.execute("""
+            self.database.cursor.execute("""
             INSERT INTO gp_surgery(
                        surgery_name,
                        address)
             VALUES(?,?)
             """,(self.surgery_name,self.address))
 
-            conn.commit()
+            self.database.connection.commit()
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to save the medical practice " 
@@ -98,7 +98,7 @@ class GpSurgery:
         print(f"{DISPLAY_INFO}Medical practice created successfully.{RESET}")
         print()
 
-        surgery_id = cursor.lastrowid
+        surgery_id = self.database.cursor.lastrowid
         print(f"{DISPLAY_INFO}Medical practice ID: {surgery_id}{RESET}")
         self.show_gpsurgery_details()
         
@@ -106,13 +106,13 @@ class GpSurgery:
         # Retrieve and display all medical practices stored in the database.
     def display_all_gpsurgery(self):
         try:
-            cursor.execute("SELECT * FROM gp_surgery")
+            self.database.cursor.execute("SELECT * FROM gp_surgery")
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to retrieve medical practices. Please try again.{e}{RESET}")
             return
 
-        surgery_rows = cursor.fetchall()
+        surgery_rows = self.database.cursor.fetchall()
 
         if len(surgery_rows) == 0:
             print(f"{ERROR}No medical practices are currently registered.{RESET}")
@@ -142,7 +142,7 @@ class GpSurgery:
                 print(f"{ERROR}Please enter the surgery ID using numbers only.{RESET}")
                 continue
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
             SELECT * FROM gp_surgery
             WHERE surgery_id = ?
             """,(surgery_id,))
@@ -152,7 +152,7 @@ class GpSurgery:
                   f"Please try again. {e}{RESET}")
             return
 
-        surgery = cursor.fetchone()
+        surgery = self.database.cursor.fetchone()
 
         if not surgery:
             print(f"{ERROR}No medical practice was found with that ID.{RESET}")
@@ -181,7 +181,7 @@ class GpSurgery:
                       f"using numbers only.{RESET}")
                 continue
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
             SELECT * FROM gp_surgery
             WHERE surgery_id = ?
             """,(surgery_id,))
@@ -191,7 +191,7 @@ class GpSurgery:
                   f"Please try again.{e}{RESET}")
             return
 
-        surgery = cursor.fetchone()
+        surgery = self.database.cursor.fetchone()
 
         if not surgery:
             print(f"{ERROR}GP Surgery not found.{RESET}")
@@ -272,14 +272,14 @@ class GpSurgery:
         self.address = new_address
 
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 UPDATE gp_surgery
                 SET surgery_name = ?,
                     address = ?
                 WHERE surgery_id = ?
             """,(self.surgery_name, self.address,surgery_id))
 
-            conn.commit()
+            self.database.connection.commit()
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to update the medical practice. Please try again.{e}{RESET}")
@@ -310,7 +310,7 @@ class GpSurgery:
                 continue
 
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
             SELECT * FROM gp_surgery
             WHERE surgery_id = ?
             """,(surgery_id,))
@@ -320,7 +320,7 @@ class GpSurgery:
                   f"practice. Please try again.{e}{RESET}")
             return
 
-        surgery = cursor.fetchone()
+        surgery = self.database.cursor.fetchone()
 
         if not surgery:
             print(f"{ERROR}No medical practice was found with that ID.{RESET}")
@@ -343,12 +343,12 @@ class GpSurgery:
             
             if delete == "y":
                 try:
-                    cursor.execute("""
+                    self.database.cursor.execute("""
                     DELETE FROM gp_surgery
                     WHERE surgery_id = ?
                     """,(surgery_id,))
 
-                    conn.commit()
+                    self.database.connection.commit()
 
                 except sqlite3.Error as e:
                     print(f"{ERROR}Unable to delete the " 

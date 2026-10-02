@@ -1,36 +1,42 @@
-# Import SQLite to work with the database.
 import sqlite3
 
-# Create a connection to the hospital database.
-conn = sqlite3.connect("hospital.db")
+class Database:
 
-# Create a cursor to execute SQL commands.
-cursor = conn.cursor()
+    def __init__(self, database_path):
+        self.database_path = database_path
+        self.connection = None
+        self.cursor = None
 
-# Enabale foreign keys to enforce table relationships.
-cursor.execute("PRAGMA foreign_keys = ON;")
+    def connect(self):
+        self.connection = sqlite3.connect(self.database_path)
+        self.cursor = self.connection.cursor()
+        self.cursor.execute("PRAGMA foreign_keys = ON;")
 
-cursor.execute("""
+
+database = Database("hospital.db")
+database.connect()
+
+database.cursor.execute("""
 CREATE TABLE IF NOT EXISTS gp_surgery(
                 surgery_id INTEGER PRIMARY KEY AUTOINCREMENT,
                 surgery_name TEXT NOT NULL,
                 address TEXT NOT NULL)
 """)
 
-cursor.execute("""
+database.cursor.execute("""
 CREATE TABLE IF NOT EXISTS department(
                department_id INTEGER PRIMARY KEY AUTOINCREMENT,
                department_name TEXT NOT NULL)
 """)
 
-cursor.execute("""
+database.cursor.execute("""
 CREATE TABLE IF NOT EXISTS medication(
                medication_id INTEGER PRIMARY KEY AUTOINCREMENT,
                medication_name TEXT NOT NULL,
                cost REAL NOT NULL)
 """)
 
-cursor.execute("""
+database.cursor.execute("""
 CREATE TABLE IF NOT EXISTS gp(
                gp_id INTEGER PRIMARY KEY AUTOINCREMENT,
                first_name TEXT NOT NULL,
@@ -41,7 +47,7 @@ CREATE TABLE IF NOT EXISTS gp(
                REFERENCES gp_surgery(surgery_id))
 """)
 
-cursor.execute("""
+database.cursor.execute("""
 CREATE TABLE IF NOT EXISTS patient(
                patient_id INTEGER PRIMARY KEY AUTOINCREMENT,
                first_name TEXT NOT NULL,
@@ -54,7 +60,7 @@ CREATE TABLE IF NOT EXISTS patient(
                REFERENCES gp(gp_id))
 """)
 
-cursor.execute("""
+database.cursor.execute("""
 CREATE TABLE IF NOT EXISTS consultant(
                consultant_id INTEGER PRIMARY KEY AUTOINCREMENT,
                first_name TEXT NOT NULL,
@@ -65,7 +71,7 @@ CREATE TABLE IF NOT EXISTS consultant(
                REFERENCES department(department_id))
 """)
 
-cursor.execute("""
+database.cursor.execute("""
 CREATE TABLE IF NOT EXISTS appointment(
                appointment_id INTEGER PRIMARY KEY AUTOINCREMENT,
                patient_id INTEGER,
@@ -80,7 +86,7 @@ CREATE TABLE IF NOT EXISTS appointment(
                REFERENCES consultant(consultant_id))
 """)
 
-cursor.execute("""
+database.cursor.execute("""
 CREATE TABLE IF NOT EXISTS prescription(
                prescription_id INTEGER PRIMARY KEY AUTOINCREMENT,
                appointment_id INTEGER UNIQUE,
@@ -89,7 +95,7 @@ CREATE TABLE IF NOT EXISTS prescription(
                REFERENCES appointment(appointment_id))
 """)
 
-cursor.execute("""
+database.cursor.execute("""
 CREATE TABLE IF NOT EXISTS prescription_medication(
                prescription_instructions TEXT NOT NULL,
                prescription_id INTEGER,
@@ -105,7 +111,7 @@ CREATE TABLE IF NOT EXISTS prescription_medication(
             
 """)
 
-cursor.execute("""
+database.cursor.execute("""
 CREATE TABLE IF NOT EXISTS bill(
                bill_id INTEGER PRIMARY KEY AUTOINCREMENT,
                total_amount REAL NOT NULL,
@@ -117,4 +123,4 @@ CREATE TABLE IF NOT EXISTS bill(
 
 """)
 
-conn.commit()
+database.connection.commit()

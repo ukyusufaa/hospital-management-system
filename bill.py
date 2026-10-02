@@ -1,10 +1,10 @@
 import sqlite3
-from database import conn, cursor
 from colors import DISPLAY_INFO,BILLING_MENU,ERROR,RESET
 
 class Bill():
-    def __init__(self, total_amount = None, 
+    def __init__(self, database, total_amount = None, 
                  appointment_id = None, payment_status = None):
+        self.database = database
         self.total_amount = total_amount
         self.appointment_id = appointment_id
         self.payment_status = payment_status
@@ -40,7 +40,7 @@ class Bill():
                 print(f"{ERROR}Please enter the appointment ID using numbers only.{RESET}")
                 continue
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM appointment
                 WHERE appointment_id = ?
             """, (self.appointment_id,))
@@ -49,7 +49,7 @@ class Bill():
             print(f"{ERROR}Unable to find the appointment.{e}{RESET}")
             return
 
-        appointment_record = cursor.fetchone()
+        appointment_record = self.database.cursor.fetchone()
 
         if not appointment_record:
             print(f"{ERROR}This appointment does not exist.{RESET}")
@@ -61,7 +61,7 @@ class Bill():
 
         # Find the one prescription associated with the one appointment.
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM prescription
                 WHERE appointment_id = ?
             """,(self.appointment_id,))
@@ -71,7 +71,7 @@ class Bill():
             return 
 
         # Get the one prescription details from the database.
-        prescription_record = cursor.fetchone()
+        prescription_record = self.database.cursor.fetchone()
 
         if not prescription_record:
             print(f"{ERROR}No prescription is linked to this appointment.{RESET}")
@@ -91,7 +91,7 @@ class Bill():
         # Remember this one prescription is linked to one appointment.
         try:
         # This junction table contains prescription_id, medication_id together so linking them.
-            cursor.execute("""
+            self.database.cursor.execute("""
                 SELECT * FROM prescription_medication
                 WHERE prescription_id = ?
             """,(self.prescription_id,))
@@ -102,7 +102,7 @@ class Bill():
             return
 
         # A prescription can contain multiple medications, so fetchall() is used.
-        prescription_medication_rows = cursor.fetchall()
+        prescription_medication_rows = self.database.cursor.fetchall()
     
         if not prescription_medication_rows:
             print(f"{DISPLAY_INFO}No medications are linked to this prescription.{RESET}")
@@ -128,7 +128,7 @@ class Bill():
 
             # Use the medication ID stored in the Bill object.
             try:
-                cursor.execute("""
+                self.database.cursor.execute("""
                     SELECT * FROM medication
                     WHERE medication_id = ?
                 """,(self.medication_id,))
@@ -139,7 +139,7 @@ class Bill():
                 return
 
             # Retrieve all matching medication records.
-            medication_rows = cursor.fetchall()
+            medication_rows = self.database.cursor.fetchall()
 
             if not medication_rows:
                 print(f"{ERROR}No Medication found.{RESET}")
@@ -159,7 +159,7 @@ class Bill():
 
         # Insert the calculated bill into the database.
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 INSERT INTO bill(
                     appointment_id,
                     total_amount,
@@ -170,7 +170,7 @@ class Bill():
                 self.payment_status))
                     
         # Save the transaction to the database.
-            conn.commit()
+            self.database.connection.commit()
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to create the bill. Please try again.{e}{RESET}")
@@ -178,7 +178,7 @@ class Bill():
 
         print(f"{DISPLAY_INFO}Bill created successfully.{RESET}")
 
-        bill_id = cursor.lastrowid
+        bill_id = self.database.cursor.lastrowid
         print(f"{DISPLAY_INFO}Bill ID: {bill_id}{RESET}")
         print()
 
@@ -189,13 +189,13 @@ class Bill():
     def display_all_bills(self):
         try:
         # Retrieve all bills from the database.
-            cursor.execute("SELECT * FROM bill")
+            self.database.cursor.execute("SELECT * FROM bill")
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to retrieve bills. Please try again.{e}{RESET}")
             return
 
-        bill_rows = cursor.fetchall()
+        bill_rows = self.database.cursor.fetchall()
         if not bill_rows:
             print(f"{ERROR}No bills are are currently recorded.{RESET}")
             return
@@ -228,7 +228,7 @@ class Bill():
 
         # Search for a bill using the appointment ID.
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
             SELECT * FROM bill
             WHERE appointment_id = ?
             """,(self.appointment_id,))
@@ -237,7 +237,7 @@ class Bill():
             print(f"{ERROR}Unable to search for the bill. Please try again.{e}{RESET}")
             return
 
-        bill_row = cursor.fetchone()
+        bill_row = self.database.cursor.fetchone()
 
         if not bill_row:
             print()
@@ -271,7 +271,7 @@ class Bill():
 
         # Find the bill associated with the appointment.
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
             SELECT * FROM bill
             WHERE appointment_id = ?
             """,(self.appointment_id,))
@@ -280,7 +280,7 @@ class Bill():
             print(f"{ERROR}Unable to retrieve the bill. Please try again.{e}{RESET}")
             return
 
-        bill_row = cursor.fetchone()
+        bill_row = self.database.cursor.fetchone()
         if not bill_row:
             print(f"{ERROR}Patient bill not found.{RESET}")
             return 
@@ -311,7 +311,7 @@ class Bill():
         self.payment_status = "PAID"
 
         try:
-            cursor.execute("""
+            self.database.cursor.execute("""
                 UPDATE bill
                 SET payment_status = ?
                 WHERE appointment_id = ?
@@ -319,7 +319,7 @@ class Bill():
                 self.appointment_id))
                 
         # Save the updated payment status.
-            conn.commit()
+            self.database.connection.commit()
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to update the bill. Please try again.{e}{RESET}")
