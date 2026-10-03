@@ -83,8 +83,13 @@ CREATE TABLE IF NOT EXISTS appointment(
                REFERENCES patient(patient_id),
 
                FOREIGN KEY(consultant_id)
-               REFERENCES consultant(consultant_id))
+               REFERENCES consultant(consultant_id),
+
+               UNIQUE(consultant_id, appointment_date, appointment_time),
+
+               UNIQUE(patient_id, appointment_date, appointment_time))
 """)
+
 
 database.cursor.execute("""
 CREATE TABLE IF NOT EXISTS prescription(
