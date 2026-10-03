@@ -131,6 +131,7 @@ class PrescriptionMedication():
         
         for record in records:
             prescription_medication = PrescriptionMedication(
+                self.database,
                 record[0],
                 record[1],
                 record[2]
@@ -286,7 +287,7 @@ class PrescriptionMedication():
                 self.medication_id))
 
         # Save the updated regimen instructions to the database.
-            self.datbase.connection.commit()
+            self.database.connection.commit()
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to update the regimen instructions. "

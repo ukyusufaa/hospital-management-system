@@ -309,6 +309,7 @@ class Appointment():
         # Create and display an Appointment object for each database record.
         for appointment_record in appointment_records:
             appointment = Appointment(
+                self.database,
                 appointment_record[1],
                 appointment_record[2],
                 appointment_record[3],

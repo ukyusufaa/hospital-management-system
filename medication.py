@@ -94,6 +94,7 @@ class Medication():
             return
 
         print(f"{DISPLAY_INFO}Medication created successfully.{RESET}")
+        print()
 
         medication_id = self.database.cursor.lastrowid
         print(f"{DISPLAY_INFO}Medication ID: {medication_id}{RESET}")
@@ -112,6 +113,7 @@ class Medication():
         
         for medication_row in medication_rows:
             medication = Medication(
+                self.database,
                 medication_row[1],
                 medication_row[2]
                 )
@@ -308,7 +310,7 @@ class Medication():
                     WHERE medication_id = ?
                 """,(medication_id,))
 
-                self.datbaase.connection.commit()
+                self.database.connection.commit()
 
             except sqlite3.Error as e:
                 print(f"{ERROR}Unable to delete the medication. Please try again.{e}{RESET}")

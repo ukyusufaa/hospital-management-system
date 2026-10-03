@@ -120,6 +120,7 @@ class GpSurgery:
         
         for surgery_row in surgery_rows:
             clinic = GpSurgery(
+                self.database,
                 surgery_row[1],
                 surgery_row[2]
             )

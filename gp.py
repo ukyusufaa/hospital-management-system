@@ -133,6 +133,7 @@ class Gp:
         
         for gp_record in gp_records:
             gp = Gp(
+                self.database,
                 gp_record[1],
                 gp_record[2],
                 gp_record[3]

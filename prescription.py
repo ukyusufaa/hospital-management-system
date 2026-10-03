@@ -102,7 +102,10 @@ class Prescription():
         
         # Create an object for each database record
         for prescription_record in prescription_records:
-            prescription = Prescription(prescription_record[1])
+            prescription = Prescription(
+                self.database,
+                prescription_record[1]
+                )
 
             print(f"{DISPLAY_INFO}Prescription ID:{prescription_record[0]}{RESET}")
             prescription.show_prescription_details()

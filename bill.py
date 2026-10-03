@@ -203,6 +203,7 @@ class Bill():
         for bill_row in bill_rows:
         # Create a Bill object for each database record.
             billing = Bill(
+                self.database,
                 bill_row[1],
                 bill_row[2],
                 bill_row[3]

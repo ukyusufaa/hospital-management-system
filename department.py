@@ -65,7 +65,7 @@ class Department():
         # Retrieve and display all departments stored in the database.
     def display_all_departments(self):
         try:
-            self.datbase.cursor.execute("SELECT * FROM department")
+            self.database.cursor.execute("SELECT * FROM department")
 
         except sqlite3.Error as e:
             print(f"{ERROR}Unable to retrieve departments. Please try again.{e}{RESET}")
@@ -78,7 +78,10 @@ class Department():
             return
         
         for department in departments:
-            new_dept = Department(department[1])
+            new_dept = Department(
+            self.database,
+            department[1]
+            )
 
             print(f"{DISPLAY_INFO}Department ID:{department[0]}{RESET}")
             new_dept.show_department_details()

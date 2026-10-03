@@ -116,15 +116,15 @@ class Consultant():
         
         for consultant_row in consultant_rows:
             specialist = Consultant(
+                self.database,
                 consultant_row[1],
                 consultant_row[2],
                 consultant_row[3]
             )
 
             print(f"{DISPLAY_INFO}Consultant ID: {consultant_row[0]}{RESET}")
-            print()
-
             specialist.show_details_consultant()
+            print()
 
         
     def search_consultant(self):

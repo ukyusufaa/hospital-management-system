@@ -198,7 +198,7 @@ def gp_surgery_management(database):
             input("Press Enter to try again...")
 
 
-def gp_management():
+def gp_management(database):
     while True:
         print(f"{MAIN_MENU_HEADING}{'+ HOLLY HOSPITAL +'.center(50)}{RESET}") 
         print(f"{SUB_MENU_HEADING}{TREE_SUB} Hospital Administration Menu{RESET}")

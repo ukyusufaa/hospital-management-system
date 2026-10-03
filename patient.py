@@ -226,6 +226,7 @@ class Patient():
         
         for patient_record in patient_records:
             patient = Patient(
+                self.database,
                 patient_record[1],
                 patient_record[2],
                 patient_record[3],
