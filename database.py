@@ -121,7 +121,8 @@ CREATE TABLE IF NOT EXISTS bill(
                bill_id INTEGER PRIMARY KEY AUTOINCREMENT,
                total_amount REAL NOT NULL,
                appointment_id INTEGER UNIQUE,
-               payment_status TEXT NOT NULL,
+               payment_status TEXT NOT NULL
+                              CHECK(payment_status IN ('UNPAID', 'PAID')),
 
                FOREIGN KEY(appointment_id)
                REFERENCES appointment(appointment_id))
