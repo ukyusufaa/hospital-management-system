@@ -33,7 +33,8 @@ database.cursor.execute("""
 CREATE TABLE IF NOT EXISTS medication(
                medication_id INTEGER PRIMARY KEY AUTOINCREMENT,
                medication_name TEXT NOT NULL,
-               cost REAL NOT NULL)
+               cost REAL NOT NULL
+                    CHECK(cost > 0))
 """)
 
 database.cursor.execute("""
