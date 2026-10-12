@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS department(
 database.cursor.execute("""
 CREATE TABLE IF NOT EXISTS medication(
                medication_id INTEGER PRIMARY KEY AUTOINCREMENT,
-               medication_name TEXT NOT NULL,
+               medication_name TEXT NOT NULL
+                              CHECK(length(trim(medication_name)) > 0),
                cost REAL NOT NULL
                     CHECK(cost > 0))
 """)
@@ -53,13 +54,81 @@ CREATE TABLE IF NOT EXISTS patient(
                patient_id INTEGER PRIMARY KEY AUTOINCREMENT,
                first_name TEXT NOT NULL,
                surname TEXT NOT NULL,
-               dob TEXT NOT NULL,
+               dob TEXT NOT NULL
+                CHECK (
+                length(dob) = 10
+                AND dob GLOB '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'
+                AND CAST(substr(dob, 7, 4) AS INTEGER) >= 1900
+                AND CAST(substr(dob, 4, 2) AS INTEGER) BETWEEN 1 AND 12
+                AND CAST(substr(dob, 1, 2) AS INTEGER) BETWEEN 1 AND
+                CASE CAST(substr(dob, 4, 2) AS INTEGER)
+                    WHEN 1 THEN 31
+                    WHEN 2 THEN
+                        CASE
+                            WHEN (
+                                CAST(substr(dob, 7, 4) AS INTEGER) % 400 = 0
+                                OR (
+                                    CAST(substr(dob, 7, 4) AS INTEGER) % 4 = 0
+                                    AND CAST(substr(dob, 7, 4) AS INTEGER) % 100 != 0
+                                    )
+                                )
+                                THEN 29
+                                ELSE 28
+                            END
+                    WHEN 3 THEN 31
+                    WHEN 4 THEN 30
+                    WHEN 5 THEN 31
+                    WHEN 6 THEN 30
+                    WHEN 7 THEN 31
+                    WHEN 8 THEN 31
+                    WHEN 9 THEN 30
+                    WHEN 10 THEN 31
+                    WHEN 11 THEN 30
+                    WHEN 12 THEN 31
+                    ELSE 0
+                END
+                ),
                address TEXT NOT NULL,
                gp_id INTEGER,
 
                FOREIGN KEY(gp_id)
                REFERENCES gp(gp_id))
 """)
+
+database.cursor.execute("""
+    CREATE TRIGGER IF NOT EXISTS patient_dob_not_future_insert
+    BEFORE INSERT ON patient
+    FOR EACH ROW
+    WHEN date(
+        substr(NEW.dob, 7, 4) || '-' ||
+        substr(NEW.dob, 4, 2) || '-' ||
+        substr(NEW.dob, 1, 2)
+    ) > date('now')
+    BEGIN
+        SELECT RAISE(
+            ABORT,
+            'Date of birth cannot be in the future'
+        );
+    END;
+""")
+
+database.cursor.execute("""
+    CREATE TRIGGER IF NOT EXISTS patient_dob_not_future_update
+    BEFORE UPDATE OF dob ON patient
+    FOR EACH ROW
+    WHEN date(
+        substr(NEW.dob, 7, 4) || '-' ||
+        substr(NEW.dob, 4, 2) || '-' ||
+        substr(NEW.dob, 1, 2)
+    ) > date('now')
+    BEGIN
+        SELECT RAISE(
+            ABORT,
+            'Date of birth cannot be in the future'
+        );
+    END;
+""")
+
 
 database.cursor.execute("""
 CREATE TABLE IF NOT EXISTS consultant(

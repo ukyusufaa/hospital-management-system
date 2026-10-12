@@ -1,5 +1,7 @@
 import sqlite3
 import calendar 
+from datetime import date
+
 from colors import DISPLAY_INFO,PATIENT_MENU,ERROR,RESET
 
 class Patient():
@@ -114,6 +116,10 @@ class Patient():
             
             if day > days_in_month:
                 print(f"{ERROR}Please enter a valid date.{RESET}")
+                continue
+
+            if date(year,month,day) > date.today():
+                print(f"{ERROR}Date of birth cannot be a future date.{RESET}")
                 continue
             break
 
@@ -382,9 +388,9 @@ class Patient():
                 print(f"{ERROR}Date of birth must use the format (DD/MM/YYYY).{RESET}")
                 continue
     
-            day = int(self.dob[0:2])
-            month = int(self.dob[3:5])
-            year = int(self.dob[6:10])
+            day = int(updated_dob[0:2])
+            month = int(updated_dob[3:5])
+            year = int(updated_dob[6:10])
     
             if day < 1 or day > 31:
                 print(f"{ERROR}Please enter a valid day.{RESET}")
@@ -402,6 +408,10 @@ class Patient():
                 
             if day > days_in_month:
                 print(f"{ERROR}Please enter a valid date.{RESET}")
+                continue
+
+            if date(year,month,day) > date.today():
+                print(f"{ERROR}Date of birth cannot be a future date.{RESET}")
                 continue
             break
     
