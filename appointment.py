@@ -191,7 +191,7 @@ class Appointment():
             hour = int(self.appointment_time[0:2])
             minutes = int(self.appointment_time[3:5])
 
-            if hour < 8 or hour > 18:
+            if hour < 8 or hour > 18 or (hour == 18 and minutes > 0):
                 print()
                 print(f"{ERROR}Appointments are available between 08:00 and 18:00.{RESET}")
                 continue
@@ -552,9 +552,10 @@ class Appointment():
             hour = int(updated_appointment_time[0:2])
             minutes = int(updated_appointment_time[3:5])
     
-            if hour < 8 or hour > 18:
+            if hour < 8 or hour > 18 or (hour == 18 and minutes > 0):
                 print()
                 print(f"{ERROR}Appointments are available between 08:00 and 18:00.{RESET}")
+                continue
     
             if minutes not in (0, 15, 30, 45):
                 print()

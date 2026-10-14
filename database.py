@@ -96,37 +96,37 @@ CREATE TABLE IF NOT EXISTS patient(
 """)
 
 database.cursor.execute("""
-    CREATE TRIGGER IF NOT EXISTS patient_dob_not_future_insert
-    BEFORE INSERT ON patient
-    FOR EACH ROW
-    WHEN date(
-        substr(NEW.dob, 7, 4) || '-' ||
-        substr(NEW.dob, 4, 2) || '-' ||
-        substr(NEW.dob, 1, 2)
-    ) > date('now')
-    BEGIN
-        SELECT RAISE(
-            ABORT,
-            'Date of birth cannot be in the future'
-        );
-    END;
+CREATE TRIGGER IF NOT EXISTS patient_dob_not_future_insert
+BEFORE INSERT ON patient
+FOR EACH ROW
+WHEN date(
+    substr(NEW.dob, 7, 4) || '-' ||
+    substr(NEW.dob, 4, 2) || '-' ||
+    substr(NEW.dob, 1, 2)
+) > date('now')
+BEGIN
+    SELECT RAISE(
+        ABORT,
+        'Date of birth cannot be in the future'
+    );
+END;
 """)
 
 database.cursor.execute("""
-    CREATE TRIGGER IF NOT EXISTS patient_dob_not_future_update
-    BEFORE UPDATE OF dob ON patient
-    FOR EACH ROW
-    WHEN date(
-        substr(NEW.dob, 7, 4) || '-' ||
-        substr(NEW.dob, 4, 2) || '-' ||
-        substr(NEW.dob, 1, 2)
-    ) > date('now')
-    BEGIN
-        SELECT RAISE(
-            ABORT,
-            'Date of birth cannot be in the future'
-        );
-    END;
+CREATE TRIGGER IF NOT EXISTS patient_dob_not_future_update
+BEFORE UPDATE OF dob ON patient
+FOR EACH ROW
+WHEN date(
+    substr(NEW.dob, 7, 4) || '-' ||
+    substr(NEW.dob, 4, 2) || '-' ||
+    substr(NEW.dob, 1, 2)
+) > date('now')
+BEGIN
+    SELECT RAISE(
+        ABORT,
+        'Date of birth cannot be in the future'
+    );
+END;
 """)
 
 
@@ -145,8 +145,50 @@ database.cursor.execute("""
 CREATE TABLE IF NOT EXISTS appointment(
                appointment_id INTEGER PRIMARY KEY AUTOINCREMENT,
                patient_id INTEGER,
-               appointment_date TEXT NOT NULL,
-               appointment_time TEXT NOT NULL,
+               appointment_date TEXT NOT NULL
+               CHECK (
+                      length(appointment_date) = 10
+                      AND appointment_date GLOB '[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]'
+                      AND CAST(substr(appointment_date, 7, 4) AS INTEGER) >= 1900
+                      AND CAST(substr(appointment_date, 4, 2) AS INTEGER) BETWEEN 1 AND 12
+                            AND CAST(substr(appointment_date, 1, 2) AS INTEGER) BETWEEN 1 AND
+                            CASE CAST(substr(appointment_date, 4, 2) AS INTEGER)
+                                WHEN 1 THEN 31
+                                WHEN 2 THEN
+                                    CASE
+                                        WHEN (
+                                            CAST(substr(appointment_date, 7, 4) AS INTEGER) % 400 = 0
+                                            OR (
+                                                CAST(substr(appointment_date, 7, 4) AS INTEGER) % 4 = 0
+                                                AND CAST(substr(appointment_date, 7, 4) AS INTEGER) % 100 != 0
+                                                )
+                                            )
+                                            THEN 29
+                                            ELSE 28
+                                        END
+                                WHEN 3 THEN 31
+                                WHEN 4 THEN 30
+                                WHEN 5 THEN 31
+                                WHEN 6 THEN 30
+                                WHEN 7 THEN 31
+                                WHEN 8 THEN 31
+                                WHEN 9 THEN 30
+                                WHEN 10 THEN 31
+                                WHEN 11 THEN 30
+                                WHEN 12 THEN 31
+                                ELSE 0
+                            END
+                            ),
+               appointment_time TEXT NOT NULL
+               CHECK (
+                    appointment_time GLOB '[0-1][0-9]:[0-5][0-9]'
+                    AND CAST(substr(appointment_time, 1, 2) AS INTEGER) BETWEEN 8 AND 18
+                    AND CAST(substr(appointment_time, 4, 2) AS INTEGER) IN (0, 15, 30, 45)
+                    AND (
+                        CAST(substr(appointment_time, 1, 2) AS INTEGER) < 18
+                        OR CAST(substr(appointment_time, 4, 2) AS INTEGER) = 0
+                    )
+                ),
                consultant_id INTEGER,
 
                FOREIGN KEY(patient_id)
@@ -160,6 +202,33 @@ CREATE TABLE IF NOT EXISTS appointment(
                UNIQUE(patient_id, appointment_date, appointment_time))
 """)
 
+database.cursor.execute("""
+CREATE TRIGGER IF NOT EXISTS appointment_date_future_insert
+BEFORE INSERT ON appointment
+FOR EACH ROW
+WHEN date(
+    substr(NEW.appointment_date, 7, 4) || '-' ||
+    substr(NEW.appointment_date, 4, 2) || '-' ||
+    substr(NEW.appointment_date, 1, 2)
+) <= date('now')
+BEGIN
+    SELECT RAISE(ABORT, 'Appointment date must be in the future');
+END;
+""")
+
+database.cursor.execute("""
+CREATE TRIGGER IF NOT EXISTS appointment_date_future_update
+BEFORE UPDATE OF appointment_date ON appointment
+FOR EACH ROW
+WHEN date(
+    substr(NEW.appointment_date, 7, 4) || '-' ||
+    substr(NEW.appointment_date, 4, 2) || '-' ||
+    substr(NEW.appointment_date, 1, 2)
+) <= date('now')
+BEGIN
+    SELECT RAISE(ABORT, 'Appointment date must be in the future');
+END;
+""")
 
 database.cursor.execute("""
 CREATE TABLE IF NOT EXISTS prescription(
