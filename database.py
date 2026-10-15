@@ -241,7 +241,9 @@ CREATE TABLE IF NOT EXISTS prescription(
 
 database.cursor.execute("""
 CREATE TABLE IF NOT EXISTS prescription_medication(
-               prescription_instructions TEXT NOT NULL,
+               prescription_instructions TEXT NOT NULL
+                    CHECK (length(trim(prescription_instructions)) > 0 
+                           AND length(prescription_instructions) <= 100),
                prescription_id INTEGER,
                medication_id INTEGER,
 
@@ -258,10 +260,11 @@ CREATE TABLE IF NOT EXISTS prescription_medication(
 database.cursor.execute("""
 CREATE TABLE IF NOT EXISTS bill(
                bill_id INTEGER PRIMARY KEY AUTOINCREMENT,
-               total_amount REAL NOT NULL,
+               total_amount REAL NOT NULL
+                    CHECK(total_amount > 0 AND ROUND(total_amount, 2) = total_amount),
                appointment_id INTEGER UNIQUE,
                payment_status TEXT NOT NULL
-                              CHECK(payment_status IN ('UNPAID', 'PAID')),
+                    CHECK(payment_status IN ('UNPAID', 'PAID')),
 
                FOREIGN KEY(appointment_id)
                REFERENCES appointment(appointment_id))

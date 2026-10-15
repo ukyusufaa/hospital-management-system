@@ -59,6 +59,25 @@ class Bill():
 
         print(f"{DISPLAY_INFO}Appointment ID: {appointment_record[0]}{RESET}")
 
+        # Find the bill linked to this appointment.
+        try:
+            self.database.cursor.execute("""
+                SELECT * FROM bill
+                WHERE appointment_id = ?
+            """,(self.appointment_id,))
+
+        except sqlite3.Error as e:
+            print(f"{ERROR}Unable to find the bill linked to this appointment.{RESET}")
+            return
+
+        bill_record = self.database.cursor.fetchone()
+
+        if bill_record:
+            print(f"{ERROR}This appointment already has an existing bill.{RESET}")
+            return
+
+        print(f"{DISPLAY_INFO}This appointment does not have a previous bill.{RESET}")
+
         # Find the one prescription associated with the one appointment.
         try:
             self.database.cursor.execute("""
