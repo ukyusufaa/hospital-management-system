@@ -10,11 +10,179 @@ class Bill():
         self.payment_status = payment_status
 
     def show_bill_details(self):
-        print("=" * 30)
-        print(f"{DISPLAY_INFO}Total Amount:{self.total_amount}{RESET}")
-        print(f"{DISPLAY_INFO}Appointment ID:{self.appointment_id}{RESET}")
+        print("=" * 40)
+        print(f"{DISPLAY_INFO}Total Amount: £{self.total_amount:.2f}{RESET}")
+        print(f"{DISPLAY_INFO}Appointment ID: {self.appointment_id}{RESET}")
         print(f"{DISPLAY_INFO}Payment Status: {self.payment_status}{RESET}")
-        print("-" * 30)
+
+        try:
+            self.database.cursor.execute("""
+                SELECT medication_id, medication_name, unit_cost
+                FROM bill_item
+                WHERE bill_id = (
+                    SELECT bill_id
+                    FROM bill
+                    WHERE appointment_id = ?
+                )
+            """, (self.appointment_id,))
+
+            bill_items = self.database.cursor.fetchall()
+
+        except sqlite3.Error as e:
+            print(f"{ERROR}Unable to retrieve bill items. {e}{RESET}")
+            print("=" * 40)
+            return
+
+        print("-" * 40)
+        print(f"{DISPLAY_INFO}Medication Charges:{RESET}")
+
+        if bill_items:
+            for item in bill_items:
+                medication_id, medication_name, unit_cost = item
+                print(f"{DISPLAY_INFO}Medication ID: {medication_id}{RESET}")
+                print(f"{DISPLAY_INFO}Medication Name: {medication_name}{RESET}")
+                print(f"{DISPLAY_INFO}Medication Cost: £{unit_cost:.2f}{RESET}")
+                print("-" * 40)
+        else:
+            print(f"{DISPLAY_INFO}No medication items recorded.{RESET}")
+        print("=" * 40)
+
+    
+    def show_invoice(self):
+        try:
+            self.database.cursor.execute("""
+                SELECT
+                    bill.bill_id,
+                    bill.payment_status,
+                    date('now'),
+                    appointment.appointment_id,
+                    patient.patient_id,
+                    patient.first_name,
+                    patient.surname,
+                    patient.address,
+                    consultant.first_name,
+                    consultant.surname,
+                    department.department_name,
+                    gp.first_name,
+                    gp.surname,
+                    gp_surgery.surgery_name,
+                    gp_surgery.address
+
+                FROM bill
+                INNER JOIN appointment
+                    ON bill.appointment_id = appointment.appointment_id
+                INNER JOIN patient
+                    ON appointment.patient_id = patient.patient_id
+                INNER JOIN consultant
+                    ON appointment.consultant_id = consultant.consultant_id
+                INNER JOIN department
+                    ON consultant.department_id = department.department_id
+                INNER JOIN gp
+                    ON patient.gp_id = gp.gp_id
+                INNER JOIN gp_surgery
+                    ON gp.surgery_id = gp_surgery.surgery_id
+                WHERE bill.appointment_id = ?
+                """, (self.appointment_id,))
+
+            invoice = self.database.cursor.fetchone()
+
+        except sqlite3.Error as e:
+            print(f"{ERROR}Unable to retrieve invoice. {e}{RESET}")
+            return
+
+        if invoice is None:
+            print(f"{ERROR}No invoice found for this appointment.{RESET}")
+            return
+    
+        (   
+            bill_id,
+            payment_status,
+            invoice_date,
+            appointment_id,
+            patient_id,
+            patient_first_name,
+            patient_surname,
+            patient_address,
+            consultant_first_name,
+            consultant_surname,
+            department_name,
+            gp_first_name,
+            gp_surname,
+            surgery_name,
+            surgery_address
+        
+        ) = invoice
+
+        try:
+            self.database.cursor.execute("""
+                SELECT
+                    bill_item.medication_name,
+                    bill_item.unit_cost
+                FROM bill
+                    LEFT JOIN bill_item
+                        ON bill_item.bill_id = bill.bill_id
+                    WHERE bill.appointment_id = ?
+                    """, (self.appointment_id,))
+        
+            bill_items = self.database.cursor.fetchall()
+        
+        except sqlite3.Error as e:
+            print(f"{ERROR}Unable to retrieve invoice. {e}{RESET}")
+            return
+        
+        if not bill_items:
+            print(f"{ERROR}No invoice found for this appointment.{RESET}")
+            return
+
+        print()
+        print("*" * 50)
+        print("                 HOLLY HOSPITAL")
+        print("*" * 50)
+        print("                 Hospital Invoice")
+        print()
+
+
+        print("=" * 50)
+        print(f"Bill ID: BILL-{bill_id:03d}")
+        print(f"Payment Status: {payment_status}")
+        print(f"Invoice Date: {invoice_date}")
+        print(f"Appointment ID: {appointment_id}")
+        print()
+
+        for item in bill_items:
+            medication_name, medication_cost = item
+            print("*" *50)
+            print("BILL ITEM DETAILS")
+            print(f"Medication: {medication_name}")
+            print(f"Medication Cost: £{medication_cost:.2f}")
+            print("*" * 50)
+            print()
+
+        print("/" *50)
+        print(f"TOTAL AMOUNT: £{self.total_amount:.2f}")
+        print("/" * 50)
+        print()
+
+        print("PATIENT DETAILS")
+        print(f"Patient ID: {patient_id}")
+        print(f"Patient: {patient_first_name} {patient_surname}")
+        print(f"Patient Address: {patient_address}")
+        print()
+
+        print("CONSULTANT DETAILS")
+        print(f"Hospital Consultant: {consultant_first_name} {consultant_surname}")
+        print()
+
+        print("DEPARTMENT DETAILS")
+        print(f"Hospital Department: {department_name}")
+        print()
+
+        print("GP AND MEDICAL CLINIC")
+        print(f"GP: {gp_first_name} {gp_surname}")
+        print(f"Medical Clinic: {surgery_name}")
+        print(f"Medical Clinic Address: {surgery_address}")
+
+        print("-" * 50)
 
     def validate_login_id(self,number):
         return number >= 1
@@ -89,7 +257,6 @@ class Bill():
             print(f"{ERROR}Unable to find the prescription. Please try again.{e}{RESET}")
             return 
 
-        # Get the one prescription details from the database.
         prescription_record = self.database.cursor.fetchone()
 
         if not prescription_record:
@@ -98,7 +265,6 @@ class Bill():
 
         print(f"{DISPLAY_INFO}A prescription linked to this appointment found.{RESET}")
 
-        # If the one prescription linked to one appointment exists.
         # prescription_id was not created in __init__.
         # We create the object attribute here using self and store the ID from the database row.
         
@@ -106,10 +272,8 @@ class Bill():
         print(f"{DISPLAY_INFO}Prescription ID: {self.prescription_id}{RESET}")
         print()
 
-        # Find all the medications listed on this one prescription.
-        # Remember this one prescription is linked to one appointment.
         try:
-        # This junction table contains prescription_id, medication_id together so linking them.
+        # This junction table contains prescription_id, medication_id
             self.database.cursor.execute("""
                 SELECT * FROM prescription_medication
                 WHERE prescription_id = ?
@@ -131,21 +295,16 @@ class Bill():
               f"linked to this prescription found.{RESET}")
         print()
 
-        # If Medications are found.
+        # Create empty list
         # Start the bill total at zero.
+        bill_items = []
         self.total_amount = 0
 
-        # Go through each medication linked to this prescription.
         for prescription_medication_row in prescription_medication_rows:
-
-            # Get the medication ID from the junction table.
-            # Store the medication ID in the Bill object.
             self.medication_id = prescription_medication_row[2]
 
-            # Display each medication ID linked to this one prescription.
             print(f"{DISPLAY_INFO}Medication ID: {self.medication_id}{RESET}")
 
-            # Use the medication ID stored in the Bill object.
             try:
                 self.database.cursor.execute("""
                     SELECT * FROM medication
@@ -157,21 +316,22 @@ class Bill():
                         f"medications. Please try again.{e}{RESET}")
                 return
 
-            # Retrieve all matching medication records.
-            medication_rows = self.database.cursor.fetchall()
+            medication_record = self.database.cursor.fetchone()
 
-            if not medication_rows:
+            if not medication_record:
                 print(f"{ERROR}No Medication found.{RESET}")
                 return
         
-            # From the medication table show all the medications and their details. 
-            # Show medication_id, name, cost of each medication.
-            print(f"{DISPLAY_INFO}Medication{medication_rows}{RESET}")
+            print(f"{DISPLAY_INFO}Medication{medication_record}{RESET}")
 
-            # Retrieve row(medication) and its cost at index 2 from the many medication rows.
-            # Add each medication cost to the bill total.
-            for row in medication_rows:
-                self.total_amount += row[2]
+        
+            self.total_amount += medication_record[2]
+
+            bill_items.append({
+                "medication_id": medication_record[0],
+                "medication_name": medication_record[1],
+                "unit_cost": medication_record[2]
+            })
 
         # Set the initial payement status.
         self.payment_status = "UNPAID"
@@ -179,25 +339,50 @@ class Bill():
         # Insert the calculated bill into the database.
         try:
             self.database.cursor.execute("""
-                INSERT INTO bill(
+                INSERT INTO bill (
                     appointment_id,
                     total_amount,
-                    payment_status)
-                VALUES(?,?,?)
-            """,(self.appointment_id,
+                    payment_status
+                )
+                VALUES (?, ?, ?)
+            """, (
+                self.appointment_id,
                 self.total_amount,
-                self.payment_status))
-                    
-        # Save the transaction to the database.
+                self.payment_status
+            ))
+
+            # Get the ID of the newly created bill.
+            bill_id = self.database.cursor.lastrowid
+
+            # Save each medication as a separate bill item.
+            for item in bill_items:
+                self.database.cursor.execute("""
+                    INSERT INTO bill_item (
+                        bill_id,
+                        medication_id,
+                        medication_name,
+                        unit_cost
+                    )
+                    VALUES (?, ?, ?, ?)
+                """, (
+                    bill_id,
+                    item["medication_id"],
+                    item["medication_name"],
+                    item["unit_cost"]
+                ))
+
+            # Save the bill and its items together.
             self.database.connection.commit()
 
         except sqlite3.Error as e:
-            print(f"{ERROR}Unable to create the bill. Please try again.{e}{RESET}")
+            # Undo any incomplete database changes.
+            self.database.connection.rollback()
+            print(
+                f"{ERROR}Unable to create the bill. "
+                f"Please try again. {e}{RESET}"
+            )
             return
 
-        print(f"{DISPLAY_INFO}Bill created successfully.{RESET}")
-
-        bill_id = self.database.cursor.lastrowid
         print(f"{DISPLAY_INFO}Bill ID: {bill_id}{RESET}")
         print()
 
@@ -229,6 +414,7 @@ class Bill():
             )
             print(f"{DISPLAY_INFO}Bill ID:{bill_row[0]}{RESET}")
             billing.show_bill_details()
+            billing.show_invoice()
             print()
 
     def search_bill(self):

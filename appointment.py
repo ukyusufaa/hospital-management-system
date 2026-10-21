@@ -328,8 +328,6 @@ class Appointment():
                     print()
                     print(f"{ERROR}Please enter a valid appointment ID.{RESET}")
                     continue
-                
-                print(f"{DISPLAY_INFO}Appointment found.{RESET}")
                 break
         
             except ValueError:
@@ -356,11 +354,13 @@ class Appointment():
             print()
             print(f"{ERROR}We couldn't find an appointment with that ID.{RESET}")
             return
+
+        print(f"{DISPLAY_INFO}Appointment found.{RESET}")
         
         self.patient_id = appointment_record[1]
-        self.consultant_id = appointment_record[2]
-        self.appointment_date = appointment_record[3]
-        self.appointment_time = appointment_record[4]
+        self.appointment_date = appointment_record[2]
+        self.appointment_time = appointment_record[3]
+        self.consultant_id = appointment_record[4]
 
         print(f"{DISPLAY_INFO}Appointment ID:{appointment_record[0]}{RESET}")
         self.show_details_appointment()
@@ -681,9 +681,9 @@ class Appointment():
             return 
         
         self.patient_id = appointment_record[1]
-        self.consultant_id = appointment_record[2]
-        self.appointment_date = appointment_record[3]
-        self.appointment_time = appointment_record[4]
+        self.appointment_date = appointment_record[2]
+        self.appointment_time = appointment_record[3]
+        self.consultant_id = appointment_record[4]
 
         print(f"{DISPLAY_INFO}Appointment ID: {appointment_record[0]}{RESET}")
         self.show_details_appointment()
@@ -714,9 +714,10 @@ class Appointment():
         # Save the deletion to the database.
             self.database.connection.commit()
 
-        except sqlite3.Error as e:
+        except sqlite3.Error:
             print()
-            print(f"{ERROR}Unable to delete the appointment. Please try again.{e}{RESET}")
+            print(f"{ERROR}Cannot delete appointment: a related bill "
+                  f"or prescription exists.{RESET}")
             return
            
         print(f"{DISPLAY_INFO}Appointment deleted successfully.{RESET}")

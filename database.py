@@ -244,8 +244,8 @@ CREATE TABLE IF NOT EXISTS prescription_medication(
                prescription_instructions TEXT NOT NULL
                     CHECK (length(trim(prescription_instructions)) > 0 
                            AND length(prescription_instructions) <= 100),
-               prescription_id INTEGER,
-               medication_id INTEGER,
+               prescription_id INTEGER NOT NULL,
+               medication_id INTEGER NOT NULL,
 
                FOREIGN KEY(prescription_id)
                REFERENCES prescription(prescription_id),
@@ -269,6 +269,24 @@ CREATE TABLE IF NOT EXISTS bill(
                FOREIGN KEY(appointment_id)
                REFERENCES appointment(appointment_id))
 
+""")
+
+database.cursor.execute("""
+CREATE TABLE IF NOT EXISTS bill_item (
+                bill_item_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                bill_id INTEGER NOT NULL,
+                medication_id INTEGER,
+                medication_name TEXT NOT NULL,
+                unit_cost REAL NOT NULL CHECK (unit_cost > 0),
+                FOREIGN KEY (bill_id) REFERENCES bill(bill_id))
+""")
+
+database.cursor.execute("""
+CREATE TRIGGER IF NOT EXISTS prevent_bill_item_deletion
+                BEFORE DELETE ON bill_item
+                BEGIN
+                    SELECT RAISE(ABORT, 'Bill items cannot be deleted');
+                END;
 """)
 
 database.connection.commit()

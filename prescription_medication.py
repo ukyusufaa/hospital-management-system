@@ -9,13 +9,38 @@ class PrescriptionMedication():
         self.prescription_instructions = prescription_instructions
         self.prescription_id = prescription_id
         self.medication_id = medication_id
-
+  
     def show_prescription_medication_details(self):
+        try:
+            self.database.cursor.execute("""
+                SELECT medication.medication_name, medication.cost
+                FROM prescription_medication
+                JOIN medication
+                ON prescription_medication.medication_id = medication.medication_id
+                WHERE prescription_medication.prescription_id = ?
+                AND prescription_medication.medication_id = ?
+            """, (self.prescription_id, self.medication_id))
+
+            medication_record = self.database.cursor.fetchone()
+
+        except sqlite3.Error as e:
+            print(f"{ERROR}Unable to retrieve medication details. Please try again. {e}{RESET}")
+            return
+
         print("=" * 30)
         print(f"{DISPLAY_INFO}Regimen Instructions: {self.prescription_instructions}{RESET}")
         print(f"{DISPLAY_INFO}Prescription ID: {self.prescription_id}{RESET}")
         print(f"{DISPLAY_INFO}Medication ID: {self.medication_id}{RESET}")
+
+        if medication_record:
+            medication_name, medication_cost = medication_record
+            print(f"{DISPLAY_INFO}Medication Name: {medication_name}{RESET}")
+            print(f"{DISPLAY_INFO}Medication Cost: £{medication_cost:.2f}{RESET}")
+        else:
+            print(f"{ERROR}Medication details could not be found.{RESET}")
+
         print("-" * 30)
+
 
     def validate_login_id(self,number):
         return number >= 1
@@ -104,11 +129,11 @@ class PrescriptionMedication():
         # Save the new prescription-medication record to the database.
             self.database.connection.commit()
 
-        except sqlite3.Error as e:
-            print(f"{ERROR}Unable to add the regimen. Please try again.{e}{RESET}")
+        except sqlite3.Error:
+            print(f"{ERROR}Invalid prescription or medication ID.{RESET}")
             return
 
-        print(f"{DISPLAY_INFO}Regimen added successfully.{RESET}")
+        print(f"{DISPLAY_INFO}Regimen inserted successfully.{RESET}")
         print()
 
         self.show_prescription_medication_details()

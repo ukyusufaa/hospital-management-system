@@ -216,8 +216,8 @@ class Prescription():
         # Save the deletion to the database.
             self.database.connection.commit()
 
-        except sqlite3.Error as e:
-            print(f"{ERROR}Unable to delete the prescription.{RESET}", e)
+        except sqlite3.Error:
+            print(f"{ERROR}Cannot delete prescription: medication exists.{RESET}")
             return 
 
         print(f"{DISPLAY_INFO}Prescription deleted successfully.{RESET}")
