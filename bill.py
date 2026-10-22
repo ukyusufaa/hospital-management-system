@@ -414,8 +414,55 @@ class Bill():
             )
             print(f"{DISPLAY_INFO}Bill ID:{bill_row[0]}{RESET}")
             billing.show_bill_details()
-            billing.show_invoice()
             print()
+
+        while True:
+            try:
+                choice = input(f"{DISPLAY_INFO}Would you like more information " 
+                        f"on a particular bill? (Y/N){RESET}").lower()
+                if not self.validate_yes_no(choice):
+                    print(f"{ERROR}Please enter Y/y for yes or N/n for no.{RESET}")
+                    continue
+            
+                if choice == 'n':
+                    print("Goodbye")
+                    return
+                
+                self.appointment_id = int(input(f"{BILLING_MENU}Please enter "
+                                    f"the appointment_id: {RESET}"))
+                                
+                if not self.validate_login_id(self.appointment_id):
+                    print(f"{ERROR}Please enter a valid appointment ID.{RESET}")
+                    continue 
+                break
+                            
+            except ValueError:
+                    print(f"{ERROR}Please enter the appointment ID using numbers only.{RESET}")
+                    continue
+        try:
+            self.database.cursor.execute("""
+                SELECT * FROM bill
+                WHERE appointment_id = ?
+            """,(self.appointment_id,))
+
+        except sqlite3.Error as e:
+            print(f"{ERROR}Unable to find the bill linked to this appointment.{RESET}")
+            return
+
+        bill_record = self.database.cursor.fetchone()
+
+        if not bill_record:
+            print(f"{ERROR}This appointment ID does not exist.{RESET}")
+            return
+
+        self.bill_id = bill_record[0]
+        self.total_amount = bill_record[1]
+        self.appointment_id = bill_record[2]
+        self.payment_status = bill_record[3]
+
+        self.show_invoice()
+        return
+
 
     def search_bill(self):
         while True:
@@ -458,7 +505,7 @@ class Bill():
         print()
 
         # Display the matching bill.
-        self.show_bill_details()
+        self.show_invoice()
         
 
     def bill_update(self):
@@ -501,16 +548,64 @@ class Bill():
         self.show_bill_details()
         print()
 
+        try:
+            self.database.cursor.execute("""
+                SELECT
+                    patient.patient_id,
+                    patient.first_name,
+                    patient.surname
+                FROM bill
+                    INNER JOIN appointment
+                        ON bill.appointment_id = appointment.appointment_id
+                    INNER JOIN patient
+                        ON appointment.patient_id = patient.patient_id
+                WHERE bill.appointment_id = ?
+                    """, (self.appointment_id,))
+        
+            bill_listed = self.database.cursor.fetchone()
+        
+        except sqlite3.Error as e:
+                print(f"{ERROR}Unable to retrieve invoice. {e}{RESET}")
+                return
+        
+        if  bill_listed is None:
+            print(f"{ERROR}No invoice found for this appointment.{RESET}")
+            return
+            
+        (   
+            patient_id,
+            patient_first_name,
+            patient_surname
+
+        ) = bill_listed
+
+        if self.payment_status == "PAID":
+            print(
+                    f"{DISPLAY_INFO}Bill paid already\n"
+                    f"Bill ID: {bill_row[0]}\n"
+                    f"Patient ID: {patient_id}\n"
+                    f"Patient: {patient_first_name} {patient_surname}\n"
+                    f"Payment Status: PAID{RESET}"
+                )
+            return
+        
         while True:
         # Ask the user whether the bill has been paid.
-            bill_paid = input(f"{DISPLAY_INFO}Has this bill been paid? (Y/N)").lower()
+            bill_paid = input(f"{DISPLAY_INFO}Does to patient wish to pay " 
+                              f"this bill? (Y/N){RESET}").lower()
             if not self.validate_yes_no(bill_paid):
                 print(f"{ERROR}Please enter Y/y for yes or N/n for no.{RESET}")
                 continue
 
             if bill_paid == 'n':
-                    print(f"{DISPLAY_INFO}The bill remains unpaid.{RESET}")
-                    return
+                print(
+                    f"{DISPLAY_INFO}Bill not paid \n"
+                    f"Bill ID: {bill_row[0]}\n"
+                    f"Patient ID: {patient_id}\n"
+                    f"Patient: {patient_first_name} {patient_surname}\n"
+                    f"Payment Status: UNPAID{RESET}"
+                    )
+                return
             break
                 
         # Update the payment status to PAID
@@ -531,7 +626,13 @@ class Bill():
             print(f"{ERROR}Unable to update the bill. Please try again.{e}{RESET}")
             return
 
-        print(f"{DISPLAY_INFO}Bill payment status updated successfully.{RESET}")
+        print(
+            f"{DISPLAY_INFO}Bill Payment Successful\n"
+            f"Bill ID: {bill_row[0]}\n"
+            f"Patient ID: {patient_id}\n"
+            f"Patient: {patient_first_name} {patient_surname}\n"
+            f"Payment Status: PAID{RESET}"
+        )
 
         print(f"{DISPLAY_INFO}Billing ID: {bill_row[0]}{RESET}")
         print()
