@@ -9,8 +9,8 @@ class Medication():
     
     def show_medication_details(self):
         print("=" * 30)
-        print(f"{DISPLAY_INFO}Medication Name:{self.medication_name}{RESET}")
-        print(f"{DISPLAY_INFO}Cost:{self.cost}{RESET}")
+        print(f"Medication Name:{DISPLAY_INFO} {self.medication_name}{RESET}")
+        print(f"Cost:{DISPLAY_INFO} {self.cost}{RESET}")
         print("-" * 30)
 
         # Validate IDs to ensure they are positive integers.
@@ -97,7 +97,7 @@ class Medication():
         print()
 
         medication_id = self.database.cursor.lastrowid
-        print(f"{DISPLAY_INFO}Medication ID: {medication_id}{RESET}")
+        print(f"Medication ID:{DISPLAY_INFO} {medication_id}{RESET}")
         self.show_medication_details()
 
 
@@ -118,7 +118,7 @@ class Medication():
                 medication_row[2]
                 )
             
-            print(f"{DISPLAY_INFO}Medication ID: {medication_row[0]}{RESET}")
+            print(f"Medication ID:{DISPLAY_INFO} {medication_row[0]}{RESET}")
             medication.show_medication_details()
             print()
         
@@ -156,7 +156,7 @@ class Medication():
         self.medication_name = medication_row[1]
         self.cost = medication_row[2]
         
-        print(f"{DISPLAY_INFO}Medication ID: {medication_row[0]}{RESET}")
+        print(f"Medication ID:{DISPLAY_INFO} {medication_row[0]}{RESET}")
         self.show_medication_details()
     
 
@@ -193,7 +193,7 @@ class Medication():
         self.medication_name = medication_row[1]
         self.cost = medication_row[2]
 
-        print(f"{DISPLAY_INFO}Medication ID: {medication_row[0]}{RESET}")
+        print(f"Medication ID:{DISPLAY_INFO} {medication_row[0]}{RESET}")
         self.show_medication_details()
         print()
             
@@ -296,7 +296,7 @@ class Medication():
         self.medication_name = medication_row[1]
         self.cost = medication_row[2]
 
-        print(f"{DISPLAY_INFO}Medication ID:{medication_row[0]}{RESET}")
+        print(f"Medication ID:{DISPLAY_INFO} {medication_row[0]}{RESET}")
         self.show_medication_details()
         print()
 

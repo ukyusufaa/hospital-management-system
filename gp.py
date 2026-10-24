@@ -12,9 +12,9 @@ class Gp:
 
     def show_details_gp(self):
         print("=" * 30)
-        print(f"{DISPLAY_INFO}GP First Name: {self.first_name}{RESET}")
-        print(f"{DISPLAY_INFO}GP Last Name: {self.surname}{RESET}")
-        print(f"{DISPLAY_INFO}Medical Practice ID: {self.surgery_id}{RESET}")
+        print(f"GP First Name:{DISPLAY_INFO} {self.first_name}{RESET}")
+        print(f"GP Last Name:{DISPLAY_INFO} {self.surname}{RESET}")
+        print(f"Medical Practice ID:{DISPLAY_INFO} {self.surgery_id}{RESET}")
         print("-" * 30)
 
         # Validate names using letters and spaces only.
@@ -112,7 +112,7 @@ class Gp:
         print(f"{DISPLAY_INFO}GP created successfully.{RESET}")
 
         gp_id = self.database.cursor.lastrowid
-        print(f"{DISPLAY_INFO}GP ID:{gp_id}{RESET}")
+        print(f"GP ID:{DISPLAY_INFO} {gp_id}{RESET}")
         self.show_details_gp()
         return
 
@@ -139,7 +139,7 @@ class Gp:
                 gp_record[3]
             )
 
-            print(f"{DISPLAY_INFO}GP ID: {gp_record[0]}{RESET}")
+            print(f"GP ID:{DISPLAY_INFO} {gp_record[0]}{RESET}")
             gp.show_details_gp()
             print()
 
@@ -178,7 +178,7 @@ class Gp:
         self.surname = gp_record[2]
         self.surgery_id = gp_record[3]
 
-        print(f"{DISPLAY_INFO}GP ID: {gp_record[0]}{RESET}")
+        print(f"GP ID:{DISPLAY_INFO} {gp_record[0]}{RESET}")
         self.show_details_gp()
     
 
@@ -215,7 +215,7 @@ class Gp:
         self.surname = gp_record[2]
         self.surgery_id = gp_record[3]
 
-        print(f"{DISPLAY_INFO}GP ID: {gp_record[0]}{RESET}")
+        print(f"GP ID:{DISPLAY_INFO} {gp_record[0]}{RESET}")
         self.show_details_gp()
 
         while True:
@@ -327,7 +327,7 @@ class Gp:
         self.surname = gp_record[2]
         self.surgery_id = gp_record[3]
 
-        print(f"{DISPLAY_INFO}GP ID: {gp_record[0]}{RESET}")
+        print(f"GP ID:{DISPLAY_INFO} {gp_record[0]}{RESET}")
         self.show_details_gp()
 
         while True:

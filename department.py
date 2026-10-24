@@ -8,7 +8,7 @@ class Department():
     
     def show_department_details(self):
         print("=" * 30)
-        print(f"{DISPLAY_INFO}Department Name:{self.department_name}{RESET}")
+        print(f"Department Name:{DISPLAY_INFO} {self.department_name}{RESET}")
         print("-" * 30)
 
         # Validate department names using letters and spaces only.
@@ -56,7 +56,7 @@ class Department():
         print()
 
         department_id = self.database.cursor.lastrowid
-        print(f"{DISPLAY_INFO}Department ID: {department_id}{RESET}")
+        print(f"Department ID:{DISPLAY_INFO} {department_id}{RESET}")
         print()
 
         self.show_department_details()
@@ -83,7 +83,7 @@ class Department():
             department[1]
             )
 
-            print(f"{DISPLAY_INFO}Department ID:{department[0]}{RESET}")
+            print(f"Department ID:{DISPLAY_INFO} {department[0]}{RESET}")
             new_dept.show_department_details()
             print()
 
@@ -120,7 +120,7 @@ class Department():
         
         self.department_name = department[1]
             
-        print(f"{DISPLAY_INFO}Department ID:{department[0]}{RESET}")
+        print(f"Department ID:{DISPLAY_INFO} {department[0]}{RESET}")
         print()
         self.show_department_details()
     
@@ -157,7 +157,7 @@ class Department():
         
         self.department_name = department[1]
             
-        print(f"{DISPLAY_INFO}Department ID:{department[0]}{RESET}")
+        print(f"Department ID:{DISPLAY_INFO} {department[0]}{RESET}")
         print()
         self.show_department_details()
         print()
@@ -233,7 +233,7 @@ class Department():
             
         self.department_name = department[1]
                 
-        print(f"{DISPLAY_INFO}Department ID:{department[0]}{RESET}")
+        print(f"Department ID:{DISPLAY_INFO} {department[0]}{RESET}")
         print()
         self.show_department_details()
         print()

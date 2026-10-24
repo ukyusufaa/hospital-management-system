@@ -10,7 +10,7 @@ ADMIN_MENU = "\033[38;2;0;168;107m" # Jade Green
 
 PRACTICE_MENU = "\033[38;2;0;169;165m" # Turquoise
 
-GP_MENU = "\033[38;2;46;;125;50m" # Hospital Green
+GP_MENU = "\033[38;2;46;125;50m" # Hospital Green
 
 DEPARTMENT_MENU = "\033[38;2;25;118;210m" # Medical Blue
 
@@ -30,6 +30,14 @@ PRESCRIPTION_INSTRUCTIONS_MENU = "\033[38;2;124;179;66m" # Lime Green
 
 BILLING_MENU = "\033[38;2;212;160;23m" # Gold
 
+PAID_STATUS = "\033[38;2;255;215;0m" # Bright Gold
+
+UNPAID_STATUS = "\033[38;2;245;245;245m" # Bright Silver
+
+MEDICATION_COST = "\033[38;2;190;80;255m"  # Bright Violet
+
+TOTAL_AMOUNT = "\033[38;2;0;150;255m"    # Bright Blue
+
 RESET = "\033[0m" # Default
 TREE_SUB = "\u2514\u2500\u2500" # Sub Menu Symbol
 
@@ -44,6 +52,7 @@ RETURN_GROUP_MENU = "\033[38;5;213m" # Pink
 EXIT = "\033[38;2;190;35;45m" # Crimson Red
 
 ERROR = "\033[91m" # Bright Red
+
 
 
 

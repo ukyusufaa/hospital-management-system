@@ -19,10 +19,10 @@ class Appointment():
 
     def show_details_appointment(self):
         print("=" * 30)
-        print(f"{DISPLAY_INFO}Patient ID:{self.patient_id}{RESET}")
-        print(f"{DISPLAY_INFO}Appointment Date:{self.appointment_date}{RESET}")
-        print(f"{DISPLAY_INFO}Appointment Time:{self.appointment_time}{RESET}")
-        print(f"{DISPLAY_INFO}Consultant ID:{self.consultant_id}{RESET}")
+        print(f"Patient ID:{DISPLAY_INFO} {self.patient_id}{RESET}")
+        print(f"Appointment Date:{DISPLAY_INFO} {self.appointment_date}{RESET}")
+        print(f"Appointment Time:{DISPLAY_INFO} {self.appointment_time}{RESET}")
+        print(f"Consultant ID:{DISPLAY_INFO} {self.consultant_id}{RESET}")
         print("-" * 30)
 
     # Validate the appointment ID is a positive number.
@@ -283,7 +283,7 @@ class Appointment():
         # Retrieve the ID automatically generated for the new appointment.
         appointment_id = self.database.cursor.lastrowid
         
-        print(f"{DISPLAY_INFO}Appointment ID:{appointment_id}{RESET}")
+        print(f"Appointment ID:{DISPLAY_INFO} {appointment_id}{RESET}")
 
         # Display the newly created appointment
         self.show_details_appointment()
@@ -316,7 +316,7 @@ class Appointment():
                 appointment_record[4]
                 )
             print()
-            print(f"{DISPLAY_INFO}Appointment ID:{appointment_record[0]}{RESET}")
+            print(f"Appointment ID:{DISPLAY_INFO} {appointment_record[0]}{RESET}")
             appointment.show_details_appointment()
 
     def search_appointment(self):
@@ -362,7 +362,7 @@ class Appointment():
         self.appointment_time = appointment_record[3]
         self.consultant_id = appointment_record[4]
 
-        print(f"{DISPLAY_INFO}Appointment ID:{appointment_record[0]}{RESET}")
+        print(f"Appointment ID:{DISPLAY_INFO} {appointment_record[0]}{RESET}")
         self.show_details_appointment()
         return
 
@@ -408,7 +408,7 @@ class Appointment():
         self.appointment_time = appointment_record[3]
         self.consultant_id = appointment_record[4]
 
-        print(f"{DISPLAY_INFO}Appointment ID:{appointment_record[0]}{RESET}")
+        print(f"Appointment ID:{DISPLAY_INFO} {appointment_record[0]}{RESET}")
         self.show_details_appointment()
 
         while True:
@@ -685,7 +685,7 @@ class Appointment():
         self.appointment_time = appointment_record[3]
         self.consultant_id = appointment_record[4]
 
-        print(f"{DISPLAY_INFO}Appointment ID: {appointment_record[0]}{RESET}")
+        print(f"Appointment ID:{DISPLAY_INFO} {appointment_record[0]}{RESET}")
         self.show_details_appointment()
 
         while True:

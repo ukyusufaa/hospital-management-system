@@ -17,11 +17,11 @@ class Patient():
     
     def show_patient_details(self):
         print("=" * 30)
-        print(f"{DISPLAY_INFO}First Name:{self.first_name}{RESET}")
-        print(f"{DISPLAY_INFO}Last Name:{self.surname}{RESET}")
-        print(f"{DISPLAY_INFO}Date of Birth:{self.dob}{RESET}")
-        print(f"{DISPLAY_INFO}Address:{self.address}{RESET}")
-        print(f"{DISPLAY_INFO}GP ID:{self.gp_id}{RESET}")
+        print(f"First Name:{DISPLAY_INFO} {self.first_name}{RESET}")
+        print(f"Last Name:{DISPLAY_INFO} {self.surname}{RESET}")
+        print(f"Date of Birth:{DISPLAY_INFO} {self.dob}{RESET}")
+        print(f"Address:{DISPLAY_INFO} {self.address}{RESET}")
+        print(f"GP ID:{DISPLAY_INFO} {self.gp_id}{RESET}")
         print("-" * 30)
 
         # Validate patient names using letters and spaces.
@@ -211,7 +211,7 @@ class Patient():
         print()
 
         patient_id = self.database.cursor.lastrowid
-        print(f"{DISPLAY_INFO}Patient ID: {patient_id}{RESET}")
+        print(f"Patient ID:{DISPLAY_INFO} {patient_id}{RESET}")
         self.show_patient_details()
         
 
@@ -240,7 +240,7 @@ class Patient():
                 patient_record[5]
             )
 
-            print(f"{DISPLAY_INFO}Patient ID: {patient_record[0]}{RESET}")
+            print(f"Patient ID:{DISPLAY_INFO} {patient_record[0]}{RESET}")
             patient.show_patient_details()
             print()
         
@@ -281,7 +281,7 @@ class Patient():
         self.address = patient_record[4]
         self.gp_id = patient_record[5]
 
-        print(f"{DISPLAY_INFO}Patient ID: {patient_record[0]}{RESET}")
+        print(f"Patient ID:{DISPLAY_INFO} {patient_record[0]}{RESET}")
         self.show_patient_details()
         
 
@@ -322,7 +322,7 @@ class Patient():
         self.address = patient_record[4]
         self.gp = patient_record[5]
 
-        print(f"{DISPLAY_INFO}Patient ID: {patient_record[0]}{RESET}")
+        print(f"Patient ID:{DISPLAY_INFO} {patient_record[0]}{RESET}")
         self.show_patient_details()
         print()
 
@@ -548,7 +548,7 @@ class Patient():
         self.address = patient_record[4]
         self.gp_id = patient_record[5]
 
-        print(f"{DISPLAY_INFO}Patient ID: {patient_record[0]}{RESET}")
+        print(f"Patient ID:{DISPLAY_INFO} {patient_record[0]}{RESET}")
         self.show_patient_details()
         print()
             

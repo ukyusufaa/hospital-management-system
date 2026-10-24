@@ -28,14 +28,14 @@ class PrescriptionMedication():
             return
 
         print("=" * 30)
-        print(f"{DISPLAY_INFO}Regimen Instructions: {self.prescription_instructions}{RESET}")
-        print(f"{DISPLAY_INFO}Prescription ID: {self.prescription_id}{RESET}")
-        print(f"{DISPLAY_INFO}Medication ID: {self.medication_id}{RESET}")
+        print(f"Regimen Instructions:{DISPLAY_INFO} {self.prescription_instructions}{RESET}")
+        print(f"Prescription ID:{DISPLAY_INFO} {self.prescription_id}{RESET}")
+        print(f"Medication ID:{DISPLAY_INFO} {self.medication_id}{RESET}")
 
         if medication_record:
             medication_name, medication_cost = medication_record
-            print(f"{DISPLAY_INFO}Medication Name: {medication_name}{RESET}")
-            print(f"{DISPLAY_INFO}Medication Cost: £{medication_cost:.2f}{RESET}")
+            print(f"Medication Name:{DISPLAY_INFO} {medication_name}{RESET}")
+            print(f"Medication Cost:{DISPLAY_INFO} £{medication_cost:.2f}{RESET}")
         else:
             print(f"{ERROR}Medication details could not be found.{RESET}")
 

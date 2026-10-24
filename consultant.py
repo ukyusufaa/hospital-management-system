@@ -11,9 +11,9 @@ class Consultant():
     
     def show_details_consultant(self):
         print("=" * 30)
-        print(f"{DISPLAY_INFO}First Name:{self.first_name}{RESET}")
-        print(f"{DISPLAY_INFO}Last Name:{self.surname}{RESET}")
-        print(f"{DISPLAY_INFO}Department ID:{self.department_id}{RESET}")
+        print(f"First Name:{DISPLAY_INFO} {self.first_name}{RESET}")
+        print(f"Last Name:{DISPLAY_INFO} {self.surname}{RESET}")
+        print(f"Department ID:{DISPLAY_INFO}{self.department_id}{RESET}")
         print("-" * 30)
     
     def validate_login_id(self,number):
@@ -93,7 +93,7 @@ class Consultant():
         print()
 
         consultant_id = self.database.cursor.lastrowid
-        print(f"{DISPLAY_INFO}Consultant ID: {consultant_id}{RESET}")
+        print(f"Consultant ID:{DISPLAY_INFO} {consultant_id}{RESET}")
         print()
 
         self.show_details_consultant()
@@ -122,7 +122,7 @@ class Consultant():
                 consultant_row[3]
             )
 
-            print(f"{DISPLAY_INFO}Consultant ID: {consultant_row[0]}{RESET}")
+            print(f"Consultant ID:{DISPLAY_INFO} {consultant_row[0]}{RESET}")
             specialist.show_details_consultant()
             print()
 
@@ -158,7 +158,7 @@ class Consultant():
         self.surname = consultant_row[2]
         self.department_id = consultant_row[3]
 
-        print(f"{DISPLAY_INFO}Consultant ID: {consultant_row[0]}{RESET}")
+        print(f"Consultant ID:{DISPLAY_INFO} {consultant_row[0]}{RESET}")
         print()
 
         self.show_details_consultant()
@@ -198,7 +198,7 @@ class Consultant():
         self.surname = consultant_row[2]
         self.department_id = consultant_row[3]
 
-        print(f"{DISPLAY_INFO}Consultant ID: {consultant_row[0]}{RESET}")
+        print(f"Consultant ID:{DISPLAY_INFO} {consultant_row[0]}{RESET}")
         print()
 
         self.show_details_consultant()
@@ -315,7 +315,7 @@ class Consultant():
         self.surname = consultant_row[2]
         self.department_id = consultant_row[3]
 
-        print(f"{DISPLAY_INFO}Consultant ID: {consultant_row[0]}{RESET}")
+        print(f"Consultant ID:{DISPLAY_INFO} {consultant_row[0]}{RESET}")
         print()
 
         self.show_details_consultant()

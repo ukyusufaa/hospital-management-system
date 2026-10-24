@@ -11,7 +11,7 @@ class Prescription():
         # Display the prescription details associated with the appointment.
     def show_prescription_details(self):
         print("=" * 30)
-        print(f"{DISPLAY_INFO}Appointment ID:{self.appointment_id}{RESET}")
+        print(f"Appointment ID:{DISPLAY_INFO} {self.appointment_id}{RESET}")
         print("-" * 30)
 
         # Validate the appointment ID is a positive number.
@@ -78,7 +78,7 @@ class Prescription():
 
         print(f"{DISPLAY_INFO}Prescription created successfully.{RESET}")
         print()
-        print(f"{DISPLAY_INFO}Prescription ID: {prescription_id}{RESET}")
+        print(f"Prescription ID:{DISPLAY_INFO} {prescription_id}{RESET}")
 
         # Display the prescription stored in this object.
         self.show_prescription_details()
@@ -107,7 +107,7 @@ class Prescription():
                 prescription_record[1]
                 )
 
-            print(f"{DISPLAY_INFO}Prescription ID:{prescription_record[0]}{RESET}")
+            print(f"Prescription ID:{DISPLAY_INFO} {prescription_record[0]}{RESET}")
             prescription.show_prescription_details()
             print()
 
@@ -148,7 +148,7 @@ class Prescription():
         # Store the database value in the current object.
         self.appointment_id = prescription_record[1]
 
-        print(f"{DISPLAY_INFO}Prescription ID:{prescription_record[0]}{RESET}")
+        print(f"Prescription ID:{DISPLAY_INFO} {prescription_record[0]}{RESET}")
         self.show_prescription_details()
             
     def delete_prescription(self):
@@ -187,7 +187,7 @@ class Prescription():
         
         self.appointment_id = prescription_record[1]
 
-        print(f"{DISPLAY_INFO}Prescription ID:{prescription_record[0]}{RESET}")
+        print(f"Prescription ID:{DISPLAY_INFO} {prescription_record[0]}{RESET}")
         self.show_prescription_details()
         print()
 

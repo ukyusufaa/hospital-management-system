@@ -65,10 +65,11 @@ def menu(database):
         print("=" *40)
 
         choice = input("Enter a choice from Main Menu: ")
+        print()
 
         if choice == "1":
             hospital_administration(database)
-
+            
         elif choice == "2":
             patient_management(database)
 

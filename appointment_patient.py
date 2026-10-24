@@ -37,9 +37,9 @@ class AppointmentPatient():
             appointment_date,appointment_time) = row
 
             print("=" *40)
-            print(f"{DISPLAY_INFO}Patient: {first_name} {surname}{RESET}")
-            print(f"{DISPLAY_INFO}Date: {appointment_date}{RESET}")
-            print(f"{DISPLAY_INFO}Time: {appointment_time}{RESET}")
+            print(f"Patient:{DISPLAY_INFO} {first_name} {surname}{RESET}")
+            print(f"Date:{DISPLAY_INFO} {appointment_date}{RESET}")
+            print(f"Time:{DISPLAY_INFO} {appointment_time}{RESET}")
             print("-"*40)
             print()
 
@@ -74,9 +74,9 @@ class AppointmentPatient():
             appointmemt_date,appointment_time) = row
 
             print("=" *40)
-            print(f"{DISPLAY_INFO}Patient: {first_name} {surname}{RESET}")
-            print(f"{DISPLAY_INFO}Date: {appointmemt_date}{RESET}")
-            print(f"{DISPLAY_INFO}Time: {appointment_time}{RESET}")
+            print(f"Patient:{DISPLAY_INFO} {first_name} {surname}{RESET}")
+            print(f"Date:{DISPLAY_INFO} {appointmemt_date}{RESET}")
+            print(f"Time:{DISPLAY_INFO} {appointment_time}{RESET}")
             print("-"*40)
             print()
 
@@ -131,9 +131,9 @@ class AppointmentPatient():
              appointment_date, appointment_time) = row
 
             print("=" * 40)
-            print(f"{DISPLAY_INFO}Patient: {first_name} {surname}{RESET}")
-            print(f"{DISPLAY_INFO}Date: {appointment_date}{RESET}")
-            print(f"{DISPLAY_INFO}Time: {appointment_time}{RESET}")
+            print(f"Patient:{DISPLAY_INFO} {first_name} {surname}{RESET}")
+            print(f"Date:{DISPLAY_INFO} {appointment_date}{RESET}")
+            print(f"Time:{DISPLAY_INFO} {appointment_time}{RESET}")
             print("-"*40)
             print()
 
@@ -174,10 +174,10 @@ class AppointmentPatient():
              c_first_name, c_surname) = row
 
             print("=" * 40)
-            print(f"{DISPLAY_INFO}Date: {appointment_date}{RESET}")
-            print(f"{DISPLAY_INFO}Time: {appointment_time}{RESET}")
-            print(f"{DISPLAY_INFO}Patient: {p_first_name} {p_surname}{RESET}")
-            print(f"{DISPLAY_INFO}Consultant: {c_first_name} {c_surname}{RESET}")
+            print(f"Date:{DISPLAY_INFO} {appointment_date}{RESET}")
+            print(f"Time:{DISPLAY_INFO} {appointment_time}{RESET}")
+            print(f"Patient:{DISPLAY_INFO} {p_first_name} {p_surname}{RESET}")
+            print(f"Consultant:{DISPLAY_INFO} {c_first_name} {c_surname}{RESET}")
             print("-" *40)
             print()
 
@@ -223,11 +223,11 @@ class AppointmentPatient():
              department_name) = row
 
             print("=" * 40)
-            print(f"{DISPLAY_INFO}Date: {appointment_date}{RESET}")
-            print(f"{DISPLAY_INFO}Time: {appointment_time}{RESET}")
-            print(f"{DISPLAY_INFO}Patient: {p_first_name} {p_surname}{RESET}")
-            print(f"{DISPLAY_INFO}Consultant: {c_first_name} {c_surname}{RESET}")
-            print(f"{DISPLAY_INFO}Department: {department_name}{RESET}")
+            print(f"Date:{DISPLAY_INFO} {appointment_date}{RESET}")
+            print(f"Time:{DISPLAY_INFO} {appointment_time}{RESET}")
+            print(f"Patient:{DISPLAY_INFO} {p_first_name} {p_surname}{RESET}")
+            print(f"Consultant:{DISPLAY_INFO} {c_first_name} {c_surname}{RESET}")
+            print(f"Department:{DISPLAY_INFO} {department_name}{RESET}")
             print("-" *40)
             print()
 
@@ -264,10 +264,10 @@ class AppointmentPatient():
              gp_surgery, address) = row
 
             print("=" *40)
-            print(f"{DISPLAY_INFO}Patient: {p_first_name} {p_surname}{RESET}")
-            print(f"{DISPLAY_INFO}GP: {gp_first_name} {gp_surname}{RESET}")
-            print(f"{DISPLAY_INFO}Medical Practice: {gp_surgery}{RESET}")
-            print(f"{DISPLAY_INFO}Practice Address: {address}{RESET}")
+            print(f"Patient:{DISPLAY_INFO} {p_first_name} {p_surname}{RESET}")
+            print(f"GP:{DISPLAY_INFO} {gp_first_name} {gp_surname}{RESET}")
+            print(f"Medical Practice:{DISPLAY_INFO} {gp_surgery}{RESET}")
+            print(f"Practice Address:{DISPLAY_INFO} {address}{RESET}")
             print("-" *40)
             print()
 
@@ -306,13 +306,13 @@ class AppointmentPatient():
 
             if prescription_id != last_prescription_id:
                 print("=" *40)
-                print(f"{DISPLAY_INFO}Prescription ID: {prescription_id}{RESET}")
+                print(f"Prescription ID:{DISPLAY_INFO} {prescription_id}{RESET}")
                 print("-" *40)
                 print()
                 last_prescription_id = prescription_id
-            print(f"{DISPLAY_INFO}Medication ID: {medication_id}{RESET}")
+            print(f"Medication ID:{DISPLAY_INFO} {medication_id}{RESET}")
             print("=" *40)
-            print(f"{DISPLAY_INFO}Medication: {medication_name}{RESET}")
+            print(f"Medication:{DISPLAY_INFO} {medication_name}{RESET}")
             print("-" *40)
             print()
 
@@ -350,11 +350,11 @@ class AppointmentPatient():
             (prescription_id,medication_count,
              cost,average) = row
 
-            print(f"{DISPLAY_INFO}Prescription ID: {prescription_id}{RESET}")
+            print(f"Prescription ID:{DISPLAY_INFO} {prescription_id}{RESET}")
             print("=" *40)
-            print(f"{DISPLAY_INFO}Medication Count: {medication_count}{RESET}")
-            print(f"{DISPLAY_INFO}Total: {cost}{RESET}")
-            print(f"{DISPLAY_INFO}Average medication cost: {average}{RESET}")
+            print(f"Medication Count:{DISPLAY_INFO} {medication_count}{RESET}")
+            print(f"Total:{DISPLAY_INFO} {cost}{RESET}")
+            print(f"Average medication cost:{DISPLAY_INFO} {average}{RESET}")
             print("-" *40)
             print()
 
@@ -385,8 +385,8 @@ class AppointmentPatient():
         for row in rows:
             prescription_id, medication_count = row
             print("=" *40)
-            print(f"{DISPLAY_INFO}Prescription ID: {prescription_id}{RESET}")
-            print(f"{DISPLAY_INFO}Medication Count: {medication_count}{RESET}")
+            print(f"Prescription ID:{DISPLAY_INFO} {prescription_id}{RESET}")
+            print(f"Medication Count:{DISPLAY_INFO} {medication_count}{RESET}")
             print("-" *40)
             print()
     

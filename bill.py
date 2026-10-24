@@ -1,5 +1,6 @@
 import sqlite3
-from colors import DISPLAY_INFO,BILLING_MENU,ERROR,RESET
+from colors import (DISPLAY_INFO,BILLING_MENU,UNPAID_STATUS,
+MEDICATION_COST,TOTAL_AMOUNT,PAID_STATUS,ERROR,RESET)
 
 class Bill():
     def __init__(self, database, total_amount = None, 
@@ -11,9 +12,12 @@ class Bill():
 
     def show_bill_details(self):
         print("=" * 40)
-        print(f"{DISPLAY_INFO}Total Amount: £{self.total_amount:.2f}{RESET}")
-        print(f"{DISPLAY_INFO}Appointment ID: {self.appointment_id}{RESET}")
-        print(f"{DISPLAY_INFO}Payment Status: {self.payment_status}{RESET}")
+        print(f"Total Amount:{DISPLAY_INFO} £{self.total_amount:.2f}{RESET}")
+        print(f"Appointment ID:{DISPLAY_INFO} {self.appointment_id}{RESET}")
+        if self.payment_status == "PAID":
+            print(f"Payment Status:{PAID_STATUS} {self.payment_status}{RESET}")
+        else:
+            print(f"Payment Status:{UNPAID_STATUS} {self.payment_status}{RESET}")
 
         try:
             self.database.cursor.execute("""
@@ -34,14 +38,14 @@ class Bill():
             return
 
         print("-" * 40)
-        print(f"{DISPLAY_INFO}Medication Charges:{RESET}")
+        print(f"Medication Charges: ")
 
         if bill_items:
             for item in bill_items:
                 medication_id, medication_name, unit_cost = item
-                print(f"{DISPLAY_INFO}Medication ID: {medication_id}{RESET}")
-                print(f"{DISPLAY_INFO}Medication Name: {medication_name}{RESET}")
-                print(f"{DISPLAY_INFO}Medication Cost: £{unit_cost:.2f}{RESET}")
+                print(f"Medication ID:{DISPLAY_INFO} {medication_id}{RESET}")
+                print(f"Medication Name:{DISPLAY_INFO} {medication_name}{RESET}")
+                print(f"Medication Cost:{DISPLAY_INFO} £{unit_cost:.2f}{RESET}")
                 print("-" * 40)
         else:
             print(f"{DISPLAY_INFO}No medication items recorded.{RESET}")
@@ -143,44 +147,50 @@ class Bill():
 
 
         print("=" * 50)
-        print(f"Bill ID: BILL-{bill_id:03d}")
-        print(f"Payment Status: {payment_status}")
-        print(f"Invoice Date: {invoice_date}")
-        print(f"Appointment ID: {appointment_id}")
+        print(f"Bill ID:{DISPLAY_INFO} BILL-{bill_id:03d}{RESET}")
+        
+        if payment_status == "PAID":
+            print(f"Payment Status:{PAID_STATUS} {payment_status}{RESET}")
+        else:
+            print(f"Payment Status:{UNPAID_STATUS} {payment_status}{RESET}")
+
+        print(f"Invoice Date:{DISPLAY_INFO} {invoice_date}{RESET}")
+        print(f"Appointment ID:{DISPLAY_INFO} {appointment_id}{RESET}")
         print()
 
         for item in bill_items:
             medication_name, medication_cost = item
             print("*" *50)
             print("BILL ITEM DETAILS")
-            print(f"Medication: {medication_name}")
-            print(f"Medication Cost: £{medication_cost:.2f}")
+            print(f"Medication:{DISPLAY_INFO} {medication_name}{RESET}")
+            print(f"Medication Cost:{DISPLAY_INFO} {MEDICATION_COST} £{medication_cost:.2f}{RESET}")
             print("*" * 50)
             print()
 
         print("/" *50)
-        print(f"TOTAL AMOUNT: £{self.total_amount:.2f}")
+        print(f"TOTAL AMOUNT:{DISPLAY_INFO} {TOTAL_AMOUNT} £{self.total_amount:.2f}{RESET}")
         print("/" * 50)
         print()
 
         print("PATIENT DETAILS")
-        print(f"Patient ID: {patient_id}")
-        print(f"Patient: {patient_first_name} {patient_surname}")
-        print(f"Patient Address: {patient_address}")
+        print(f"Patient ID:{DISPLAY_INFO} {patient_id}{RESET}")
+        print(f"Patient:{DISPLAY_INFO} {patient_first_name} {patient_surname}{RESET}")
+        print(f"Patient Address:{DISPLAY_INFO} {patient_address}{RESET}")
         print()
 
         print("CONSULTANT DETAILS")
-        print(f"Hospital Consultant: {consultant_first_name} {consultant_surname}")
+        print(f"Hospital Consultant:{DISPLAY_INFO} {consultant_first_name} " 
+              f"{consultant_surname}{RESET}")
         print()
 
         print("DEPARTMENT DETAILS")
-        print(f"Hospital Department: {department_name}")
+        print(f"Hospital Department:{DISPLAY_INFO} {department_name}{RESET}")
         print()
 
         print("GP AND MEDICAL CLINIC")
-        print(f"GP: {gp_first_name} {gp_surname}")
-        print(f"Medical Clinic: {surgery_name}")
-        print(f"Medical Clinic Address: {surgery_address}")
+        print(f"GP:{DISPLAY_INFO} {gp_first_name} {gp_surname}{RESET}")
+        print(f"Medical Clinic:{DISPLAY_INFO} {surgery_name}{RESET}")
+        print(f"Medical Clinic Address:{DISPLAY_INFO} {surgery_address}{RESET}")
 
         print("-" * 50)
 
@@ -225,7 +235,7 @@ class Bill():
         
         print(f"{DISPLAY_INFO}The Appointment exists{RESET}")
 
-        print(f"{DISPLAY_INFO}Appointment ID: {appointment_record[0]}{RESET}")
+        print(f"Appointment ID:{DISPLAY_INFO} {appointment_record[0]}{RESET}")
 
         # Find the bill linked to this appointment.
         try:
@@ -269,7 +279,7 @@ class Bill():
         # We create the object attribute here using self and store the ID from the database row.
         
         self.prescription_id = prescription_record[0]
-        print(f"{DISPLAY_INFO}Prescription ID: {self.prescription_id}{RESET}")
+        print(f"Prescription ID:{DISPLAY_INFO} {self.prescription_id}{RESET}")
         print()
 
         try:
@@ -303,7 +313,7 @@ class Bill():
         for prescription_medication_row in prescription_medication_rows:
             self.medication_id = prescription_medication_row[2]
 
-            print(f"{DISPLAY_INFO}Medication ID: {self.medication_id}{RESET}")
+            print(f"Medication ID:{DISPLAY_INFO} {self.medication_id}{RESET}")
 
             try:
                 self.database.cursor.execute("""
@@ -383,7 +393,7 @@ class Bill():
             )
             return
 
-        print(f"{DISPLAY_INFO}Bill ID: {bill_id}{RESET}")
+        print(f"Bill ID:{DISPLAY_INFO} {bill_id}{RESET}")
         print()
 
         # Display the newly created bill.
@@ -400,6 +410,7 @@ class Bill():
             return
 
         bill_rows = self.database.cursor.fetchall()
+
         if not bill_rows:
             print(f"{ERROR}No bills are are currently recorded.{RESET}")
             return
@@ -412,9 +423,8 @@ class Bill():
                 bill_row[2],
                 bill_row[3]
             )
-            print(f"{DISPLAY_INFO}Bill ID:{bill_row[0]}{RESET}")
+            print(f"Bill ID:{DISPLAY_INFO} {bill_row[0]}{RESET}")
             billing.show_bill_details()
-            print()
 
         while True:
             try:
@@ -496,13 +506,10 @@ class Bill():
             print()
             print(f"{ERROR}No bill was found for this appointment.{RESET}")
             return 
-        
+        self.bill_id = bill_row[0]
         self.total_amount = bill_row[1]
         self.appointment_id = bill_row[2]
         self.payment_status = bill_row[3]
-
-        print(f"{DISPLAY_INFO}Bill ID: {bill_row[0]}{RESET}")
-        print()
 
         # Display the matching bill.
         self.show_invoice()
@@ -542,7 +549,7 @@ class Bill():
         self.appointment_id = bill_row[2]
         self.payment_status = bill_row[3]
 
-        print(f"{DISPLAY_INFO}Bill ID:{bill_row[0]}{RESET}")
+        print(f"Bill ID:{DISPLAY_INFO} {bill_row[0]}{RESET}")
         print()
     
         self.show_bill_details()
@@ -581,7 +588,7 @@ class Bill():
 
         if self.payment_status == "PAID":
             print(
-                    f"{DISPLAY_INFO}Bill paid already\n"
+                    f"{PAID_STATUS}Bill paid already\n"
                     f"Bill ID: {bill_row[0]}\n"
                     f"Patient ID: {patient_id}\n"
                     f"Patient: {patient_first_name} {patient_surname}\n"
@@ -599,7 +606,7 @@ class Bill():
 
             if bill_paid == 'n':
                 print(
-                    f"{DISPLAY_INFO}Bill not paid \n"
+                    f"{UNPAID_STATUS}Bill not paid \n"
                     f"Bill ID: {bill_row[0]}\n"
                     f"Patient ID: {patient_id}\n"
                     f"Patient: {patient_first_name} {patient_surname}\n"
@@ -627,14 +634,12 @@ class Bill():
             return
 
         print(
-            f"{DISPLAY_INFO}Bill Payment Successful\n"
+            f"{PAID_STATUS}Bill Payment Successful\n"
             f"Bill ID: {bill_row[0]}\n"
             f"Patient ID: {patient_id}\n"
             f"Patient: {patient_first_name} {patient_surname}\n"
             f"Payment Status: PAID{RESET}"
         )
-
-        print(f"{DISPLAY_INFO}Billing ID: {bill_row[0]}{RESET}")
         print()
 
         # Display the updated bill

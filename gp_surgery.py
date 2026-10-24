@@ -9,8 +9,8 @@ class GpSurgery:
     
     def show_gpsurgery_details(self):
         print("=" * 30)
-        print(f"{PRACTICE_MENU}Surgery Name:{self.surgery_name}{RESET}")
-        print(f"{PRACTICE_MENU}Address:{self.address}{RESET}")
+        print(f"Surgery Name:{DISPLAY_INFO} {self.surgery_name}{RESET}")
+        print(f"Address:{DISPLAY_INFO} {self.address}{RESET}")
         print("-" * 30)
 
         # Validate surgery names using letters and spaces.
@@ -99,7 +99,7 @@ class GpSurgery:
         print()
 
         surgery_id = self.database.cursor.lastrowid
-        print(f"{DISPLAY_INFO}Medical practice ID: {surgery_id}{RESET}")
+        print(f"Medical practice ID:{DISPLAY_INFO} {surgery_id}{RESET}")
         self.show_gpsurgery_details()
         
 
@@ -125,7 +125,7 @@ class GpSurgery:
                 surgery_row[2]
             )
 
-            print(f"{DISPLAY_INFO}Medical practice ID: {surgery_row[0]}{RESET}")
+            print(f"Medical practice ID:{DISPLAY_INFO} {surgery_row[0]}{RESET}")
             clinic.show_gpsurgery_details()
             print()
     
@@ -162,7 +162,7 @@ class GpSurgery:
         self.surgery_name = surgery[1]
         self.address = surgery[2]
 
-        print(f"{DISPLAY_INFO}Medical practice ID: {surgery[0]}{RESET}")
+        print(f"Medical practice ID:{DISPLAY_INFO} {surgery[0]}{RESET}")
         self.show_gpsurgery_details()
     
 
@@ -201,7 +201,7 @@ class GpSurgery:
         self.surgery_name = surgery[1]
         self.address = surgery[2]
 
-        print(f"{DISPLAY_INFO}Medical practice ID: {surgery[0]}{RESET}")
+        print(f"Medical practice ID:{DISPLAY_INFO} {surgery[0]}{RESET}")
         self.show_gpsurgery_details()
         print()
 
@@ -330,7 +330,7 @@ class GpSurgery:
         self.surgery_name = surgery[1]
         self.address = surgery[2]
 
-        print(f"{DISPLAY_INFO}Medical practice ID: {surgery[0]}{RESET}")
+        print(f"Medical practice ID:{DISPLAY_INFO} {surgery[0]}{RESET}")
         self.show_gpsurgery_details()
         print()
 
