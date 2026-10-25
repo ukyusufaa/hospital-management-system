@@ -81,9 +81,9 @@ class Bill():
                     ON appointment.consultant_id = consultant.consultant_id
                 INNER JOIN department
                     ON consultant.department_id = department.department_id
-                INNER JOIN gp
+                LEFT JOIN gp
                     ON patient.gp_id = gp.gp_id
-                INNER JOIN gp_surgery
+                LEFT JOIN gp_surgery
                     ON gp.surgery_id = gp_surgery.surgery_id
                 WHERE bill.appointment_id = ?
                 """, (self.appointment_id,))
@@ -95,7 +95,7 @@ class Bill():
             return
 
         if invoice is None:
-            print(f"{ERROR}No invoice found for this appointment.{RESET}")
+            print(f"{ERROR}This appointment has no invoice.{RESET}")
             return
     
         (   
@@ -188,9 +188,11 @@ class Bill():
         print()
 
         print("GP AND MEDICAL CLINIC")
-        print(f"GP:{DISPLAY_INFO} {gp_first_name} {gp_surname}{RESET}")
-        print(f"Medical Clinic:{DISPLAY_INFO} {surgery_name}{RESET}")
-        print(f"Medical Clinic Address:{DISPLAY_INFO} {surgery_address}{RESET}")
+        gp_name = f"{gp_first_name or ''} {gp_surname or ''}".strip()
+        print(f"GP:{DISPLAY_INFO} {gp_name or 'Not registered'}{RESET}")
+        print(f"Medical Clinic:{DISPLAY_INFO} {surgery_name or 'Not registered'}{RESET}")
+        print(f"Medical Clinic Address:{DISPLAY_INFO} " 
+              f"{surgery_address or 'Not registered'}{RESET}")
 
         print("-" * 50)
 
@@ -629,8 +631,9 @@ class Bill():
         # Save the updated payment status.
             self.database.connection.commit()
 
-        except sqlite3.Error as e:
-            print(f"{ERROR}Unable to update the bill. Please try again.{e}{RESET}")
+        except sqlite3.Error:
+            self.database.connection.rollback()
+            print(f"{ERROR}Unable to update the bill. Please try again.{RESET}")
             return
 
         print(

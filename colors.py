@@ -32,11 +32,11 @@ BILLING_MENU = "\033[38;2;212;160;23m" # Gold
 
 PAID_STATUS = "\033[38;2;255;215;0m" # Bright Gold
 
-UNPAID_STATUS = "\033[38;2;245;245;245m" # Bright Silver
+UNPAID_STATUS = "\033[38;2;255;105;180m"  # Hot Pink
 
-MEDICATION_COST = "\033[38;2;190;80;255m"  # Bright Violet
+MEDICATION_COST = "\033[38;2;90;90;90m"  # Dark Grey
 
-TOTAL_AMOUNT = "\033[38;2;0;150;255m"    # Bright Blue
+TOTAL_AMOUNT = "\033[38;2;0;100;255m"  # Bright Blue
 
 RESET = "\033[0m" # Default
 TREE_SUB = "\u2514\u2500\u2500" # Sub Menu Symbol
