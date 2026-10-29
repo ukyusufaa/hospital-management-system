@@ -21,7 +21,12 @@ class Department():
     def validate_id_input(self,number):
         if number < 1:
             return False
-        return True          
+        return True  
+
+    def validate_yes_no(self,selected):
+        if selected != 'y' and selected != 'n':
+            return False
+        return True        
 
         # Collect and validate department details before saving the record.
     def create_department(self):
@@ -100,7 +105,7 @@ class Department():
 
             except ValueError:
                 print(f"{ERROR}Department ID must contain numbers only.{RESET}")
-                return
+                continue
 
         try:
             self.database.cursor.execute("""
@@ -162,44 +167,51 @@ class Department():
         self.show_department_details()
         print()
 
-        update = input(f"{DEPARTMENT_MENU}Update this department? (Y/N): {RESET}").lower()
+        while True:
+            update = input(f"{DEPARTMENT_MENU}Update this department? (Y/N): {RESET}").lower()
+
+            if not self.validate_yes_no(update):
+                print(f"{ERROR}Please enter Y/y or N/n.{RESET}")
+                continue
         
-        if update == "y":
-            while True:
-                new_dept_name = input(f"{DEPARTMENT_MENU}Enter new department name: {RESET}")
-                
-                if new_dept_name == "":
-                    print(f"{ERROR}Department name is required. "
-                          f"Please enter a department name.{RESET}")
-                    continue
-
-                if not self.validate_department_name(new_dept_name):
-                    print(f"{ERROR}Please use letters and spaces only.{RESET}")
-                    continue 
-                break 
-
-            self.department_name = new_dept_name
-
-            try:
-                self.database.cursor.execute("""
-                    UPDATE department
-                    SET department_name = ?
-                    WHERE department_id = ?
-                """,(self.department_name,department_id))
-
-                self.database.connection.commit()
-
-            except sqlite3.Error as e:
-                print(f"{ERROR}Unable to update the department. Please try again.{e}{RESET}")
+            if update == "n":
+                print(f"{DISPLAY_INFO}Department update cancelled.{RESET}")
+                print()
                 return
+            break 
 
-            print(f"{DISPLAY_INFO}Department updated successfully.{RESET}")
-            print()
+        while True:
+            new_dept_name = input(f"{DEPARTMENT_MENU}Enter new department name: {RESET}")
+                
+            if new_dept_name == "":
+                print(f"{ERROR}Department name is required. "
+                      f"Please enter a department name.{RESET}")
+                continue
+
+            if not self.validate_department_name(new_dept_name):
+                print(f"{ERROR}Please use letters and spaces only.{RESET}")
+                continue 
+            break 
+
+        self.department_name = new_dept_name
+
+        try:
+            self.database.cursor.execute("""
+                UPDATE department
+                SET department_name = ?
+                WHERE department_id = ?
+            """,(self.department_name,department_id))
+
+            self.database.connection.commit()
+
+        except sqlite3.Error as e:
+            print(f"{ERROR}Unable to update the department. Please try again.{e}{RESET}")
             return
-        
-        print(f"{DISPLAY_INFO}Department update cancelled.{RESET}")
-        
 
+        print(f"{DISPLAY_INFO}Department updated successfully.{RESET}")
+        print()
+        return
+        
         # Confirm and remove an existing department from the database.
     def delete_department(self):
         while True:
@@ -237,28 +249,36 @@ class Department():
         print()
         self.show_department_details()
         print()
-    
-        delete = input(f"{DEPARTMENT_MENU}Delete this department? (Y/N): {RESET}").lower()
+
+        while True:
+            delete = input(f"{DEPARTMENT_MENU}Delete this department? (Y/N): {RESET}").lower()
         
-        if delete == "y":
-            try:
-                self.database.cursor.execute("""
-                    DELETE FROM department
-                    WHERE department_id = ?
-                """,(department_id,))
-
-                self.database.connection.commit()
-
-            except sqlite3.Error as e:
-                print(f"{ERROR}Unable to delete the department. Please try again.{e}{RESET}")
+            if not self.validate_yes_no(delete):
+                print(f"{ERROR}Please enter Y/y or N/n.{RESET}")
+                continue
+                
+            if delete == "n":
+                print(f"{DISPLAY_INFO}Department not deleted.{RESET}")
+                print()
                 return
-    
-            print(f"{DISPLAY_INFO}Department deleted successfully.{RESET}")
-            print()
+            break 
+     
+        try:
+            self.database.cursor.execute("""
+                DELETE FROM department
+                WHERE department_id = ?
+            """,(department_id,))
+
+            self.database.connection.commit()
+
+        except sqlite3.Error as e:
+            print(f"{ERROR}Unable to delete the department. Please try again.{e}{RESET}")
             return
-            
-        print(f"{DISPLAY_INFO}Department deletion cancelled.{RESET}")
+    
+        print(f"{DISPLAY_INFO}Department deleted successfully.{RESET}")
+        print()
         return
+    
                     
 
 
