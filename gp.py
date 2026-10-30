@@ -350,10 +350,12 @@ class Gp:
 
             self.database.connection.commit()
 
-        except sqlite3.Error as e:
-            print(f"{ERROR}Unable to delete the GP. Please try again.{e}{RESET}")
+        except sqlite3.Error:
+            print(f"{ERROR}A GP with patients assigned to it cannot be deleted. "
+                  f"Delete or move the patients to another GP first.{RESET}")
+            return
                     
-        print(f"{DISPLAY_INFO}GP sucesssfully deleted.{RESET}")
+        print(f"{DISPLAY_INFO}GP successfully deleted.{RESET}")
                     
                 
 
