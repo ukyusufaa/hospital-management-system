@@ -271,8 +271,10 @@ class Department():
 
             self.database.connection.commit()
 
-        except sqlite3.Error as e:
-            print(f"{ERROR}Unable to delete the department. Please try again.{e}{RESET}")
+        except sqlite3.Error:
+            print(f"{ERROR}This department cannot be deleted because it has " 
+                  f"consultants assigned to it. Move them to another department " 
+                  f"or delete them first.{RESET}")
             return
     
         print(f"{DISPLAY_INFO}Department deleted successfully.{RESET}")
