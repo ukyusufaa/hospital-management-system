@@ -382,7 +382,7 @@ class Patient():
     
                 if not value.isdigit():
                     invalid_dob = True
-                break 
+                    break 
     
             if invalid_dob:
                 print(f"{ERROR}Date of birth must use the format (DD/MM/YYYY).{RESET}")
