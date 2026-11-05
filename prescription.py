@@ -37,8 +37,25 @@ class Prescription():
 
             except ValueError:
                 print(f"{ERROR}Please enter a valid appointment ID using numbers only.{RESET}")
-                continue 
+                continue
 
+        # Check whether an appointment already exists.
+        try:
+            self.database.cursor.execute("""
+                SELECT * FROM appointment
+                WHERE appointment_id = ?
+            """,(self.appointment_id,))
+
+        except sqlite3.Error as e:
+            print("Database Error: ",e)
+            return 
+
+        appointment_found = self.database.cursor.fetchone()
+
+        if not appointment_found:
+            print("Print no appointment was found.")
+            return
+        
         # Check whether a prescription already exists.
         try:
             self.database.cursor.execute("""
