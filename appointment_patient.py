@@ -316,7 +316,7 @@ class AppointmentPatient():
             print("-" *40)
             print()
 
-    def display_advanced_queries(self):
+    def display_prescription_statistics(self):
         try:
             self.database.cursor.execute("""
                 SELECT  prescription_medication.prescription_id,

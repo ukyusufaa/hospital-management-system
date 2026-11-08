@@ -578,7 +578,7 @@ def appointment_patient_menu(database):
 
         elif choice == "8":
             appointment_patient = AppointmentPatient(database)
-            appointment_patient.display_advanced_queries()
+            appointment_patient.display_prescription_statistics()
 
         elif choice == "9":
             appointment_patient = AppointmentPatient(database)
