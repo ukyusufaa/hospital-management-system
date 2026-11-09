@@ -346,6 +346,10 @@ class AppointmentPatient():
 
         rows = self.database.cursor.fetchall()
 
+        if not rows:
+            print("No such prescriptions match these statistics")
+            return
+
         for row in rows:
             (prescription_id,medication_count,
              cost,average) = row
@@ -379,8 +383,13 @@ class AppointmentPatient():
 
         except sqlite3.Error as e:
             print(f"{ERROR}Database Error{e}{RESET}")
+            return
 
         rows = self.database.cursor.fetchall()
+
+        if not rows:
+            print("No such prescriptions match these statistics")
+            return
 
         for row in rows:
             prescription_id, medication_count = row
