@@ -41,9 +41,9 @@ def menu(database):
         )
 
         print()
-        print("Address: 100 London Rd, Northampton, NN1 1YZ, England, UK".center(50))
-        print("Phone: 01604 101010".center(50))
-        print("Email:holly-hospital@nhs.net".center(50))
+        print("Address: 1 Example Street, Northampton, NN1 1AA, England, UK".center(50))
+        print("Phone: 01632 960000".center(50))
+        print("Email:info@holly-hospital-system.example".center(50))
         print()
         print("=== Welcome To The Main Menu of Holly Hospital ===".center(50))
         print()
