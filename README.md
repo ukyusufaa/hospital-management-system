@@ -227,7 +227,14 @@ The second kind is a database error called sqlite3.Error. This happens when a da
 
 Python checks the input first and catches a ValueError, then the database checks last and raises a sqlite3.Error if a rule is broken. This ensures incorrect data is stopped twice.
 
+## Limitations and future improvements
+HHS has no login details which is a security risk, so a username and password should be added. In the future an improvement could be to restrict what a receptionist could handle on the system. So after the initial login a consultant could be required to enter an additional password to access the restricted prescription and medication options from the menu. In this new system the receptionist should only be allowed to insert, view, update and delete appointments.
 
+The HHS uses a terminal to show menus, display information and error messages and I used Python coded coloring to make the terminal more user-friendly. A later improvement could be to use HTML, CSS and Flask. A GUI could be used instead of a terminal.
 
+I tested the current system by typing in test data by hand. Future methods of testing could be to use automatic tests such as pytest.
 
+The current system uses the DD/MM/YYYY over YYYY-MM-DD. The main drawback is that dates cannot be compared and sorted chronologically. The substr was used to cut the date into year, month and day, so the reports could sort dates in the correct order. The stored date itself was never changed. This allowed me to compare and sort dates chronologically.
+This is an inconvenience. I only chose this DD/MM/YYYY over YYYY-MM-DD as it is the standard UK date structure. But the YYYY-MM-DD is the better date format structure.
 
+The bill currently charges for the medication and not the appointment. In the future every appointment could be charged for whether there is a prescription (medication) or not.
